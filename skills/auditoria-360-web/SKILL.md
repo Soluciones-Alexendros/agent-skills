@@ -4,7 +4,7 @@ description: Auditoría 360° end-to-end de un website (SEO técnico y on-page, 
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: web
   idioma: es
 

@@ -8,7 +8,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: web
   idioma: es
 
@@ -61,7 +61,6 @@ Usar al diseñar o rediseñar interfaces, definir paleta/tipografía o pulir int
 - `references/layout-motion.md` — layout y motion.
 - `references/writing-in-design.md` — copy como material de diseño.
 - `references/frontend-design-source.md`, `references/interaction-design-source.md` — fuentes absorbidas.
-- `LICENSE.txt` — licencia (extra, no normativo).
 
 ## Herramientas
 

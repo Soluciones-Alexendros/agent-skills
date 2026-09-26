@@ -8,7 +8,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: codigo
   idioma: es
 
@@ -224,58 +224,9 @@ Skip theoretical issues. Report only what you've confirmed is exploitable after 
 
 ## Quick Patterns Reference
 
-### Always Flag (Critical)
-```
-eval(user_input)           # Any language
-exec(user_input)           # Any language
-pickle.loads(user_data)    # Python
-yaml.load(user_data)       # Python (not safe_load)
-unserialize($user_data)    # PHP
-deserialize(user_data)     # Java ObjectInputStream
-shell=True + user_input    # Python subprocess
-child_process.exec(user)   # Node.js
-```
+Patrones de código que deben marcarse inmediatamente durante la revisión. Se organizan en: **Always Flag (Critical)** — `eval`/`exec`/`pickle`/`yaml.load`/`unserialize`/`shell=True`; **Always Flag (High)** — DOM XSS, SQL injection, command injection; **Always Flag (Secrets)** — hardcoded passwords, API keys, private keys; **Check Context First** — SSRF, path traversal, open redirect y weak crypto (depende de si la entrada es del usuario o de configuración).
 
-### Always Flag (High)
-```
-innerHTML = userInput              # DOM XSS
-dangerouslySetInnerHTML={user}     # React XSS
-v-html="userInput"                 # Vue XSS
-f"SELECT * FROM x WHERE {user}"    # SQL injection
-`SELECT * FROM x WHERE ${user}`    # SQL injection
-os.system(f"cmd {user_input}")     # Command injection
-```
-
-### Always Flag (Secrets)
-```
-password = "hardcoded"
-api_key = "sk-..."
-AWS_SECRET_ACCESS_KEY = "..."
-private_key = "-----BEGIN"
-```
-
-### Check Context First (MUST Investigate Before Flagging)
-```
-# SSRF - ONLY if URL is from user input, NOT from settings/config
-requests.get(request.GET['url'])     # FLAG: User-controlled URL
-requests.get(settings.API_URL)       # SAFE: Server-controlled config
-requests.get(f"{settings.BASE}/{x}") # CHECK: Is 'x' user input?
-
-# Path traversal - ONLY if path is from user input
-open(request.GET['file'])            # FLAG: User-controlled path
-open(settings.LOG_PATH)              # SAFE: Server-controlled config
-open(f"{BASE_DIR}/{filename}")       # CHECK: Is 'filename' user input?
-
-# Open redirect - ONLY if URL is from user input
-redirect(request.GET['next'])        # FLAG: User-controlled redirect
-redirect(settings.LOGIN_URL)         # SAFE: Server-controlled config
-
-# Weak crypto - ONLY if used for security purposes
-hashlib.md5(file_content)            # SAFE: File checksums, caching
-hashlib.md5(password)                # FLAG: Password hashing
-random.random()                      # SAFE: Non-security uses (UI, sampling)
-random.random() for token            # FLAG: Security tokens need secrets module
-```
+> Ver [references/quick-patterns.md](references/quick-patterns.md) para la lista completa de patrones con ejemplos de código y criterios FLAG/SAFE/CHECK.
 
 ---
 

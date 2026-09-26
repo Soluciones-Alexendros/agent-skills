@@ -8,7 +8,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: alignux
   idioma: es
 disable-model-invocation: true
@@ -33,7 +33,7 @@ Canaliza los conocimientos y estándares de estructuras e identidades del sistem
 - `references/despliegue-aprendizajes.md` — Metodología para cohesionar aprendizajes en habilidades operativas
 - `references/DirectoriosEsenciales.md` — Directorios esenciales del home y notación de referencia ALIGNUX (`·`): `·Aplicaciones` (raíz única: `··Ventana`/`··Terminal` producto + `··Fuentes` + `··Websites` + `··dotfiles`), `·Audiovisual` (medios); invariantes del canon CLI (`Scripts/`, `Shell/`, `Agentes/`) y mapa XDG (incl. `Documentos/Formatos` sin certificar). Leer antes de crear/mover directorios del home o instalar productos
 - `references/registro-estructura-home.md` — Registro constitucional del estándar del home (plantilla de salida: contexto histórico, principio, especificación, trazabilidad, validación), con la evolución a `·Aplicaciones`. Leer para entender *por qué* del canon del home
-- CONVENCIONES_SKILLS.md — canon externo (no incluido en este repo): nomenclatura, estructura, frontmatter, tags, validador, deuda aceptada, gobernanza. Leer antes de crear o modificar cualquier skill
+- `references/convenciones-skills.md` — canon de convenciones de skills: nomenclatura, estructura, frontmatter, tags, validador, deuda aceptada, gobernanza. Leer antes de crear o modificar cualquier skill
 
 ## Estructura de salida
 ALWAYS use this exact template:
@@ -109,7 +109,7 @@ Consulta de identidad y estándares ALIGNUX: invocar solo cuando el operador pid
 ## Estructura
 
 - `SKILL.md` — constitución, triggering, estándares y metodología.
-- `REFLEXIONES.md` — extra: registro de razonamientos del autor (no normativo).
+- `references/reflexiones.md` — extra: registro de razonamientos del autor (no normativo).
 - `references/` — identidad, historia computacional, estándares de estructura, principios, despliegue de aprendizajes, directorios esenciales y registro del home.
 - Sin `scripts/`: skill puramente documental.
 

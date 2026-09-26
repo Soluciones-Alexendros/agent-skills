@@ -7,12 +7,12 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: datos
   idioma: es
 
 ---
-# Upstash — Namespace Router
+# Upstash — Router de Namespace
 
 Punto de entrada unificado para todo el ecosistema Upstash. Esta skill actúa como **router automático**: detecta la intención del usuario y dirige al submódulo correspondiente en `references/`.
 

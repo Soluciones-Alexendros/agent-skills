@@ -7,12 +7,12 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: datos
   idioma: es
 
 ---
-# Supabase Postgres Best Practices
+# Supabase Postgres — Mejores Prácticas
 
 Comprehensive performance optimization guide for Postgres, maintained by Supabase. Contains rules across 8 categories, prioritized by impact to guide automated query optimization and schema design.
 
