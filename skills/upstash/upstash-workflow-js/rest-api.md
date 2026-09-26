@@ -8,9 +8,9 @@ The goal is to help agents construct correct TypeScript API requests, handle opt
 
 ## Core Concepts
 
-• **DLQ Entries** represent failed workflow runs containing metadata such as payload, headers, timestamps, failure callback state, and workflow configuration.  
-• **Restart** recreates the entire workflow run from the beginning (fresh execution, no preserved state).  
-• **Resume** creates a new run continuing from the failed step (preserves successful steps).  
+• **DLQ Entries** represent failed workflow runs containing metadata such as payload, headers, timestamps, failure callback state, and workflow configuration.
+• **Restart** recreates the entire workflow run from the beginning (fresh execution, no preserved state).
+• **Resume** creates a new run continuing from the failed step (preserves successful steps).
 • **Bulk operations** process up to 50 DLQ entries per request and may return a cursor for pagination.
 • **Flow-Control and Retry Overrides** are passed via headers and apply only to the newly created workflow run.
 
@@ -22,14 +22,14 @@ Be careful: changing workflow code **before** the failed step may cause resume o
 
 Below is a complete summary of the API endpoints supported by this skill.
 
-• `GET /v2/workflows/dlq` — List DLQ entries with filtering.  
-• `GET /v2/workflows/dlq/{dlqId}` — Retrieve a single DLQ entry.  
-• `DELETE /v2/workflows/dlq/{dlqId}` — Delete a DLQ entry.  
-• `POST /v2/workflows/dlq/restart/{dlqId}` — Restart a workflow from scratch.  
-• `POST /v2/workflows/dlq/resume/{dlqId}` — Resume a workflow from point of failure.  
-• `POST /v2/workflows/dlq/restart` — Bulk restart (up to 50).  
-• `POST /v2/workflows/dlq/resume` — Bulk resume (up to 50).  
-• `POST /v2/workflows/dlq/callback/{dlqId}` — Rerun a failed failure-callback.  
+• `GET /v2/workflows/dlq` — List DLQ entries with filtering.
+• `GET /v2/workflows/dlq/{dlqId}` — Retrieve a single DLQ entry.
+• `DELETE /v2/workflows/dlq/{dlqId}` — Delete a DLQ entry.
+• `POST /v2/workflows/dlq/restart/{dlqId}` — Restart a workflow from scratch.
+• `POST /v2/workflows/dlq/resume/{dlqId}` — Resume a workflow from point of failure.
+• `POST /v2/workflows/dlq/restart` — Bulk restart (up to 50).
+• `POST /v2/workflows/dlq/resume` — Bulk resume (up to 50).
+• `POST /v2/workflows/dlq/callback/{dlqId}` — Rerun a failed failure-callback.
 • `GET /v2/flowControl` and `/v2/flowControl/{key}` — Flow-control inspection.
 
 ---
@@ -104,31 +104,31 @@ async function example() {
 
 ## Request Query Fields
 
-• **dlqIds: string[]** — Exact DLQ IDs for targeting specific failed runs (bulk restart/resume).  
-• **fromDate / toDate: number** — Millisecond timestamps; inclusive range filters.  
-• **workflowUrl: string** — Filters by workflow endpoint URL.  
-• **workflowRunId: string** — Can match full run ID or prefix.  
-• **workflowCreatedAt: number** — Timestamp filter for creation time.  
-• **responseStatus: number** — Filter by HTTP status of failed run.  
-• **callerIP: string** — Filter by origin IP.  
-• **failureCallbackState: string** — Filter runs whose failure callback succeeded or failed.  
-• **cursor: string** — Pagination cursor; returned by list & bulk ops.  
+• **dlqIds: string[]** — Exact DLQ IDs for targeting specific failed runs (bulk restart/resume).
+• **fromDate / toDate: number** — Millisecond timestamps; inclusive range filters.
+• **workflowUrl: string** — Filters by workflow endpoint URL.
+• **workflowRunId: string** — Can match full run ID or prefix.
+• **workflowCreatedAt: number** — Timestamp filter for creation time.
+• **responseStatus: number** — Filter by HTTP status of failed run.
+• **callerIP: string** — Filter by origin IP.
+• **failureCallbackState: string** — Filter runs whose failure callback succeeded or failed.
+• **cursor: string** — Pagination cursor; returned by list & bulk ops.
 • **count: number** — Limit for listing DLQ entries (default/max 100).
 
 ## Header Overrides
 
 These apply only when creating a **new workflow run** (restart or resume).
 
-• **Upstash-Flow-Control-Key** — Override flow-control key.  
-• **Upstash-Flow-Control-Value** — Override flow-control config (e.g., "parallelism=1").  
+• **Upstash-Flow-Control-Key** — Override flow-control key.
+• **Upstash-Flow-Control-Value** — Override flow-control config (e.g., "parallelism=1").
 • **Upstash-Retries** — Override step retry configuration.
 
 All are optional; original values are reused if omitted.
 
 ## Response Fields
 
-• **cursor?: string** — If returned, additional entries exist.  
-• **workflowRuns: { workflowRunId: string; workflowCreatedAt: number }[]** — Returned by bulk restart/resume.  
+• **cursor?: string** — If returned, additional entries exist.
+• **workflowRuns: { workflowRunId: string; workflowCreatedAt: number }[]** — Returned by bulk restart/resume.
 • **message objects** (DLQ list/get) include:
 
 - **workflowRunId, workflowCreatedAt, workflowUrl**
@@ -140,17 +140,17 @@ All are optional; original values are reused if omitted.
 
 # Pitfalls & Best Practices
 
-• **Resume only works if workflow code before the failed step stays unchanged**. Any change may cause resume to fail.  
-• **Bulk operations process max 50 items**. Always check `cursor` to continue processing.  
-• **Deleting a DLQ entry is permanent**; once removed, it cannot be resumed or restarted.  
-• **Failure callback reruns are independent** and do not affect workflow execution. They only retry the failure-notification step.  
+• **Resume only works if workflow code before the failed step stays unchanged**. Any change may cause resume to fail.
+• **Bulk operations process max 50 items**. Always check `cursor` to continue processing.
+• **Deleting a DLQ entry is permanent**; once removed, it cannot be resumed or restarted.
+• **Failure callback reruns are independent** and do not affect workflow execution. They only retry the failure-notification step.
 • **Prefix matching on workflowRunId** can unintentionally match more runs than expected—use full ID for precision.
 
 ---
 
 # Recommended Patterns
 
-• Fetch → Check cursor → Continue looping for bulk operations.  
-• Always log `failureCallbackInfo.state` to determine whether a callback rerun is required.  
-• Apply header overrides sparingly; flow-control misconfiguration may stall large batches.  
+• Fetch → Check cursor → Continue looping for bulk operations.
+• Always log `failureCallbackInfo.state` to determine whether a callback rerun is required.
+• Apply header overrides sparingly; flow-control misconfiguration may stall large batches.
 • Prefer filtering in bulk operations instead of manually passing large dlqIds arrays.

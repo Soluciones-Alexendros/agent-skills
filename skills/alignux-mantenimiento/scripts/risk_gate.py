@@ -129,29 +129,29 @@ def matches_pattern(cmd: str, patterns: tuple) -> bool:
 
 def touches_protected_path(cmd: str) -> bool:
     """Verifica si un comando implica escritura en rutas protegidas.
-    
+
     Solo considera escrita la línea de comandos si contiene redirecciones
     de salida (>, >>, | tee), o si es explícitamente un editor/escritor.
     Comandos de solo lectura como cat, grep, head, ls no se clasifican.
     """
     # Whitelist de comandos de solo lectura que no deberían clasificar como R2
-    read_only_cmds = ("cat", "grep", "head", "tail", "ls", "find", "df", "du", 
+    read_only_cmds = ("cat", "grep", "head", "tail", "ls", "find", "df", "du",
                        "systemctl status", "journalctl", "ps", "top", "htop",
-                       "ss", "ip", "uname", "uptime", "whoami", "id", 
+                       "ss", "ip", "uname", "uptime", "whoami", "id",
                        "mount", "blkid", "lscpu", "free", "vmstat", "nproc")
     cmd_lower = cmd.lower()
-    
+
     for ro_cmd in read_only_cmds:
         if cmd_lower.startswith(ro_cmd + " ") or cmd_lower == ro_cmd:
             return False
-    
+
     # Detectar operaciones de escritura: redirecciones o herramientas de edición
     write_indicators = (" >", " >>", "| tee", "| sudo tee", "<(/dev/", "> /dev/")
     has_write_op = any(ind in cmd for ind in write_indicators)
-    
+
     if not has_write_op:
         return False
-    
+
     # Si hay operación de escritura, verificar si toca ruta protegida
     return any(path in cmd for path in PROTECTED_PATHS)
 
