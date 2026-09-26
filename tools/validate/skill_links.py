@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Validador de enlaces relativos en SKILL.md y references/*.md.
+"""Validador de enlaces relativos en todos los .md del repo.
 
 Uso: python3 tools/validate/skill_links.py [--root DIR]
 Comprueba que todo enlace relativo [t](ruta) apunte a un fichero existente
 (ignora URLs http/https, anclas puras y enlaces externos declarados).
+Cubre: skills/, docs/, .github/, tools/, README.md y CHANGELOG.md.
 Exit 0 sin rotos; 1 con rotos.
 """
 import re
@@ -36,7 +37,12 @@ def check_md(md: Path) -> None:
 
 
 def main() -> int:
-    mds = sorted((ROOT / "skills").rglob("*.md"))
+    mds = sorted(
+        p for p in ROOT.rglob("*.md")
+        if ".git" not in p.parts
+        and "__pycache__" not in p.parts
+        and ".archivado" not in str(p)
+    )
     for md in mds:
         check_md(md)
     print(f"md revisados: {len(mds)}, rotos: {len(BROKEN)}")

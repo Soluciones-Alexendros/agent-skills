@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Validación agregada del repo agent-skills.
-# Uso: bash run-validation.sh [--spec-only|--links-only|--pytest-only|--smoke-only]
+# Uso: bash run-validation.sh [--spec-only|--links-only|--version-only|--pytest-only|--smoke-only]
 # Exit: 0 todo verde, 1 algún fallo.
 set -euo pipefail
 
@@ -22,6 +22,10 @@ if [[ "$MODE" == "all" || "$MODE" == "--links-only" ]]; then
     step "links" python3 "$ROOT/tools/validate/skill_links.py"
 fi
 
+if [[ "$MODE" == "all" || "$MODE" == "--version-only" ]]; then
+    step "version-bump" python3 "$ROOT/tools/version/bump.py" --check --auto --base origin/main
+fi
+
 if [[ "$MODE" == "all" || "$MODE" == "--pytest-only" ]]; then
     # Los tests usan cwd="." y SCRIPT relativo: ejecutar pytest con cwd =
     # scripts/ si los tests están en scripts/tests/, o la skill si están en tests/.
@@ -38,7 +42,7 @@ if [[ "$MODE" == "all" || "$MODE" == "--pytest-only" ]]; then
             SEEN[$key]=1
             step "pytest $cwd" bash -c "cd \"\$0\" && PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -p no:cacheprovider \"\$1\"" "$ROOT/$cwd" "$arg"
         fi
-    done < <(cd "$ROOT" && find skills -name "test_*.py" -not -path "*__pycache__*" | sort)
+    done < <(cd "$ROOT" && find skills tools -name "test_*.py" -not -path "*__pycache__*" | sort)
 fi
 
 if [[ "$MODE" == "all" || "$MODE" == "--smoke-only" ]]; then

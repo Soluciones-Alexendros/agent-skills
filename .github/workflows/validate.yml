@@ -4,9 +4,13 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   spec-links:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -16,11 +20,12 @@ jobs:
       - run: python3 tools/validate/skill_links.py
   tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pytest
+      - run: pip install pytest==8.3.5
       - run: bash run-validation.sh --pytest-only
       - run: bash run-validation.sh --smoke-only
