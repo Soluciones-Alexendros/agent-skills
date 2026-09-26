@@ -105,9 +105,9 @@ export const uploads = uploadHandler({
   onBeforeUpload: async ({ request, file }) => {
     const user = await getUser(request);
     if (!user) throw new BlobError("unauthorized");
-    return { 
-      path: uniquePath`${user.id}/${file.name}`, 
-      metadata: { owner: user.id } 
+    return {
+      path: uniquePath`${user.id}/${file.name}`,
+      metadata: { owner: user.id }
     };
   },
 
@@ -224,9 +224,9 @@ import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 const config = bucket.s3(); // { bucket, endpoint, credentials: async providers }
 const s3 = new S3Client(config);
 
-await s3.send(new GetObjectCommand({ 
-  Bucket: config.bucket, 
-  Key: "reports/q3.pdf" 
+await s3.send(new GetObjectCommand({
+  Bucket: config.bucket,
+  Key: "reports/q3.pdf"
 }));
 
 // Útil para: byte ranges, conditional GETs, tagging, operaciones no wrappedas

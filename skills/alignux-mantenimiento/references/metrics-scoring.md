@@ -356,7 +356,7 @@ groups:
           severity: critical
         annotations:
           summary: "Health score below 70 on {{ $labels.hostname }}"
-          
+
       - alert: P0FindingsOpen
         expr: linux_sys_care_findings_p0 > 0
         for: 1m
@@ -364,7 +364,7 @@ groups:
           severity: critical
         annotations:
           summary: "{{ $value }} P0 findings open on {{ $labels.hostname }}"
-          
+
       - alert: SecurityUpdatesPending
         expr: linux_sys_care_security_updates_pending > 0
         for: 1h
@@ -372,7 +372,7 @@ groups:
           severity: warning
         annotations:
           summary: "{{ $value }} security updates pending on {{ $labels.hostname }}"
-          
+
       - alert: DiskSpaceCritical
         expr: (linux_sys_care_disk_usage_root / linux_sys_care_disk_size_root) > 0.90
         for: 5m
@@ -380,7 +380,7 @@ groups:
           severity: critical
         annotations:
           summary: "Root disk > 90% on {{ $labels.hostname }}"
-          
+
       - alert: KernelRebootPending
         expr: linux_sys_care_kernel_reboot_pending == 1
         for: 24h
