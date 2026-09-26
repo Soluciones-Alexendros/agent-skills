@@ -47,10 +47,10 @@ done
 
 say() { echo "$1: $2"; }
 
-say "apparmor_kernel" "$(cat /sys/module/apparmor/parameters/enabled 2>/dev/null || echo '?')"
-say "apparmor_userns_restrict" "$(sysctl -n kernel.apparmor_restrict_unprivileged_userns 2>/dev/null || echo '?')"
+say "apparmor_kernel" "$(cat /sys/module/apparmor/parameters/enabled 2>/dev/null || echo 'CLAVE: ?')"
+say "apparmor_userns_restrict" "$(sysctl -n kernel.apparmor_restrict_unprivileged_userns 2>/dev/null || echo 'CLAVE: ?')"
 if command -v systemctl >/dev/null 2>&1; then
-  say "apparmor_service" "$(systemctl is-active apparmor 2>/dev/null || echo '?')"
+  say "apparmor_service" "$(systemctl is-active apparmor 2>/dev/null || echo 'CLAVE: ?')"
 else
   say "apparmor_service" "?"
 fi
@@ -60,7 +60,7 @@ else
   say "aa_status" "aa-status no disponible (sin sudo o sin apparmor-utils)"
 fi
 if command -v systemctl >/dev/null 2>&1; then
-  say "auditd" "$(systemctl is-active auditd 2>/dev/null || echo '?')"
+  say "auditd" "$(systemctl is-active auditd 2>/dev/null || echo 'CLAVE: ?')"
 else
   say "auditd" "?"
 fi
