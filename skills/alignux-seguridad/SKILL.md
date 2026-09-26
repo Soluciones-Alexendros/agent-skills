@@ -8,14 +8,14 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: alignux
   idioma: es
 
 ---
 # ALIGNUX.seguridad
 
-Skill de seguridad defensiva para sistemas Linux, operada por un agente IA con seguridad estructural. Parte del sistema **ALIGNUX** — identidad constitucional en mayúsculas, coherencia sobre consistencia. Hermana de `ALIGNUX.mantenimiento` (que se queda con higiene, actualizaciones, ordenado y optimización). Cuando una petición toca ambos mundos, la parte defensiva es de esta skill y la de higiene de la otra.
+Skill de seguridad defensiva para sistemas Linux, operada por un agente IA con seguridad estructural. Parte del sistema **ALIGNUX** — identidad constitucional en mayúsculas, coherencia sobre consistencia. Hermana de `alignux-mantenimiento` (que se queda con higiene, actualizaciones, ordenado y optimización). Cuando una petición toca ambos mundos, la parte defensiva es de esta skill y la de higiene de la otra.
 
 ## Qué hace / Propósito
 
@@ -29,11 +29,11 @@ Evaluar y mejorar la postura defensiva del sistema sin alarmismo ni escrituras n
 - **Vulnerabilidades/CVEs**: "Chequea CVEs", "Actualizaciones de seguridad pendientes", "Lista priorizada con severidad"
 - **Hardening**: "Hardening CIS", "Endurece SSH, sysctl, firewall", "Plan P1-P4 con aprobación"
 - **AppArmor**: "Ciclo vida perfiles AppArmor", "genprof, complain, soak, logprof, enforce", "Depuración denegaciones"
-- **NO usar cuando**: Higiene/mantenimiento puro (→ `ALIGNUX.mantenimiento`), actualizaciones paquetes, limpieza cachés, optimización recursos
+- **NO usar cuando**: Higiene/mantenimiento puro (→ `alignux-mantenimiento`), actualizaciones paquetes, limpieza cachés, optimización recursos
 
 ## Frontera de Alcances
 
-| **ALIGNUX.seguridad** | **ALIGNUX.mantenimiento** |
+| **ALIGNUX.seguridad** | **alignux-mantenimiento** |
 |----------------------|---------------------------|
 | Postura defensiva (firewall, MAC, auditd, AV, integridad) | Actualizaciones de paquetes, cachés, huérfanos |
 | Forense ligero: journald, auditd, auth.log, denials.log | Limpieza de logs (rotación, vacuum) |
@@ -42,7 +42,7 @@ Evaluar y mejorar la postura defensiva del sistema sin alarmismo ni escrituras n
 | Escaneos: ClamAV, rkhunter, AIDE, debsums, Lynis | Health Score de higiene/recursos |
 | Ciclo de vida de perfiles AppArmor | Snapshots y mantenimiento rutinario |
 
-**Regla:** Cuando una petición toca ambos mundos, la parte defensiva es de esta skill y la de higiene de `ALIGNUX.mantenimiento`.
+**Regla:** Cuando una petición toca ambos mundos, la parte defensiva es de esta skill y la de higiene de `alignux-mantenimiento`.
 
 ## Principios Rectores (Alinenados con Constitución ALIGNUX)
 
@@ -51,7 +51,7 @@ Evaluar y mejorar la postura defensiva del sistema sin alarmismo ni escrituras n
 3. **Validar antes de remediar** — Los escáneres mienten con frecuencia (rkhunter y sus falsos positivos son el ejemplo clásico). Antes de proponer una acción, confirmar el hallazgo por una segunda vía.
 4. **Defensa en capas, no en pánico** — MAC en vivo (AppArmor), integridad a posteriori (AIDE), auditoría de acciones (auditd), firmas (ClamAV/rkhunter). Ninguna capa sustituye a otra; el informe siempre dice qué capa cubre qué.
 5. **Reversibilidad** — Toda acción de escritura documenta su vuelta atrás antes de ejecutarse.
-6. **Riesgo graduado** — Se reutiliza la escala de `ALIGNUX.mantenimiento`: R0 (solo lectura, libre), R1 (escritura reversible con snapshot), R2 (riesgo: SSH, firewall, kernel, AppArmor enforce; requiere aprobación), R3 (prohibido siempre).
+6. **Riesgo graduado** — Se reutiliza la escala de `alignux-mantenimiento`: R0 (solo lectura, libre), R1 (escritura reversible con snapshot), R2 (riesgo: SSH, firewall, kernel, AppArmor enforce; requiere aprobación), R3 (prohibido siempre).
 
 ## Modos de Operación
 
@@ -81,7 +81,7 @@ Evaluar y mejorar la postura defensiva del sistema sin alarmismo ni escrituras n
 - **Higiene de parches de seguridad (20%)**: CVEs críticos sin parchear, actualizaciones de seguridad pendientes.
 
 ### Clasificación de Hallazgos
-Igual que en `ALIGNUX.mantenimiento`: **P0** compromiso activo/inminente · **P1** vulnerabilidad o configuración insegura real · **P2** desviación de baseline · **P3** mejora de defensa · **P4** informativo.
+Igual que en `alignux-mantenimiento`: **P0** compromiso activo/inminente · **P1** vulnerabilidad o configuración insegura real · **P2** desviación de baseline · **P3** mejora de defensa · **P4** informativo.
 
 ## Referencias Internas
 
@@ -113,7 +113,7 @@ Al invocarse, el agente ejecuta el fingerprint, muestra el contexto detectado (d
 
 Esta skill implementa los principios de `ALIGNUX.constitucion`:
 - **Identidad**: Prefijo `ALIGNUX.` en mayúsculas (identidad constitucional)
-- **Coherencia**: Frontera clara con `ALIGNUX.mantenimiento`, nomenclatura `dominio.subdominio`
+- **Coherencia**: Frontera clara con `alignux-mantenimiento`, nomenclatura `dominio.subdominio`
 - **Estructura habilita**: Tags `sistema.ALIGNUX.*`, progressive disclosure, validador automatizado
 - **Documentación viva**: validador como verdad ejecutable (tools/validate/skill_spec.py (validador del repo))
 - **Aprendizaje = despliegue**: Síntesis de ~4 décadas experiencia Linux/seguridad en skill operativa

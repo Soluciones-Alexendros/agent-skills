@@ -7,7 +7,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: integraciones
   idioma: es
 
@@ -64,7 +64,9 @@ Obtener secretos desde Proton Pass vía pass-cli cuando haga falta token, passwo
 
 ## Estructura
 
-- `SKILL.md` — único fichero versionado de la skill (sin `references/`, `scripts/` ni `configs/` propios).
+- `SKILL.md` — operativa de acceso y reglas.
+- `references/cli-reference.md` — comandos de `pass-cli` (list, show, insert, edit, rm, mv, cp, generate, login, logout, sync, share).
+- `references/security-notes.md` — manejo de sesión, inyección por variables de entorno y limpieza de portapapeles.
 - URI _(ejemplos)_: `pass://<Bóveda>/<Item>/<campo>`; rutas locales _(ejemplos)_: `~/.local/share/proton-pass-cli/.session/`, `~/.local/bin/pass-cli`.
 
 ## Herramientas

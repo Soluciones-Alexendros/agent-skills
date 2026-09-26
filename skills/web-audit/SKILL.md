@@ -8,7 +8,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: web
   idioma: es
 
@@ -69,31 +69,66 @@ Checklist WCAG 2.1 AA:
 
 Estructura del informe:
 
----------------|
-...
+| Sección | Contenido | Origen |
+|---------|-----------|--------|
+| 1. Resumen ejecutivo | Hallazgo principal, semáforo (verde/ámbar/rojo), top 3 acciones | Fusión de secciones 3–4 |
+| 2. Rendimiento | CWV (LCP, INP, CLS), tamaño de página, requests, caché | Etapa 2 (Pre-flight) |
+| 3. SEO | Tabla de checks con estado y evidencia | Etapa 3 |
+| 4. Accesibilidad | Violaciones WCAG y mejoras sugeridas | Etapa 4 |
+| 5. Plan de acción | Tabla priorizada: prioridad, área, acción, esfuerzo | Fusión de 2–4 |
+
 ### Optimizaciones
 - [ ] Acción 1 (prioridad alta)
-- [ ] Acción 2 (prioridad media)
 
 ## 3. SEO
 ### Estado actual
-...
+
+| Check | Estado | Evidencia |
+|-------|--------|-----------|
+| Title único y < 60 caracteres | ✓ / ✗ / ~ | Lectura HTML |
+| Meta description presente (150–160 caracteres) | ✓ / ✗ / ~ | Lectura HTML |
+| Canonical apunta a la URL final | ✓ / ✗ / ~ | Lectura HTML |
+| robots.txt existe y no bloquea contenido | ✓ / ✗ / ~ | `curl /robots.txt` |
+| sitemap.xml válido y enviado a buscadores | ✓ / ✗ / ~ | `curl /sitemap.xml` |
+| Open Graph completo (title, description, image, url) | ✓ / ✗ / ~ | Lectura HTML |
+| Jerarquía H1–H6 sin saltos | ✓ / ✗ / ~ | Lectura HTML |
+| Imágenes con alt descriptivo | ✓ / ✗ / ~ | Lectura HTML |
+| HTTPS sin contenido mixto | ✓ / ✗ / ~ | Lighthouse |
+| Schema.org (JSON-LD) | ✓ / ✗ / ~ | Lectura HTML |
+
+Leyenda: ✓ conforme · ✗ incumple · ~ parcial (detallar en evidencia).
+
 ### Recomendaciones
-- [ ] Acción 1
-- [ ] Acción 2
+- [ ] Corregir los checks ✗ empezando por los que afectan al rastreo (robots, sitemap, canonical)
+- [ ] Completar los checks ~ con evidencia adjunta en el informe
+- [ ] Re-auditar tras las correcciones y regenerar la tabla de estado
 
 ## 4. ACCESIBILIDAD
 ### Violaciones WCAG
-| Regla | Elemento | Severidad | Fix |
-|-------|----------|-----------|-----|
-...
+
+| Regla WCAG | Elemento | Severidad | Fix |
+|------------|----------|----------|-----|
+| 1.4.3 Contraste (mínimo) | Texto con ratio < 4.5:1 | Alta | Ajustar color de texto/fondo y re-medir |
+| 1.1.1 Contorno no textual | Imagen sin alt | Alta | Añadir `alt` descriptivo o `alt=""` si decorativa |
+| 4.1.2 Nombre, rol, valor | Botón sin nombre accesible | Alta | Añadir `aria-label` o texto visible |
+| 2.1.1 Teclado | Control no alcanzable por teclado | Alta | Sustituir por elemento enfocable o `tabindex` |
+| 3.3.1 Identificación de errores | Formulario sin mensaje de error asociado | Media | `aria-describedby` + texto de error visible |
+| 2.4.7 Foco visible | `outline:none` sin alternativa | Media | Restaurar estilo de foco visible |
+
 ### Mejoras sugeridas
-- [ ] Mejora 1
+- [ ] Revisar landmarks y roles ARIA en cada plantilla
+- [ ] Verificar navegación completa por teclado en los flujos críticos
+- [ ] Añadir captions/transcripts al multimedia
 
 ## 5. RESUMEN Y PLAN DE ACCIÓN
 | Prioridad | Área | Acción | Esfuerzo |
 |-----------|------|--------|----------|
-...
+| Alta | Rendimiento | Corregir LCP/CLS (imágenes, lazy loading, layouts estables) | Medio |
+| Alta | Accesibilidad | Resolver violaciones WCAG de severidad alta | Medio |
+| Alta | SEO | Desbloquear rastreo (robots/sitemap/canonical) | Bajo |
+| Media | SEO | Completar meta tags, Open Graph y Schema.org | Bajo |
+| Media | Accesibilidad | Formularios: errores visibles y asociados | Medio |
+| Baja | Rendimiento | Compresión Brotli y caché agresiva de estáticos | Bajo |
 
 ## Fuentes fusionadas
 
@@ -126,3 +161,4 @@ Sin scripts en esta skill. Herramientas externas citadas:
 - `references/seo-source.md` — SEO.
 - `references/a11y-source.md` — Accesibilidad.
 - Skills relacionadas: `repo-starting`, `web-diseno`.
+- Para pruebas E2E → `webapp-testing`.

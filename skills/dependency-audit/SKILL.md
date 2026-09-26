@@ -7,7 +7,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: codigo
   idioma: es
 
@@ -61,7 +61,9 @@ Usar ante «audita dependencias», CVEs de librerías o limpieza de deps. No usa
 
 ## Estructura
 
-- `SKILL.md` — único fichero versionado de la skill (sin `references/`, `scripts/` ni `configs/` propios).
+- `SKILL.md` — pipeline de 7 etapas y reglas de oro.
+- `references/pipeline-detail.md` — detalle de las 7 etapas: entradas, salidas y criterios de decisión.
+- `references/ecosystems.md` — heurísticas de detección para npm, pip, cargo, go, maven, gradle, composer y gem.
 - Entradas del proyecto auditado _(ejemplos)_: `package.json`, `pyproject.toml`, `Cargo.toml`.
 
 ## Herramientas

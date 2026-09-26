@@ -7,7 +7,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: web
   idioma: es
 
@@ -62,7 +62,9 @@ Tests E2E o comprobación asistida de una app en `localhost` _(ejemplo: URL loca
 
 ## Estructura
 
-- `SKILL.md` — único fichero versionado de la skill (sin `references/`, `scripts/`, `configs/`, `assets/` propios).
+- `SKILL.md` — enfoque y ejemplo mínimo.
+- `references/playwright-config.md` — `playwright.config.ts` mínimo para testing local.
+- `references/test-patterns.md` — page objects, fixtures y mocking de API.
 - Ejemplo mínimo Playwright en este fichero (URL local _(ejemplo)_).
 
 ## Herramientas

@@ -7,12 +7,12 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.2.0"
   dominio: codigo
   idioma: es
 
 ---
-# Improve Codebase Architecture
+# Mejorar la Arquitectura del Código
 
 Surface architectural friction and propose **deepening opportunities** — refactors that turn shallow modules into deep ones. The aim is testability and AI-navigability.
 
@@ -108,3 +108,4 @@ Análisis y refactor de arquitectura: invocar ante «revisa la arquitectura», s
 ## Referencias
 
 - [references/html-report.md](references/html-report.md): informe HTML de ejemplo generado por la skill.
+- Para tipado avanzado → `typescript-avanzado`.
