@@ -164,9 +164,9 @@ export async function POST(req: Request) {
   const verified = await receiver.verify(req, {
     // headers: req.headers, // auto-detectado
   });
-  
+
   if (!verified) return new Response("Invalid signature", { status: 401 });
-  
+
   const body = await req.json();
   await processWebhook(body);
   return new Response("OK");

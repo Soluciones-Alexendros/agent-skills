@@ -267,7 +267,7 @@ def render_html(data, history=None):
                 <strong>Duración:</strong> {meta.get("duration_seconds", "N/A")}s
             </div>
         </div>
-        
+
         <div class="score-card">
             <div class="score-circle">{overall}</div>
             <p style="margin-top: 8px; color: #666;">Health Score</p>
@@ -290,7 +290,7 @@ def render_html(data, history=None):
                 </div>
             </div>
         </div>
-        
+
         <div class="section">
             <h2>Resumen</h2>
             <div class="summary-grid">

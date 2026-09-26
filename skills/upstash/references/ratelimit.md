@@ -211,7 +211,7 @@ const limiter = new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(20, "1m"
 export async function middleware(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || "anonymous";
   const { success } = await limiter.limit(`ip:${ip}`);
-  
+
   if (!success) {
     return new NextResponse("Rate limited", { status: 429 });
   }

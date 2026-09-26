@@ -198,13 +198,13 @@ const client = new Client({ token: "dev", devMode: true });
 // Versionar workflows
 export const { POST } = serve(async (context) => {
   const version = context.get("version") || 1;
-  
+
   if (version === 1) {
     // Lógica v1
     await context.run("old-step", ...);
     await context.set("version", 2); // Migrar estado
   }
-  
+
   if (version >= 2) {
     // Lógica v2 (nuevos pasos)
     await context.run("new-step", ...);
@@ -220,19 +220,19 @@ export const { POST } = serve(async (context) => {
 // Workflow como agente
 export const { POST } = serve(async (context) => {
   const task = context.requestPayload.task;
-  
+
   // Planificar
   const plan = await context.run("plan", async () => {
     return await llm.plan(task);
   });
-  
+
   // Ejecutar pasos del plan
   for (const step of plan.steps) {
     await context.run(`execute-${step.id}`, async () => {
       return await executeStep(step);
     });
   }
-  
+
   // Completar
   await context.run("finalize", async () => {
     return await llm.summarize(plan);
