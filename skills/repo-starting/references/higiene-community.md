@@ -2,7 +2,7 @@
 
 Checklist absorbida de la antigua skill `repo-hygiene`. Solo lectura; la remediación va en las fases 5–6 de `repo-starting` tras confirmación.
 
-Para la flota Iniciativas-Alexendros el contrato P0/P1/P2 completo está en `references/repo-standard/` (fuente: [repo-standard](https://github.com/Iniciativas-Alexendros/repo-standard)). Esta hoja cubre el mínimo community standards cuando el repo aún no se alinea al canon de flota.
+Para la flota Iniciativas-Alexendros el contrato P0/P1/P2 completo está en `references/` (fuente: [repo-standard](https://github.com/Iniciativas-Alexendros/repo-standard)). Esta hoja cubre el mínimo community standards cuando el repo aún no se alinea al canon de flota.
 
 ## Checks obligatorios
 

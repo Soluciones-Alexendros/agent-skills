@@ -29,7 +29,7 @@ Tomar un repositorio en estado desconocido y devolverlo: (a) alineado con el rem
 3. **Verde antes y después**: registrar si la suite pasa antes de tocar nada.
 4. **Cambios pequeños**: Conventional Commits; commit solo si el operador lo pide.
 5. **Separar lo disruptivo**: reescrituras grandes solo en el informe.
-6. **No inventar**: anclar en docs del repo o en `references/repo-standard/`. Verificar ADRs en el remoto si hace falta.
+6. **No inventar**: anclar en docs del repo o en `references/`. Verificar ADRs en el remoto si hace falta.
 7. **Preservar el propósito**: entender el producto antes de alinear estructura.
 8. **Convención local gana** en estilo de código; el **contrato de flota** (nombres de jobs CI, Renovate, árbol docs P0/P1) gana sobre desviaciones injustificadas.
 9. **Sincronización segura**: solo `git pull --ff-only` con árbol limpio y clon solo detrás del upstream.
@@ -53,7 +53,7 @@ Antes del escáner:
 ### Fase 0 — Reconocimiento
 
 1. `python3 <skill_root>/scripts/scan_repo.py <ruta> --json <fuera>/scan.json --md <fuera>/scan.md`
-2. Detectar **perfil** P0 / P1 / P2 (`references/repo-standard/canon.md`).
+2. Detectar **perfil** P0 / P1 / P2 (`references/canon.md`).
 3. `bash <skill_root>/scripts/check-product-structure.sh <ruta> --profile <P0|P1|P2>`
 4. `git log --oneline -20`, README, manifiestos, CI.
 5. Mapa del proyecto y puntos calientes.
@@ -66,8 +66,8 @@ Estática / dinámica / semántica. Severidades P0–P4.
 
 Leer en este orden (solo lo necesario):
 
-1. `references/repo-standard/canon.md` — perfiles, árbol, decisiones cerradas.
-2. `references/repo-standard/reutilizacion.md` — checklist §8 y copiar vs adaptar.
+1. `references/canon.md` — perfiles, árbol, decisiones cerradas.
+2. `references/reutilizacion.md` — checklist §8 y copiar vs adaptar.
 3. `references/higiene-community.md` — community standards residuales.
 4. `references/convenciones-y-canon.md` — estilo por lenguaje (la convención local del repo gana aquí).
 
@@ -99,9 +99,9 @@ Tras sí: rama `audit/AAAAMMDD` o `chore/repo-standard-*`. Aplicar checklist del
 |---------|--------|
 | `scripts/scan_repo.py` | Fase 0 |
 | `scripts/check-product-structure.sh` | Fase 0–2 |
-| `references/repo-standard/canon.md` | Fase 2 (primero) |
-| `references/repo-standard/reutilizacion.md` | Fase 2–4 |
-| `references/repo-standard/*` _(glob: detalle flota)_ | Detalle flota |
+| `references/canon.md` | Fase 2 (primero) |
+| `references/reutilizacion.md` | Fase 2–4 |
+| `references/*` _(glob: detalle flota)_ | Detalle flota |
 | `references/higiene-community.md` | Fases 2–3 |
 | `references/convenciones-y-canon.md` | Estilo por lenguaje |
 | `references/verificacion-y-tests.md` | Fases 4–5 |
@@ -118,7 +118,7 @@ git -C <repo> fetch --prune origin
 OUT=$(mktemp -d)
 python3 "$SKILL_ROOT/scripts/scan_repo.py" <repo> --json "$OUT/scan.json" --md "$OUT/scan.md"
 bash "$SKILL_ROOT/scripts/check-product-structure.sh" <repo> --profile P1
-# leer references/repo-standard/canon.md + reutilizacion.md
+# leer references/canon.md + reutilizacion.md
 # plan → sí → rama audit/… → alinear → informe
 ```
 
@@ -130,7 +130,7 @@ Usar al pedir escanear/auditar un repo, alinear con el estándar de flota o heal
 
 - `SKILL.md` — fases 0–7 y TL;DR.
 - `scripts/` — escáner y chequeo de estructura.
-- `references/repo-standard/` — canon de flota (`canon.md`, `reutilizacion.md` y detalle).
+- `references/` — canon de flota (`canon.md`, `reutilizacion.md` y detalle).
 - `references/convenciones-y-canon.md`, `references/higiene-community.md`, `references/verificacion-y-tests.md`, `references/frontend-ui-ux.md`, `references/plantilla-informe.md` — apoyo por fase.
 
 ## Herramientas
@@ -144,8 +144,8 @@ Usar al pedir escanear/auditar un repo, alinear con el estándar de flota o heal
 
 ## Referencias
 
-- `references/repo-standard/canon.md` — perfiles y árbol (primero).
-- `references/repo-standard/reutilizacion.md` — checklist §8 y copiar vs adaptar (verificar case exacto `reutilizacion.md`).
-- `references/repo-standard/*` _(glob: detalle flota)_ — `overview.md`, `architecture-resumen.md`, `adrs-indice.md`, `coding-standards.md`, `testing.md`.
+- `references/canon.md` — perfiles y árbol (primero).
+- `references/reutilizacion.md` — checklist §8 y copiar vs adaptar (verificar case exacto `reutilizacion.md`).
+- `references/*` _(glob: detalle flota)_ — `overview.md`, `architecture-resumen.md`, `adrs-indice.md`, `coding-standards.md`, `testing.md`.
 - `references/higiene-community.md`, `references/convenciones-y-canon.md`, `references/verificacion-y-tests.md`, `references/frontend-ui-ux.md`, `references/plantilla-informe.md`.
 - Rutas del canon externo `docs/architecture/`, `docs/architecture/decisions/` (ADR-0001…0011 y `template.md`) y `stacks/` — código plano, viven en el repo remoto `https://github.com/Iniciativas-Alexendros/repo-standard`, no incluidas en esta skill.
