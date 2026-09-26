@@ -47,10 +47,19 @@ done
 
 say() { echo "$1: $2"; }
 
+# is-active imprime el estado por stdout AUNQUE falle (exit != 0),
+# lo que generaría líneas sueltas sin "CLAVE: ". Capturar estado o fallback.
+svc() { # [--user] unit fallback
+  local args=()
+  if [[ "${1:-}" == "--user" ]]; then args+=(--user); shift; fi
+  local st
+  if st=$(systemctl "${args[@]}" is-active "$1" 2>/dev/null); then printf '%s' "$st"; else printf '%s' "$2"; fi
+}
+
 say "apparmor_kernel" "$(cat /sys/module/apparmor/parameters/enabled 2>/dev/null || echo '?')"
 say "apparmor_userns_restrict" "$(sysctl -n kernel.apparmor_restrict_unprivileged_userns 2>/dev/null || echo '?')"
 if command -v systemctl >/dev/null 2>&1; then
-  say "apparmor_service" "$(systemctl is-active apparmor 2>/dev/null || echo '?')"
+  say "apparmor_service" "$(svc apparmor '?')"
 else
   say "apparmor_service" "?"
 fi
@@ -60,7 +69,7 @@ else
   say "aa_status" "aa-status no disponible (sin sudo o sin apparmor-utils)"
 fi
 if command -v systemctl >/dev/null 2>&1; then
-  say "auditd" "$(systemctl is-active auditd 2>/dev/null || echo '?')"
+  say "auditd" "$(svc auditd '?')"
 else
   say "auditd" "?"
 fi
@@ -89,8 +98,8 @@ else
   say "aide_timer" "?"
 fi
 if command -v systemctl >/dev/null 2>&1; then
-  say "clamav_daemon" "$(systemctl is-active clamav-daemon 2>/dev/null || echo no-instalado)"
-  say "freshclam" "$(systemctl is-active clamav-freshclam 2>/dev/null || echo no-instalado)"
+  say "clamav_daemon" "$(svc clamav-daemon no-instalado)"
+  say "freshclam" "$(svc clamav-freshclam no-instalado)"
 else
   say "clamav_daemon" "no-instalado"
   say "freshclam" "no-instalado"
@@ -105,12 +114,12 @@ else
   say "ufw" "sin sudo"
 fi
 if command -v systemctl >/dev/null 2>&1; then
-  say "sshd" "$(systemctl is-active ssh 2>/dev/null || echo inactivo)"
+  say "sshd" "$(svc ssh inactivo)"
 else
   say "sshd" "inactivo"
 fi
 if command -v systemctl >/dev/null 2>&1; then
-  say "apparmor_notify_user" "$(systemctl --user is-active apparmor-notify 2>/dev/null || echo no)"
+  say "apparmor_notify_user" "$(svc --user apparmor-notify no)"
 else
   say "apparmor_notify_user" "no"
 fi
