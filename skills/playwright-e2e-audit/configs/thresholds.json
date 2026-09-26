@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "crawler": {
+    "max_depth": 12,
+    "max_pages": 150,
+    "pagination_param": "page",
+    "pagination_max": 5,
+    "ignore_paths": ["/logout", "/admin", "/wp-admin", "/wp-login"],
+    "timeout_ms": 20000
+  },
+  "ui": {
+    "touch_target_min_px": 44,
+    "touch_target_hard_min_px": 24,
+    "font_size_min_px": 12,
+    "line_height_min": 1.4,
+    "grid_pt": 8,
+    "header_max_viewport_pct": 25,
+    "cta_prominence_pct": [15, 20],
+    "min_gap_px": 8
+  },
+  "cwv": {
+    "lcp_ms": 2500,
+    "inp_ms": 200,
+    "cls": 0.1
+  },
+  "motion": {
+    "transition_max_ms": 500
+  },
+  "seo": {
+    "title_chars": [50, 60],
+    "meta_description_chars": [120, 158]
+  },
+  "semaforo": {"verde": 90, "ambar": 70},
+  "veredicto": {
+    "apto": {"max_fail_criticas": 0, "min_pct_global": 90},
+    "apto_con_observaciones": {"max_fail_criticas": 0, "min_pct_global": 70},
+    "notas": "1 FAIL Crítica => NO APTO. WARN cuenta como incumplimiento parcial. N/A excluido del denominador."
+  },
+  "rice_sprints": {
+    "Sprint 0": {"plazo": "48h", "severidades": ["Crítica"], "objetivo": "Estabilizar: la web no rompe ni pierde conversiones"},
+    "Sprint 1": {"plazo": "Semana 1", "severidades": ["Alta"], "objetivo": "Usable y accesible: 100% funcional + WCAG AA"},
+    "Sprint 2": {"plazo": "Semana 2", "severidades": ["Media"], "objetivo": "Profesionalizar: CWV verde y UI unificada"},
+    "Sprint 3": {"plazo": "Semana 3", "severidades": ["Baja"], "objetivo": "SEO y delight: pulido final"}
+  },
+  "viewports": {"desktop": 1440, "tablet": 768, "mobile": 390},
+  "personas": ["visitante_nuevo", "usuario_logueado", "mobile_user"]
+}

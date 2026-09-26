@@ -1,0 +1,13 @@
+{
+  "url": "https://ejemplo.test/pricing",
+  "viewport": {"w": 390, "h": 844},
+  "documentWidth": 412,
+  "elements": [
+    {"selector": "button.buy", "tag": "BUTTON", "w": 32, "h": 28, "x": 10, "y": 100, "clickable": true, "text": "Comprar"},
+    {"selector": "button.more", "tag": "BUTTON", "w": 20, "h": 20, "x": 10, "y": 200, "clickable": true, "text": "+"},
+    {"selector": "a.nav", "tag": "A", "w": 120, "h": 48, "x": 0, "y": 0, "clickable": true, "text": "Home"},
+    {"selector": "p.body", "tag": "P", "w": 360, "h": 96, "x": 15, "y": 300, "fontSize": "10px", "lineHeight": "12px", "text": "Texto de cuerpo largo de ejemplo para medir tipografía"},
+    {"selector": "img.hero", "tag": "IMG", "w": 400, "h": 200, "x": 0, "y": 48, "naturalW": 1200, "naturalH": 1200},
+    {"selector": "header.top", "tag": "HEADER", "w": 390, "h": 240, "x": 0, "y": 0}
+  ]
+}

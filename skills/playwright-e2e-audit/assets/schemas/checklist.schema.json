@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Playwright E2E Audit Compliance Checklist v2",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "url",
+      "category",
+      "check",
+      "status",
+      "severity"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "ID único ej: RT-01, FN-02, UI-01"
+      },
+      "url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "category": {
+        "type": "string",
+        "enum": [
+          "Rutas",
+          "Funcional",
+          "Formularios",
+          "UI/UX",
+          "Accesibilidad",
+          "Performance",
+          "SEO",
+          "Seguridad",
+          "Motion"
+        ]
+      },
+      "check": {
+        "type": "string"
+      },
+      "method": {
+        "type": "string",
+        "description": "Cómo se verificó: crawler, boundingBox, axe, lighthouse, etc"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "PASS",
+          "FAIL",
+          "WARN",
+          "N/A"
+        ]
+      },
+      "severity": {
+        "type": "string",
+        "enum": [
+          "Crítica",
+          "Alta",
+          "Media",
+          "Baja"
+        ]
+      },
+      "evidence": {
+        "type": "object",
+        "properties": {
+          "locator": {
+            "type": "string"
+          },
+          "box": {
+            "type": "object"
+          },
+          "screenshot": {
+            "type": "string"
+          },
+          "console": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "network": {
+            "type": "array"
+          }
+        }
+      },
+      "recommendation": {
+        "type": "string"
+      },
+      "wcag_ref": {
+        "type": "string"
+      },
+      "rice": {
+        "type": "object",
+        "properties": {
+          "reach": {
+            "type": "number"
+          },
+          "impact": {
+            "type": "number"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "effort": {
+            "type": "number"
+          },
+          "score": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+name: quality
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sin residuos ni finales de línea con espacios
+        run: |
+          FAIL=0
+          # residuos prohibidos
+          if find skills tools docs -name '__pycache__' -o -name '.pytest_cache' -o -name '.archivado*' | grep -q .; then
+            echo "RESIDUOS ENCONTRADOS"; FAIL=1
+          fi
+          # trailing whitespace en md/py/sh/yml
+          if grep -rn ' $' --include='*.md' --include='*.py' --include='*.sh' --include='*.yml' skills tools docs .github run-validation.sh | grep -q .; then
+            echo "TRAILING WHITESPACE"; FAIL=1
+          fi
+          exit $FAIL
+      - name: bash -n global
+        run: |
+          find skills tools -name '*.sh' -print0 | xargs -0 -n1 bash -n

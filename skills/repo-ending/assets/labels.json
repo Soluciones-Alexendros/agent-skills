@@ -1,0 +1,80 @@
+{
+  "notes": [
+    "Taxonomía ortogonal. Sintaxis 'eje: valor'. Adapta solo el eje area al dominio del repo.",
+    "preserve_unless_mapped no se borra ni se renombra salvo que el usuario lo pida en la confirmación."
+  ],
+  "axes": {
+    "type": {
+      "color": "1D76DB",
+      "labels": [
+        { "name": "type: bug", "description": "Something isn't working" },
+        { "name": "type: feature", "description": "New functionality" },
+        { "name": "type: enhancement", "description": "Improvement to existing functionality" },
+        { "name": "type: docs", "description": "Documentation only" },
+        { "name": "type: refactor", "description": "Code change without behavior change" },
+        { "name": "type: chore", "description": "Maintenance, tooling, dependencies" },
+        { "name": "type: security", "description": "Security vulnerability or hardening" }
+      ]
+    },
+    "priority": {
+      "color": "B60205",
+      "labels": [
+        { "name": "priority: critical", "description": "Blocks release or production" },
+        { "name": "priority: high", "description": "Next in line after current work" },
+        { "name": "priority: medium", "description": "Scheduled in normal backlog order" },
+        { "name": "priority: low", "description": "Nice to have; no committed date" }
+      ]
+    },
+    "status": {
+      "color": "FBCA04",
+      "labels": [
+        { "name": "status: triage", "description": "Needs review and classification" },
+        { "name": "status: blocked", "description": "Waiting on an external dependency" },
+        { "name": "status: in-progress", "description": "Actively being worked" },
+        { "name": "status: needs-review", "description": "Work done, awaiting review" },
+        { "name": "status: wontfix", "description": "Will not be addressed; reason in a comment" }
+      ]
+    },
+    "area": {
+      "color": "0E8A16",
+      "labels": [
+        { "name": "area: api", "description": "Public API surface" },
+        { "name": "area: cli", "description": "Command-line interface" },
+        { "name": "area: core", "description": "Core domain logic" },
+        { "name": "area: infra", "description": "CI/CD, deployment, infrastructure" },
+        { "name": "area: ui", "description": "User interface" }
+      ]
+    },
+    "release": {
+      "color": "5319E7",
+      "labels": [
+        { "name": "release: major", "description": "Breaking change; bumps MAJOR" },
+        { "name": "release: minor", "description": "Backwards-compatible feature; bumps MINOR" },
+        { "name": "release: patch", "description": "Backwards-compatible fix; bumps PATCH" },
+        { "name": "release: breaking", "description": "Unmarked breaking change; resolve before release" }
+      ]
+    }
+  },
+  "preserve_unless_mapped": [
+    "question",
+    "duplicate",
+    "help wanted",
+    "good first issue",
+    "invalid"
+  ],
+  "aliases_for_cleanup": {
+    "bug": "type: bug",
+    "enhancement": "type: enhancement",
+    "feature": "type: feature",
+    "feature request": "type: feature",
+    "documentation": "type: docs",
+    "dependencies": "type: chore",
+    "security": "type: security",
+    "critical": "priority: critical",
+    "high priority": "priority: high",
+    "low priority": "priority: low",
+    "blocked": "status: blocked",
+    "in progress": "status: in-progress",
+    "wontfix": "status: wontfix"
+  }
+}
