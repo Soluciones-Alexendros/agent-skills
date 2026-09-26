@@ -40,17 +40,17 @@ const rateLimitScript = `
   local key = KEYS[1]
   local limit = tonumber(ARGV[1])
   local window = tonumber(ARGV[2])
-  
+
   local current = redis.call('INCR', key)
-  
+
   if current == 1 then
     redis.call('EXPIRE', key, window)
   end
-  
+
   if current > limit then
     return 0
   end
-  
+
   return 1
 `;
 
@@ -72,23 +72,23 @@ const purchaseScript = `
   local userBalance = KEYS[2]
   local qty = tonumber(ARGV[1])
   local price = tonumber(ARGV[2])
-  
+
   local stock = tonumber(redis.call('GET', inventory) or 0)
   local balance = tonumber(redis.call('GET', userBalance) or 0)
-  
+
   local cost = qty * price
-  
+
   if stock < qty then
     return {err = "insufficient_stock"}
   end
-  
+
   if balance < cost then
     return {err = "insufficient_balance"}
   end
-  
+
   redis.call('DECRBY', inventory, qty)
   redis.call('DECRBY', userBalance, cost)
-  
+
   return {ok = "success"}
 `;
 
@@ -109,12 +109,12 @@ const setIfHigherScript = `
   local key = KEYS[1]
   local newValue = tonumber(ARGV[1])
   local current = tonumber(redis.call('GET', key) or 0)
-  
+
   if newValue > current then
     redis.call('SET', key, newValue)
     return 1
   end
-  
+
   return 0
 `;
 

@@ -69,7 +69,7 @@ await redis.set("user", JSON.stringify({ name: "Alice" }));
 async function getUser(id: string) {
   const cached = await redis.get(`user:${id}`);
   if (cached) return cached;
-  
+
   const user = await db.users.find(id);
   await redis.setex(`user:${id}`, 3600, user); // TTL 1h
   return user;
