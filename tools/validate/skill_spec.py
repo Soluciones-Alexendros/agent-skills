@@ -13,6 +13,8 @@ ROOT = Path(sys.argv[sys.argv.index("--root") + 1]) if "--root" in sys.argv else
 SKILLS = ROOT / "skills"
 
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
+PROHIBITED_DIRS = {"agents", "infrastructure", "languages"}
 DOMINIOS = {"alignux", "codigo", "datos", "integraciones", "proceso", "repo", "web"}
 MAX_BODY_LINES = 500
 ERRORS: list[str] = []
@@ -68,6 +70,19 @@ def check_skill(sdir: Path) -> None:
     dom = re.search(r"dominio:\s*(\S+)", raw_fm)
     if dom and dom.group(1) not in DOMINIOS:
         err(skill, f"dominio desconocido: {dom.group(1)}")
+    ver = re.search(r"version:\s*\"?([^\"\s]+)\"?", raw_fm)
+    if ver and not SEMVER_RE.match(ver.group(1)):
+        err(skill, f"version no semver X.Y.Z: '{ver.group(1)}'")
+    # directorios prohibidos dentro de la skill
+    for d in PROHIBITED_DIRS:
+        if (sdir / d).is_dir():
+            err(skill, f"directorio prohibido: {d}/")
+    # references/ solo ficheros planos
+    refs = sdir / "references"
+    if refs.is_dir():
+        for sub in refs.iterdir():
+            if sub.is_dir():
+                err(skill, f"references/ contiene subdirectorio: {sub.name}/")
     # residuos prohibidos
     for pat in ("__pycache__", ".pytest_cache", "LICENSE", "LICENSE.txt"):
         if (sdir / pat).exists() or any(sdir.rglob(pat)):

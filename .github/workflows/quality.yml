@@ -12,12 +12,23 @@ jobs:
       - name: Sin residuos ni finales de línea con espacios
         run: |
           FAIL=0
-          # residuos prohibidos
-          if find skills tools docs -name '__pycache__' -o -name '.pytest_cache' -o -name '.archivado*' | grep -q .; then
+          # residuos prohibidos: caches, bytecode, temporales, backups, logs
+          if find . -path './.git' -prune -o \( \
+            -name '__pycache__' -o -name '*.pyc' -o -name '.pytest_cache' -o \
+            -name '.archivado*' -o -name '*.tmp' -o -name '*.bak' -o -name '*.log' \
+            \) -print | grep -q .; then
             echo "RESIDUOS ENCONTRADOS"; FAIL=1
           fi
-          # trailing whitespace en md/py/sh/yml
-          if grep -rn ' $' --include='*.md' --include='*.py' --include='*.sh' --include='*.yml' skills tools docs .github run-validation.sh | grep -q .; then
+          # secretos prohibidos en repo
+          if find . -path './.git' -prune -o \( \
+            -name '.env' -o -name '.env.*' -o -name '*.pem' -o -name '*.key' \
+            \) -print | grep -q .; then
+            echo "SECRETOS ENCONTRADOS"; FAIL=1
+          fi
+          # trailing whitespace en md/py/sh/yml/yaml/json/toml
+          if grep -rn ' $' --include='*.md' --include='*.py' --include='*.sh' \
+            --include='*.yml' --include='*.yaml' --include='*.json' --include='*.toml' \
+            skills tools docs .github run-validation.sh | grep -q .; then
             echo "TRAILING WHITESPACE"; FAIL=1
           fi
           exit $FAIL

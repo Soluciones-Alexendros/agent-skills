@@ -1,0 +1,16 @@
+name: version
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  check-bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Exigir bump de metadata.version en skills cambiadas
+        run: python3 tools/version/bump.py --check --auto --base origin/${{ github.event.pull_request.base.ref || 'main' }}
