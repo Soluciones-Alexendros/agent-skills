@@ -25,3 +25,41 @@ Cada `SKILL.md` es autocontenido y legible: sus `references/` amplían por nivel
 
 - Por dominio: ver tabla en [README](../README.md) y [TAXONOMY.md](TAXONOMY.md).
 - Los `description` declaran límites explícitos (`No usar para X → otra-skill`); ante solape, seguir esa indicación.
+
+## Versionado automático
+
+Cada skill declara `metadata.version` en su frontmatter. Al modificar instrucciones, bump según la magnitud:
+
+```bash
+python3 tools/version/bump.py --auto --type <major|minor|patch>
+```
+
+- `major`: actualización incompatible (breaking)
+- `minor`: desarrollo menor, nueva funcionalidad compatible
+- `patch`: parcheado, fix compatible
+
+La CI (`version.yml`) exige el bump en PRs con skills cambiadas. Para verificar localmente:
+
+```bash
+python3 tools/version/bump.py --check --auto --base origin/main
+```
+
+## Estructura de references/ (carga progresiva)
+
+Cada skill sigue el patrón de carga progresiva:
+
+1. `SKILL.md` — arranque autocontenido con el 80% de los casos resueltos.
+2. `references/` — guías detalladas por tema, se cargan solo cuando el caso lo requiere.
+3. `scripts/` — utilidades automatizadas (no se cargan en contexto, se ejecutan).
+
+Esto mantiene el contexto del agente ligero: solo se lee lo necesario para la tarea.
+
+## Validación
+
+Toda skill debe pasar la validación del repo en verde:
+
+```bash
+bash run-validation.sh
+```
+
+Ejecuta: spec (`skill_spec.py`), enlaces (`skill_links.py`), bump de versión, pytest, smoke tests y `bash -n` global. Ver [CONTRIBUTING.md](CONTRIBUTING.md) para el proceso de contribución.

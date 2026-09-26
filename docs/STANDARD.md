@@ -43,4 +43,21 @@ Prohibido en el repo: `__pycache__/`, `.pytest_cache/`, dirs `.archivado-*`, fic
 ## Versiones
 
 - `metadata.version` por skill (semver). Cambios incompatibles de instrucciones → bump minor/major y nota en [CHANGELOG.md](../CHANGELOG.md).
+- Autoversionado por magnitud con `tools/version/bump.py` (sin dependencias):
+
+| Magnitud | Alias ES | Efecto | Cuándo |
+|---|---|---|---|
+| `major` | actualización, breaking, incompatible | `X.y.z` → `X+1.0.0` | instrucciones incompatibles |
+| `minor` | desarrollo menor, feature, funcionalidad | `x.Y.z` → `x.Y+1.0` | nueva capacidad compatible |
+| `patch` | parche, parcheado, fix, corrección | `x.y.Z` → `x.y.Z+1` | fix compatible, docs, typos |
+
+```bash
+python3 tools/version/bump.py --type minor --skills codigo-seguridad
+python3 tools/version/bump.py --type parche --all --dry-run
+python3 tools/version/bump.py --type fix --auto --base origin/main
+python3 tools/version/bump.py --check --auto --base origin/main  # lo que exige la CI
+```
+
+- El bumper actualiza `SKILL.md`, añade la entrada a `## [Unreleased]` del CHANGELOG y sugiere el tag de repo (`--tag` lo crea: `vX.Y.Z`).
+- La CI (`version.yml`) falla en la PR si una skill cambiada no trae su bump.
 - Release del repo: tag `vX.Y.Z` + GitHub Release (workflow `release.yml`).
