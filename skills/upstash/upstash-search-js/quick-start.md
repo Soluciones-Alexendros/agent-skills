@@ -26,9 +26,9 @@ Documents consist of:
 ### TypeScript / Python Example
 ```ts
 import { Search } from "@upstash/search";
-const client = new Search({ 
+const client = new Search({
   url: process.env.UPSTASH_SEARCH_REST_URL,
-  token: process.env.UPSTASH_SEARCH_REST_TOKEN 
+  token: process.env.UPSTASH_SEARCH_REST_TOKEN
 });
 const index = client.index("movies");
 await index.upsert([

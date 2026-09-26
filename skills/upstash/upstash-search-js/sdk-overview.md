@@ -12,9 +12,9 @@ You must configure a Search client using either environment variables or a confi
 import { Search } from "@upstash/search";
 
 // Option 1: with explicit config
-const client = new Search({ 
+const client = new Search({
   url: process.env.UPSTASH_SEARCH_REST_URL!,
-  token: process.env.UPSTASH_SEARCH_REST_TOKEN! 
+  token: process.env.UPSTASH_SEARCH_REST_TOKEN!
 });
 const index = client.index("movies");
 

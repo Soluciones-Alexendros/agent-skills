@@ -58,7 +58,7 @@ await index.upsert([
     }
   },
   {
-    id: "prod-2", 
+    id: "prod-2",
     content: "Raqueta tenis Wilson Pro Staff - control, precisión, grafito",
     metadata: {
       category: "deportes",
@@ -75,9 +75,9 @@ await index.upsert([
 
 ```typescript
 // Búsqueda simple
-const results = await index.search({ 
-  query: "zapatillas running", 
-  topK: 10 
+const results = await index.search({
+  query: "zapatillas running",
+  topK: 10
 });
 
 // Búsqueda con reranking (mejor relevancia semántica)
@@ -130,7 +130,7 @@ do {
     topK: 20,
     cursor
   });
-  
+
   // procesa page.results
   cursor = page.cursor; // undefined = fin
 } while (cursor);
@@ -167,10 +167,10 @@ const info = await index.info();
 const fast = await index.search({ query: "nike air", topK: 20 });
 
 // Con reranking: Cross-encoder (preciso, ~50-100ms)
-const precise = await index.search({ 
-  query: "nike air", 
-  topK: 20, 
-  rerank: true 
+const precise = await index.search({
+  query: "nike air",
+  topK: 20,
+  rerank: true
 });
 
 // Diferencia: rerank entiende "air" como tecnología Nike, no solo palabra

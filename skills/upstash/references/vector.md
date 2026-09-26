@@ -59,9 +59,9 @@ await index.upsert([
   {
     id: "doc-1",
     vector: [0.1, 0.2, 0.3, ...], // 1536-dim
-    metadata: { 
-      title: "Introducción a RAG", 
-      category: "ai", 
+    metadata: {
+      title: "Introducción a RAG",
+      category: "ai",
       author: "user-123",
       tags: ["rag", "llm", "vector-db"]
     }
@@ -237,11 +237,11 @@ const answer = await openai.chat.completions.create({
 async function cachedCompletion(prompt: string) {
   const embedding = await embed(prompt);
   const cached = await index.query({ vector: embedding, topK: 1, filter: "type = 'completion'" });
-  
+
   if (cached[0]?.score > 0.95) {
     return cached[0].metadata.response; // Cache hit
   }
-  
+
   const response = await llm.complete(prompt);
   await index.upsert([{
     id: `completion-${Date.now()}`,
