@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+- `repo-starting` 0.1.0 -> 0.2.0 (minor)
+
+  aplanar references/repo-standard (regla references planas)
+
+
 Formato: entradas por release del repo. Las skills versionan además su `metadata.version` en cada `SKILL.md`.
 
 ## [v0.1.0] — 2026-09-26
