@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- `repo-starting` 0.2.0 -> 0.2.1 (patch)
+
+  cambios P2 sobre aplanado
+
 - `repo-starting` 0.1.0 -> 0.2.0 (minor)
 
   aplanar references/repo-standard (regla references planas)
