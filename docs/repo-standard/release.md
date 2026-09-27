@@ -2,7 +2,7 @@
 
 ### Propósito de este documento
 
-- **Objetivos:** Fijar versionado, changelog, publicación y provenance (SLSA/sigstore) de la flota. Solo lectura: la ceremonia de cierre la ejecuta `repo-release` (Fases B y F).
+- **Objetivos:** Fijar versionado, changelog, publicación y provenance (SLSA/sigstore) de la flota. Solo lectura: la ceremonia de cierre la ejecuta `operar-release` (Fases B y F).
 - **Estructura:** Esta meta-sección → Esquema de versión → Changelog → Publicación → Provenance → Yank.
 - **Contenido a integrar según contexto:** En un producto, elegir SemVer o CalVer una vez y no mezclarlos. Las notas de release salen siempre del changelog, nunca se redactan aparte.
 
@@ -15,7 +15,7 @@
 
 ## Changelog (Keep a Changelog 1.1.0)
 
-Fuente: `https://keepachangelog.com/en/1.1.0/`. Plantilla en `repo-release/assets/CHANGELOG.md`.
+Fuente: `https://keepachangelog.com/en/1.1.0/`. Plantilla en `operar-release/assets/CHANGELOG.md`.
 
 - Una sección por release: `## [X.Y.Z] - AAAA-MM-DD`, la más reciente arriba, justo bajo `[Unreleased]`.
 - Grupos canónicos: Added / Changed / Deprecated / Removed / Fixed / Security. Omitir grupos vacíos en una release real.

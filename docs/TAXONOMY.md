@@ -1,20 +1,19 @@
-# Taxonomía de dominios
+# Taxonomía de familias
 
-Son 18 skills en 7 dominios. El campo `metadata.dominio` del frontmatter de `SKILL.md` manda; el prefijo del nombre es orientativo (p. ej. `email-proton` y `protonpass` pertenecen a `integraciones`, `upstash` a `datos`). La taxonomía es cerrada: toda skill nueva debe encajar en un dominio existente o proponer uno nuevo en la PR (ver [CONTRIBUTING.md](CONTRIBUTING.md)).
+Son 17 skills en 4 familias. El campo `metadata.dominio` del frontmatter de `SKILL.md` refleja esta tabla y el prefijo del nombre es la familia (normativo, no orientativo). La taxonomía es cerrada: toda skill nueva debe encajar en una familia existente o proponer una nueva en la PR (ver [CONTRIBUTING.md](CONTRIBUTING.md)).
 
-| Dominio | Ámbito | Skills |
+Las familias se alinean con las fases de ciclo de vida de ISO/IEC/IEEE 12207: diseño (`disenar`), implementación (`construir`), verificación (`verificar`) y operación (`operar`).
+
+| Familia | Ámbito | Skills |
 |---|---|---|
-| `alignux` | Constitución ALIGNUX | alignux-constitucion |
-| `codigo` | Calidad y arquitectura del código | codigo-arquitectura · codigo-typescript |
-| `datos` | Bases de datos y backends serverless | upstash (router + 7 modos: `redis`, `vector`, `search`, `queue`, `ratelimit`, `blob`, `box`) |
-| `integraciones` | Servicios externos (correo, gestores de secretos) | email-proton · protonpass |
-| `linux` | Mantenimiento y seguridad defensiva de sistemas Linux | linux-mantenimiento · linux-seguridad |
-| `repo` | Ciclo de vida del repositorio: audit, hooks, release | repo-audit · repo-hooks · repo-release · repo-lifecycle (enrutador audit/hooks/release) |
-| `web` | Auditoría, diseño, seguridad, rendimiento y compliance web | web-compliance · web-performance · web-fullaudit (orquestador) · web-seguridad · web-design-system · web-diseno |
+| `disenar` | Estructura, identidad y experiencia antes de escribir código | disenar-arquitectura · disenar-constitucion · disenar-design-system · disenar-interfaz |
+| `construir` | Implementación: tipado, datos, integraciones | construir-typescript · construir-upstash · construir-proton-suite (correo Proton Mail + secretos Proton Pass) |
+| `verificar` | Quality gates y auditorías | verificar-compliance · verificar-performance · verificar-owasp · verificar-fullaudit (orquestador) · verificar-repo · verificar-hooks |
+| `operar` | Publicación y operación continua | operar-release · operar-lifecycle · operar-mantenimiento · operar-seguridad |
 
 ## Reglas
 
 1. El `name` del frontmatter de `SKILL.md` es idéntico al nombre de la carpeta.
-2. El campo `metadata.dominio` del frontmatter refleja esta tabla (manda sobre el prefijo).
+2. El campo `metadata.dominio` del frontmatter refleja esta tabla — el prefijo del nombre ES la familia (normativo, no orientativo): toda skill se nombra `<familia>-<slug>` en kebab-case sin tildes.
 3. El `description` del frontmatter declara alcance y límites con referencias cruzadas (`→ otra-skill`) cuando hay solape.
 4. Idioma de descripciones y docs del repo: español (`metadata.idioma: es`); se preservan términos técnicos en inglés.

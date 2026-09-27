@@ -6,9 +6,9 @@ Copiar o enlazar la carpeta de la skill al directorio de skills del usuario o de
 
 ```bash
 # global
-cp -r skills/web-seguridad ~/.claude/skills/
+cp -r skills/verificar-owasp ~/.claude/skills/
 # o por proyecto
-cp -r skills/web-seguridad /ruta/proyecto/.claude/skills/
+cp -r skills/verificar-owasp /ruta/proyecto/.claude/skills/
 ```
 
 Claude Code descubre el `SKILL.md` por su frontmatter (`name` + `description`).
@@ -23,7 +23,7 @@ Cada `SKILL.md` es autocontenido y legible: sus `references/` amplían por nivel
 
 ## Elegir skill
 
-- Por dominio: ver tabla en [README](../README.md) y [TAXONOMY.md](TAXONOMY.md).
+- Por familia: ver tabla en [README](../README.md) y [TAXONOMY.md](TAXONOMY.md).
 - Los `description` declaran límites explícitos (`No usar para X → otra-skill`); ante solape, seguir esa indicación.
 
 ## Versionado automático

@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+- `construir-typescript` 1.0.0 -> 2.0.0 (major)
+- `construir-upstash` 0.4.0 -> 1.0.0 (major)
+- `disenar-arquitectura` 0.3.0 -> 1.0.0 (major)
+- `disenar-constitucion` 0.2.1 -> 1.0.0 (major)
+- `disenar-design-system` 0.2.0 -> 1.0.0 (major)
+- `disenar-interfaz` 0.3.0 -> 1.0.0 (major)
+- `operar-lifecycle` 0.1.0 -> 1.0.0 (major)
+- `operar-mantenimiento` 1.0.0 -> 2.0.0 (major)
+- `operar-release` 1.0.0 -> 2.0.0 (major)
+- `operar-seguridad` 1.0.0 -> 2.0.0 (major)
+- `verificar-compliance` 1.0.0 -> 2.0.0 (major)
+- `verificar-fullaudit` 1.0.0 -> 2.0.0 (major)
+- `verificar-hooks` 2.0.0 -> 3.0.0 (major)
+- `verificar-owasp` 1.0.0 -> 2.0.0 (major)
+- `verificar-performance` 2.0.0 -> 3.0.0 (major)
+- `verificar-repo` 1.0.0 -> 2.0.0 (major)
+
+  Reestructuración a 4 familias por fase SDLC (disenar/construir/verificar/operar); fusión email-proton+protonpass → construir-proton-suite v1.0.0; dominios alignux, datos, integraciones suprimidos
+
 - Consolidación FASE-4 (18 skills, 7 dominios): `docs/TAXONOMY.md`, `README.md` y `tools/validate/skill_spec.py` alineados a los nombres reales; `web-seguridad` con cuerpo íntegramente en ES (tecnicismos en inglés preservados).
 - Tabla de renombros/fusiones:
   | Antes | Ahora | Tipo |

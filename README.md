@@ -1,6 +1,6 @@
 # agent-skills
 
-18 skills para agentes de codificación, mantenidas por Soluciones-Alexendros bajo licencia MIT.
+17 skills para agentes de codificación, mantenidas por Soluciones-Alexendros bajo licencia MIT.
 
 ## Quick start
 
@@ -9,28 +9,27 @@ git clone https://github.com/Soluciones-Alexendros/agent-skills.git
 cp -r agent-skills/skills/<nombre> ~/.claude/skills/
 ```
 
-## Skills por dominio
+## Skills por familia
 
-| Dominio | Skill | Qué hace |
+| Familia | Skill | Qué hace |
 |---|---|---|
-| `alignux` | alignux-constitucion | Constitución y memoria del agente |
-| `codigo` | codigo-arquitectura | Análisis y refactor de código |
-| | codigo-typescript | Tipos avanzados de TypeScript |
-| `datos` | upstash | Ecosistema serverless Upstash |
-| `integraciones` | email-proton | Correo Proton Mail (thin-skill → protonsuite-tools) |
-| | protonpass | Secretos Proton Pass (thin-skill → protonsuite-tools) |
-| `linux` | linux-mantenimiento | Higiene y salud del sistema Linux |
-| | linux-seguridad | Seguridad defensiva de Linux |
-| `repo` | repo-audit | Auditoría y health check de repositorio |
-| | repo-hooks | Hooks pre-commit con Husky |
-| | repo-release | Cierre y publicación de repositorio |
-| | repo-lifecycle | Enrutador audit/hooks/release |
-| `web` | web-design-system | Sistema de diseño |
-| | web-compliance | Auditoría compliance web (A11y, legal, SEO/SEM) |
-| | web-diseno | Diseño visual de interfaces |
-| | web-fullaudit | Orquestador de auditoría web completa |
-| | web-performance | Auditoría performance y calidad técnica web |
-| | web-seguridad | Revisión seguridad código y dependencias (OWASP) |
+| `disenar` | disenar-arquitectura | Análisis de arquitectura de codebase |
+| | disenar-constitucion | Constitución y memoria del agente |
+| | disenar-design-system | Sistema de diseño |
+| | disenar-interfaz | Diseño visual de interfaces |
+| `construir` | construir-typescript | Tipos avanzados de TypeScript |
+| | construir-upstash | Ecosistema serverless Upstash |
+| | construir-proton-suite | Correo Proton Mail y secretos Proton Pass (thin-skill → protonsuite-tools) |
+| `verificar` | verificar-compliance | Auditoría compliance web (A11y, legal, SEO/SEM) |
+| | verificar-performance | Auditoría performance y calidad técnica web |
+| | verificar-owasp | Revisión seguridad código y dependencias (OWASP) |
+| | verificar-fullaudit | Orquestador de auditoría web completa |
+| | verificar-repo | Auditoría y health check de repositorio |
+| | verificar-hooks | Hooks pre-commit con Husky |
+| `operar` | operar-release | Cierre y publicación de repositorio |
+| | operar-lifecycle | Enrutador audit/hooks/release |
+| | operar-mantenimiento | Higiene y salud del sistema Linux |
+| | operar-seguridad | Seguridad defensiva de Linux |
 
 ## Estructura del repo
 

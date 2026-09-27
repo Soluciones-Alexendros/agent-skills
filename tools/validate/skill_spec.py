@@ -2,7 +2,7 @@
 """Validador de spec de skills (Agent Skills + STANDARD.md del repo).
 
 Uso: python3 tools/validate/skill_spec.py [--root DIR]
-Exit 0 si las 18 skills cumplen; 1 en caso contrario (lista errores).
+Exit 0 si las 17 skills cumplen; 1 en caso contrario (lista errores).
 Sin dependencias externas.
 """
 import re
@@ -15,7 +15,7 @@ SKILLS = ROOT / "skills"
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
 PROHIBITED_DIRS = {"agents", "infrastructure", "languages"}
-DOMINIOS = {"alignux", "codigo", "datos", "integraciones", "linux", "repo", "web"}
+DOMINIOS = {"disenar", "construir", "verificar", "operar"}
 MAX_BODY_LINES = 500
 ERRORS: list[str] = []
 

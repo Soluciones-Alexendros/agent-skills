@@ -2,9 +2,9 @@
 
 ### Propósito de este documento
 
-- **Objetivos:** Fijar el árbol canónico de ficheros, las reglas de nombrado y el formato de commits que todo repo de la flota debe cumplir por perfil (P0/P1/P2). Solo lectura: la remediación vive en las skills `repo-audit` (diagnóstico) y `repo-release` (cierre).
+- **Objetivos:** Fijar el árbol canónico de ficheros, las reglas de nombrado y el formato de commits que todo repo de la flota debe cumplir por perfil (P0/P1/P2). Solo lectura: la remediación vive en las skills `verificar-repo` (diagnóstico) y `operar-release` (cierre).
 - **Estructura:** Esta meta-sección → Perfiles → Árbol canónico → Nombrado → Commits → Verificación.
-- **Contenido a integrar según contexto:** En un producto, este archivo no se copia: se declara «cumple `repo-standard`» y se adapta el árbol al stack. La validación se hace con `check-product-structure.sh` de `repo-audit`.
+- **Contenido a integrar según contexto:** En un producto, este archivo no se copia: se declara «cumple `repo-standard`» y se adapta el árbol al stack. La validación se hace con `check-product-structure.sh` de `verificar-repo`.
 
 ## Perfiles
 
@@ -51,10 +51,10 @@ Reglas:
 
 ## Nombrado
 
-- Ramas: `audit/AAAAMMDD` (diagnóstico `repo-audit`), `chore/repo-release-*` (remediación de cierre), `feat/*`, `fix/*`. Sin force-push. Un PR de alineación por repo.
+- Ramas: `audit/AAAAMMDD` (diagnóstico `verificar-repo`), `chore/operar-release-*` (remediación de cierre), `feat/*`, `fix/*`. Sin force-push. Un PR de alineación por repo.
 - Tags: anotados `vX.Y.Z` (SemVer) o fecha vigente si el repo es CalVer (no convertir uno en otro).
 - Workflows y jobs con nombres estables en inglés técnico: `quality`, `test`, `build`, `smoke`, `actionlint`, `Secret scanning`. Un required check nunca cambia de nombre ni lleva filtro `paths` que lo oculte en un PR.
-- Labels por ejes `type:`, `priority:`, `status:`, `area:`, `release:` (ver `repo-release/assets/labels.json`). Solo el eje `area` se adapta al dominio.
+- Labels por ejes `type:`, `priority:`, `status:`, `area:`, `release:` (ver `operar-release/assets/labels.json`). Solo el eje `area` se adapta al dominio.
 - Ficheros: `kebab-case` para markdown y workflows; el código sigue la convención local del repo (esta prima sobre el canon en estilo).
 
 ## Commits
@@ -72,7 +72,7 @@ Formato Conventional Commits 1.0.0 (`https://www.conventionalcommits.org/en/v1.0
 ## Verificación
 
 ```bash
-bash <repo-audit>/scripts/check-product-structure.sh <repo> --profile P1
+bash <verificar-repo>/scripts/check-product-structure.sh <repo> --profile P1
 ```
 
 Criterio: faltantes = 0 y errores = 0. Los avisos (`ISSUE_TEMPLATE/*.yml` ausente, `SUPPORT.md` en P2) no bloquean salvo repo crítico.
