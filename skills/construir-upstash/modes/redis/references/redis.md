@@ -1,6 +1,6 @@
 # Redis Serverless (Upstash) — Referencia Completa
 
-> **Skill independiente aspiracional**: `datos-redis` (no existe en este repo; contenido completo aquí). Modo interno de `construir-upstash` (`modes/redis/MODE.md`)
+> **Modo interno de `construir-upstash`** (`modes/redis/MODE.md`) — referencia completa de nivel standalone.
 
 ---
 

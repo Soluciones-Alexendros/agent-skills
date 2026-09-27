@@ -1,6 +1,12 @@
 # Changelog
 
-## [Unreleased]
+## [v2.0.0] — 2026-09-27
+
+- `construir-typescript` 2.0.0 -> 2.0.1 (patch)
+- `construir-upstash` 1.0.0 -> 1.0.1 (patch)
+- `verificar-compliance` 2.0.0 -> 2.0.1 (patch)
+
+  Limpieza de referencias aspiracionales a skills inexistentes (web-nextjs, datos-*, cli-upstash, entorno-aislado); linaje absorbido (web-playwright, webapp-testing, web-rendimiento) conservado
 
 - `construir-typescript` 1.0.0 -> 2.0.0 (major)
 - `construir-upstash` 0.4.0 -> 1.0.0 (major)
@@ -20,6 +26,8 @@
 - `verificar-repo` 1.0.0 -> 2.0.0 (major)
 
   Reestructuración a 4 familias por fase SDLC (disenar/construir/verificar/operar); fusión email-proton+protonpass → construir-proton-suite v1.0.0; dominios alignux, datos, integraciones suprimidos
+
+## [v1.0.0] — 2026-09-27
 
 - Consolidación FASE-4 (18 skills, 7 dominios): `docs/TAXONOMY.md`, `README.md` y `tools/validate/skill_spec.py` alineados a los nombres reales; `web-seguridad` con cuerpo íntegramente en ES (tecnicismos en inglés preservados).
 - Tabla de renombros/fusiones:

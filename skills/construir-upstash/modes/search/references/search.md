@@ -1,6 +1,6 @@
 # Search (Upstash) — Full-Text & Semántico con Reranking
 
-> **Submódulo de `construir-upstash`** — Modo interno de `construir-upstash` (`modes/search/MODE.md`). Skill independiente aspiracional: `datos-vectorial` (no existe en este repo) incluye esto.
+> **Submódulo de `construir-upstash`** — Modo interno de `construir-upstash` (`modes/search/MODE.md`).
 
 ---
 

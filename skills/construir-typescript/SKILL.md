@@ -7,7 +7,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "2.0.0"
+  version: "2.0.1"
   dominio: construir
   idioma: es
 
@@ -34,7 +34,7 @@ Domina el sistema de tipos avanzado de TypeScript (generics, conditional types, 
 - **Type testing**: `AssertEqual`, `ExpectError` y verificación de tipos en compile-time
 - **Modernización TS 5.5+**: predicados de tipo inferidos, `isolatedDeclarations`, validación con arktype/valibot/zod v4, pattern matching con ts-pattern, efectos con effect-ts (ver `references/modern-typescript-2024-2026.md`)
 
-**NO usar cuando**: la tarea sea sintaxis básica de TypeScript (tipos primitivos, interfaces simples) o desarrollo React/Next.js; para Next.js usar `web-nextjs` _(pendiente: skill no existente en este repo; texto plano, no enlace)_.
+**NO usar cuando**: la tarea sea sintaxis básica de TypeScript (tipos primitivos, interfaces simples) o desarrollo React/Next.js (frameworks fuera de alcance de esta skill).
 
 ## Referencias internas
 
@@ -134,4 +134,3 @@ Sin `scripts/` propios. Recursos versionados:
 - `references/core-concepts.md`, `references/details.md` (leer cuando el resumen no baste).
 - `references/modern-typescript-2024-2026.md` (tooling 2024-26).
 - `disenar-arquitectura` — solo como frontera declarada (arquitectura general), no como enlace.
-- `web-nextjs` _(pendiente: no existe en este repo)_ — solo como frontera declarada, no como enlace.

@@ -1,6 +1,6 @@
 # Upstash CLI — Terminal, CI & Scripting
 
-> **Submódulo de `construir-upstash`** — Router: `construir-upstash` → `references/cli.md`. Skill independiente aspiracional: `cli-upstash` (no existe en este repo)
+> **Submódulo de `construir-upstash`** — Router: `construir-upstash` → `references/cli.md`.
 
 ---
 

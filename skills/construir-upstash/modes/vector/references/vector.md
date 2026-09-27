@@ -1,6 +1,6 @@
 # Vector Database (Upstash) — Referencia Completa
 
-> **Skill independiente aspiracional**: `datos-vectorial` (no existe en este repo; contenido completo aquí + `references/search.md`). Modo interno de `construir-upstash` (`modes/vector/MODE.md`)
+> **Modo interno de `construir-upstash`** (`modes/vector/MODE.md`) — referencia completa de nivel standalone; incluye búsqueda (`references/search.md`).
 
 ---
 

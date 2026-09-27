@@ -22,7 +22,7 @@ Revisa código UI (HTML, CSS, JSX, TSX, Vue, Svelte) para cumplimiento de **Web 
 - **Auditoría de accesibilidad**: "Revisa mi UI por accesibilidad", "Check WCAG compliance", "Audita contraste, focus, ARIA"
 - **Revisión UX/UI**: "Audita mi diseño", "Revisa usabilidad", "Check consistencia visual"
 - **Cumplimiento guidelines**: "Verifica contra Web Interface Guidelines", "Revisa best practices"
-- **NO usar cuando**: Diseño visual desde cero (→ `disenar-interfaz`), implementación Next.js (→ `web-nextjs`)
+- **NO usar cuando**: Diseño visual desde cero (→ `disenar-interfaz`), implementación Next.js (fuera de alcance)
 
 ## Referencias internas
 - `references/wcag-checklist.md` — Checklist WCAG 2.1/2.2 AA: perceivable, operable, understandable, robust

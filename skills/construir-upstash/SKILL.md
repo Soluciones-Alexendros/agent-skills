@@ -7,7 +7,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "1.0.0"
+  version: "1.0.1"
   dominio: construir
   idioma: es
 ---

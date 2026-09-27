@@ -9,7 +9,7 @@ description: >
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "2.0.0"
+  version: "2.0.1"
   dominio: verificar
   idioma: es
 

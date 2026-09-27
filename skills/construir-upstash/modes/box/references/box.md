@@ -1,6 +1,6 @@
 # Box (Upstash) — Sandboxed Containers con Agentes IA
 
-> **Submódulo de `construir-upstash`** — Modo interno de `construir-upstash` (`modes/box/MODE.md`). Skill independiente aspiracional: `entorno-aislado` (no existe en este repo)
+> **Submódulo de `construir-upstash`** — Modo interno de `construir-upstash` (`modes/box/MODE.md`).
 
 ---
 
