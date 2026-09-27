@@ -117,6 +117,6 @@ def test_merge_main_help():
     import sys
     import os
     script_path = os.path.join(os.path.dirname(__file__), "..", "..", "core", "utils", "merge_results.py")
-    r = subprocess.run([sys.executable, script_path, "--help"], 
+    r = subprocess.run([sys.executable, script_path, "--help"],
                        capture_output=True, text=True)
     assert r.returncode == 0
