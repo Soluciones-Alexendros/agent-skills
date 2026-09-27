@@ -1,5 +1,7 @@
 """Unit: RICE y sprints (4 sprints, severidad ES normalizada)."""
-import rice
+import sys
+
+rice = sys.modules["web_fullaudit_scoring_rice"]
 
 
 def test_rice_score_critico():

@@ -7,6 +7,7 @@ Ejecutar tras cualquier cambio:  python3 core/utils/selftest.py
 
 No importar desde pytest (los @test se ejecutan en importación por diseño).
 """
+import importlib.util
 import json
 import logging
 import os
@@ -16,17 +17,25 @@ import tempfile
 logger = logging.getLogger("fullaudit.selftest")
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.join(HERE, "..", "..")
+CORE_DIR = os.path.join(HERE, "..")
+ROOT = os.path.join(CORE_DIR, "..")
 FIXTURES = os.path.join(ROOT, "tests", "fixtures")
-sys.path.insert(0, os.path.join(HERE, "..", "scoring"))
-sys.path.insert(0, os.path.join(HERE, "..", "reporting"))
-sys.path.insert(0, HERE)
 
-import merge_results  # noqa: E402
-import orchestrator  # noqa: E402
-import report as report_mod  # noqa: E402
-import rice  # noqa: E402
-import score as score_mod  # noqa: E402
+def _load_core_module(name, subdir):
+    path = os.path.join(CORE_DIR, subdir, f"{name}.py")
+    spec = importlib.util.spec_from_file_location(f"fullaudit_{subdir}_{name}", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not load {name} from {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[f"fullaudit_{subdir}_{name}"] = module
+    spec.loader.exec_module(module)
+    return module
+
+merge_results = _load_core_module("merge_results", "utils")
+orchestrator = _load_core_module("orchestrator", "utils")
+report_mod = _load_core_module("report", "reporting")
+rice = _load_core_module("rice", "scoring")
+score_mod = _load_core_module("score", "scoring")
 
 RESULTADOS = []
 

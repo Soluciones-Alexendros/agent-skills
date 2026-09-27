@@ -13,13 +13,20 @@ import argparse
 import csv
 import datetime
 import html
+import importlib.util
 import json
 import logging
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "scoring"))
-from score import score  # noqa: E402
+HERE = os.path.dirname(os.path.abspath(__file__))
+SCORING_PATH = os.path.join(HERE, "..", "scoring", "score.py")
+_score_spec = importlib.util.spec_from_file_location("fullaudit_scoring_score", SCORING_PATH)
+if _score_spec is None or _score_spec.loader is None:
+    raise ImportError(f"Could not load score from {SCORING_PATH}")
+_score_module = importlib.util.module_from_spec(_score_spec)
+_score_spec.loader.exec_module(_score_module)
+score = _score_module.score
 
 logger = logging.getLogger("fullaudit.report")
 

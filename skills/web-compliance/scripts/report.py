@@ -7,11 +7,21 @@ Uso:
 """
 import argparse
 import datetime
+import importlib.util
 import json
 import logging
+import os
 import sys
 
-from score import score
+# Cargar score desde el mismo directorio para evitar conflictos de imports
+_SCRIPTS_DIR = os.path.dirname(__file__)
+_score_path = os.path.join(_SCRIPTS_DIR, "score.py")
+_score_spec = importlib.util.spec_from_file_location("web_compliance_score", _score_path)
+if _score_spec is None or _score_spec.loader is None:
+    raise ImportError(f"Could not load score module from {_score_path}")
+_score_module = importlib.util.module_from_spec(_score_spec)
+_score_spec.loader.exec_module(_score_module)
+score = _score_module.score
 
 logger = logging.getLogger("auditoria360.report")
 

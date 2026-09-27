@@ -1,5 +1,13 @@
-"""Fixtures compartidos: scripts en sys.path (sin importar selftest)."""
+"""Fixtures compartidos: scripts/ en sys.path con aislamiento de imports."""
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
+ROOT = os.path.join(os.path.dirname(__file__), "..")
+SCRIPTS_PATH = os.path.join(ROOT, "scripts")
+
+# Insertar al principio para prioridad, pero también registrar en un dict para importlib
+sys.path.insert(0, SCRIPTS_PATH)
+
+# Guardar referencia para imports explícitos
+import importlib.util
+_WEB_COMPLIANCE_SCRIPTS = SCRIPTS_PATH

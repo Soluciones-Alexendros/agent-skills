@@ -1,5 +1,7 @@
 """Unit: scoring dual (dictamen compliance + veredicto e2e)."""
-import score as score_mod
+import sys
+
+score_mod = sys.modules["web_fullaudit_scoring_score"]
 
 
 def test_score_dual_basico():

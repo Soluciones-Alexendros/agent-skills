@@ -16,19 +16,28 @@ Uso:
     python3 orchestrator.py --list-modes
 """
 import argparse
+import importlib.util
 import json
 import logging
 import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "scoring"))
-sys.path.insert(0, os.path.join(HERE, "..", "reporting"))
-sys.path.insert(0, HERE)
+CORE_DIR = os.path.join(HERE, "..")
 
-import merge_results  # noqa: E402
-import report as report_mod  # noqa: E402
-import score as score_mod  # noqa: E402
+def _load_core_module(name, subdir):
+    path = os.path.join(CORE_DIR, subdir, f"{name}.py")
+    spec = importlib.util.spec_from_file_location(f"fullaudit_{subdir}_{name}", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not load {name} from {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[f"fullaudit_{subdir}_{name}"] = module
+    spec.loader.exec_module(module)
+    return module
+
+merge_results = _load_core_module("merge_results", "utils")
+report_mod = _load_core_module("report", "reporting")
+score_mod = _load_core_module("score", "scoring")
 
 logger = logging.getLogger("fullaudit.orchestrator")
 

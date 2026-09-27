@@ -1,8 +1,9 @@
 """Integration: 1 test por modo via orchestrator/score (sin red)."""
 import os
+import sys
 
-import orchestrator
-import score as score_mod
+orchestrator = sys.modules["web_fullaudit_utils_orchestrator"]
+score_mod = sys.modules["web_fullaudit_scoring_score"]
 
 FIX = os.path.join(os.path.dirname(__file__), "..", "fixtures")
 

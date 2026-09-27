@@ -5,13 +5,29 @@ Degradación documentada: HTML corrupto no aborta (checks parciales, error None)
 """
 import json
 import os
+import sys
 import urllib.error
+import importlib.util
 
-import audit_page
-import contrast
-import report as report_mod
-import score as score_mod
 import pytest
+
+# Cargar módulos desde scripts/ explícitamente para evitar colisiones con web-fullaudit
+SCRIPTS_DIR = os.path.join(os.path.dirname(__file__), "..", "scripts")
+
+def _load_module(name):
+    path = os.path.join(SCRIPTS_DIR, f"{name}.py")
+    spec = importlib.util.spec_from_file_location(f"web_compliance_{name}", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not load module {name} from {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[f"web_compliance_{name}"] = module
+    spec.loader.exec_module(module)
+    return module
+
+audit_page = _load_module("audit_page")
+contrast = _load_module("contrast")
+score_mod = _load_module("score")
+report_mod = _load_module("report")
 
 FIX = os.path.join(os.path.dirname(__file__), "fixtures")
 
