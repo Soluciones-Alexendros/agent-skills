@@ -1,0 +1,19 @@
+name: secret-scan
+description: "Escaneo de secretos con gitleaks (sin subir SARIF con posible material sensible)"
+inputs:
+  enable-comments:
+    description: "'true' solo en pull_request; los push escanean sin comentar"
+    required: false
+    default: "false"
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+    - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        GITLEAKS_ENABLE_COMMENTS: ${{ inputs.enable-comments }}
+        GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false

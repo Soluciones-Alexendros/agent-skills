@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+- Consolidación FASE-4 (18 skills, 7 dominios): `docs/TAXONOMY.md`, `README.md` y `tools/validate/skill_spec.py` alineados a los nombres reales; `web-seguridad` con cuerpo íntegramente en ES (tecnicismos en inglés preservados).
+- Tabla de renombros/fusiones:
+  | Antes | Ahora | Tipo |
+  |---|---|---|
+  | `web-rendimiento` | `web-performance` | renombro |
+  | `design-system` | `web-design-system` | renombro |
+  | `typescript-avanzado` | `codigo-typescript` | renombro |
+  | `repo-starting` | `repo-audit` | renombro |
+  | `repo-precommit` | `repo-hooks` | renombro |
+  | `repo-ending` | `repo-release` | renombro |
+  | — | `repo-lifecycle` | nueva (enrutador audit/hooks/release) |
+  | — | `web-fullaudit` | nueva (orquestador de auditoría web) |
+  | `web-playwright` | — | suprimida |
+  | `webapp-testing` | — | suprimida |
+- Canon `docs/repo-standard/` (solo lectura): `structure.md`, `ci-cd.md`, `release.md`, `security.md`, `templates/` (PR, issues, commitlint)
+- `repo-starting` → `repo-audit` 1.0.0 (major): entrada `scripts/audit-repo.sh`, Fase 8 handoff a `repo-release`, conserva health-check; refs al canon local
+- `repo-precommit` → `repo-hooks` 2.0.0 (major): cuerpo a ES; refs a `repo-release` y canon
+- `repo-ending` → `repo-release` 1.0.0 (major): sin health-check duplicado; workflows a `workflow_call`; `assets/ruleset.json`; `references/dependabot-grouped.md`; composites `actions/` (setup-node, actionlint, secret-scan)
+- Nueva `repo-lifecycle` 0.1.0: thin-router audit vs hooks vs release
+- Refs cruzadas: `web-seguridad`, `codigo-arquitectura`, `repo-audit/references/*`, README (TAXONOMY intacta, la actualiza el coordinador)
+
 - Reestructuración de skills 2026-09-27 (21 → 18):
   - `auditoria-360-web` → `web-compliance` 1.0.0 (major): conserva accesibilidad, legal, SEO/SEM; absorbe SEO/a11y de `web-audit`
   - Nueva `web-rendimiento` 1.0.0: CWV, carga, caché, SEO técnico (split web + resto de `web-audit`)
@@ -12,6 +33,7 @@
   - `alignux-seguridad` → `linux-seguridad` 1.0.0, `alignux-mantenimiento` → `linux-mantenimiento` 1.0.0 (major, nuevo dominio `linux`)
   - `email-proton` / `protonpass` 1.0.0 (major): thin-skills con enlaces pineados a protonsuite-tools v1.4.0
   - `upstash` 0.3.0 (minor: pierde referencia a `datos-postgres`); retoques de enlaces 0.2.x: `web-diseno`, `webapp-testing`, `design-system`, `repo-starting`, `repo-ending`, `codigo-arquitectura`, `alignux-constitucion` 0.2.1
+  - `upstash` 0.3.0 -> 0.4.0 (minor): monolito 89 ficheros → router + `core/` + 7 modos internos (`redis`, `vector`, `search`, `queue`, `ratelimit`, `blob`, `box`); vendor `upstash-*/` aplanado en `modes/*/references/`; workflows extiende queue, ratelimit requiere redis
 
 - `repo-starting` 0.2.0 -> 0.2.1 (patch)
 
@@ -21,11 +43,6 @@
 - `repo-starting` 0.1.0 -> 0.2.0 (minor)
 
   aplanar references/repo-standard (regla references planas)
-
-
-Formato: entradas por release del repo. Las skills versionan además su `metadata.version` en cada `SKILL.md`.
-
-## [Unreleased]
 
 - `alignux-constitucion` 0.1.0 -> 0.2.0 (minor)
 - `alignux-mantenimiento` 0.1.0 -> 0.2.0 (minor)
@@ -50,6 +67,8 @@ Formato: entradas por release del repo. Las skills versionan además su `metadat
   Revisión P0-P4: enlaces, validators, CI, smoke tests, expansión de skills thin, extracción de cuerpos, identidad de grupo, documentación
 
 - Autoversionado semver por magnitud: `tools/version/bump.py` (`major` = actualización incompatible, `minor` = desarrollo menor compatible, `patch` = parcheado/fix; con alias en ES), tests propios, cobertura en `run-validation.sh` y CI `version.yml` que exige el bump en PRs con skills cambiadas.
+
+Formato: entradas por release del repo. Las skills versionan además su `metadata.version` en cada `SKILL.md`.
 
 ## [v0.1.0] — 2026-09-26
 

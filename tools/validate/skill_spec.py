@@ -2,7 +2,7 @@
 """Validador de spec de skills (Agent Skills + STANDARD.md del repo).
 
 Uso: python3 tools/validate/skill_spec.py [--root DIR]
-Exit 0 si las 19 skills cumplen; 1 en caso contrario (lista errores).
+Exit 0 si las 18 skills cumplen; 1 en caso contrario (lista errores).
 Sin dependencias externas.
 """
 import re

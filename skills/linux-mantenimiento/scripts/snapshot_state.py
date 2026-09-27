@@ -118,10 +118,128 @@ def capture_config_pending(pkg_mgr: str, snapshot_path: str) -> None:
     write_text(f"{snapshot_path}/config-pending.txt", out)
 
 
+def list_snapshots(base_dir: str) -> int:
+    """Lista snapshots con metadata (solo lectura)."""
+    try:
+        entries = sorted(os.listdir(base_dir))
+    except OSError as exc:
+        logger.error("no se pudo listar %r: %s", base_dir, exc)
+        return 1
+    found = 0
+    for name in entries:
+        meta_path = os.path.join(base_dir, name, "metadata.json")
+        if not os.path.isfile(meta_path):
+            continue
+        try:
+            with open(meta_path, encoding="utf-8") as fh:
+                meta = json.load(fh)
+            print(f"{name}  {meta.get('timestamp', '?')}  {meta.get('package_manager', '?')}")
+        except (OSError, ValueError):
+            print(f"{name}  (metadata ilegible)")
+        found += 1
+    if not found:
+        print("(sin snapshots)")
+    return 0
+
+
+def diff_snapshot(base_dir: str, snapshot_id: str) -> tuple[list, list, int]:
+    """Compara etc-checksums del snapshot contra el /etc actual.
+
+    Devuelve (changed, missing, total). Solo /etc, solo lectura.
+    """
+    snap_file = os.path.join(base_dir, snapshot_id, "etc-checksums.txt")
+    changed: list = []
+    missing: list = []
+    total = 0
+    try:
+        with open(snap_file, encoding="utf-8") as fh:
+            lines = fh.read().splitlines()
+    except OSError as exc:
+        logger.error("no se pudo leer %r: %s", snap_file, exc)
+        return [], [], 0
+    for line in lines:
+        parts = line.split()
+        if len(parts) < 2:
+            continue
+        digest, path = parts[0], parts[-1]
+        if not path.startswith("/etc/"):
+            continue
+        total += 1
+        current = md5_file(path)
+        if not current:
+            missing.append(path)
+        elif current != digest:
+            changed.append(path)
+    return changed, missing, total
+
+
+def rollback_snapshot(base_dir: str, snapshot_id: str, execute: bool = False) -> int:
+    """Rollback de /etc contra un snapshot.
+
+    Por defecto dry-run: diff + plan de restauracion. Con --execute restaura
+    desde etc-backup.tar.gz (si existe) con backup previo; snapper/timeshift
+    se indican como comandos manuales (no se auto-restauran).
+    """
+    if "/" in snapshot_id or snapshot_id in ("", ".", ".."):
+        logger.error("snapshot_id inválido: %r", snapshot_id)
+        print(f"snapshot_id inválido: {snapshot_id}", file=sys.stderr)
+        return 2
+    snapshot_path = os.path.join(base_dir, snapshot_id)
+    if not os.path.isdir(snapshot_path):
+        logger.error("snapshot inexistente: %r", snapshot_path)
+        print(f"snapshot inexistente: {snapshot_id}", file=sys.stderr)
+        return 1
+    changed, missing, total = diff_snapshot(base_dir, snapshot_id)
+    print(f"rollback {snapshot_id}: {total} ficheros vigilados, "
+          f"{len(changed)} cambiados, {len(missing)} eliminados")
+    for path in (changed + missing)[:20]:
+        print(f"  ~ {path}")
+    tarball = os.path.join(snapshot_path, "etc-backup.tar.gz")
+    if not execute:
+        print("[dry-run] Sin cambios. Plan de restauracion:")
+        if os.path.isfile(tarball):
+            print(f"  tar -tzf {tarball}  # verificar contenido")
+            print(f"  snapshot_state.py --rollback {snapshot_id} --execute  # restaura /etc desde tarball")
+        if which("snapper") is not None:
+            print("  snapper undochange <pre>..<post>  # alternativa btrfs (manual)")
+        if which("timeshift") is not None:
+            print("  timeshift --restore  # alternativa (interactivo, ventana acordada)")
+        return 0
+    if not os.path.isfile(tarball):
+        log_warn("sin etc-backup.tar.gz: restauracion manual con los comandos de arriba")
+        return 1
+    backup_dir = os.path.join(snapshot_path, f"pre-rollback-{utcnow_iso().replace('-', '').replace(':', '').replace('T', '-').replace('Z', '')}")
+    try:
+        os.makedirs(backup_dir, exist_ok=True)
+    except OSError as exc:
+        logger.error("no se pudo crear %r: %s", backup_dir, exc)
+        return 1
+    restored, failed = 0, 0
+    for path in changed + missing:
+        rel = path.lstrip("/")
+        try:
+            if os.path.isfile(path):
+                with open(path, "rb") as src, open(os.path.join(backup_dir, rel.replace("/", "_")), "wb") as dst:
+                    dst.write(src.read())
+        except OSError as exc:
+            logger.warning("no se pudo respaldar %r: %s", path, exc)
+        rc, _ = run_capture(f"tar -xzf '{tarball}' -C / '{rel}' 2>/dev/null", timeout=120)
+        if rc == 0:
+            restored += 1
+        else:
+            failed += 1
+            log_warn(f"no se pudo restaurar {path}")
+    log_info(f"Rollback {snapshot_id}: {restored} restaurados, {failed} fallidos (backup en {backup_dir})")
+    return 0 if failed == 0 else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Captura pre-cambio (snapshot reversible antes de R1+).")
     parser.add_argument("snapshot_id", nargs="?", default=None, help="ID del snapshot")
     parser.add_argument("--snapshot-dir", default=None, help="Override directorio base de snapshots")
+    parser.add_argument("--list", action="store_true", help="Listar snapshots existentes")
+    parser.add_argument("--rollback", default="", help="ID del snapshot contra el que comparar/restaurar /etc")
+    parser.add_argument("--execute", action="store_true", help="Ejecutar rollback (por defecto dry-run)")
     parser.add_argument("--verbose", action="store_true", help="Logging verboso a stderr")
     args = parser.parse_args(argv)
     _setup_logging(args.verbose)
@@ -130,6 +248,10 @@ def main(argv: list[str] | None = None) -> int:
     if not base_dir:
         logger.error("directorio base de snapshots vacío")
         return 1
+    if args.list:
+        return list_snapshots(base_dir)
+    if args.rollback:
+        return rollback_snapshot(base_dir, args.rollback, execute=args.execute)
     snapshot_id = args.snapshot_id or f"snap-{utcnow_iso().replace('-', '').replace(':', '').replace('T', '-').replace('Z', '')}"
     if "/" in snapshot_id or snapshot_id in ("", ".", ".."):
         logger.error("snapshot_id inválido: %r", snapshot_id)

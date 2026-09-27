@@ -127,6 +127,34 @@ def matches_pattern(cmd: str, patterns: tuple) -> bool:
     return False
 
 
+_SUBSHELL_RE = re.compile(r"\$\((.*?)\)")
+_BACKTICK_RE = re.compile(r"`(.*?)`")
+_ENV_ASSIGN_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=[^\s]+\s+")
+_SUDO_PREFIX_RE = re.compile(r"^(sudo|doas|run0|command|builtin)\s+")
+
+
+def _strip_wrappers(cmd: str) -> str:
+    """Quita prefijos sudo/doas/env/VAR=x para clasificar el comando real."""
+    text = cmd.strip()
+    while True:
+        new = _SUDO_PREFIX_RE.sub("", text, count=1)
+        new = _ENV_ASSIGN_RE.sub("", new, count=1)
+        if new == text:
+            return text
+        text = new
+
+
+def _candidates(cmd: str) -> list:
+    """Comando normalizado + contenido de subshells $(...) y `...`.
+
+    Evita evasion por envoltura: `sudo pacman -Syu`, `env FOO=1 rm -rf /`
+    o `echo $(pacman -Syu)` se clasifican por su contenido real.
+    """
+    base = _strip_wrappers(cmd)
+    inners = _SUBSHELL_RE.findall(cmd) + _BACKTICK_RE.findall(cmd)
+    return [base] + [_strip_wrappers(i) for i in inners if i.strip()]
+
+
 def touches_protected_path(cmd: str) -> bool:
     """Verifica si un comando implica escritura en rutas protegidas.
 
@@ -157,13 +185,14 @@ def touches_protected_path(cmd: str) -> bool:
 
 
 def classify_command(cmd: str) -> str:
-    if matches_pattern(cmd, R3_PATTERNS):
+    cands = _candidates(cmd)
+    if any(matches_pattern(c, R3_PATTERNS) for c in cands):
         return "R3"
-    if matches_pattern(cmd, R2_PATTERNS):
+    if any(matches_pattern(c, R2_PATTERNS) for c in cands):
         return "R2"
     if touches_protected_path(cmd):
         return "R2"
-    if matches_pattern(cmd, R1_PATTERNS):
+    if any(matches_pattern(c, R1_PATTERNS) for c in cands):
         return "R1"
     return "R0"
 

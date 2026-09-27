@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Cliente CLI para Proton Mail Bridge (IMAP 127.0.0.1:1143 / SMTP 127.0.0.1:1025).
 
+LEGACY: funcional pero deprecado. El canon vive en protonsuite-tools
+(tag v1.5.0, AGPL-3.0, solo enlazado). Se mantiene con tests en verde;
+no añadir features. Preferir los MCP tools de Mail cuando existan.
+
 Credenciales por entorno: PROTON_USER (email Proton), PROTON_PASS (password de Bridge).
 Subcomandos: unread, search, fetch, folders, mark, send.
 """

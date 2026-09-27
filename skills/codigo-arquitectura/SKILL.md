@@ -7,19 +7,19 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.2.1"
+  version: "0.3.0"
   dominio: codigo
   idioma: es
 
 ---
 # Mejorar la Arquitectura del Código
 
-Surface architectural friction and propose **deepening opportunities** — refactors that turn shallow modules into deep ones. The aim is testability and AI-navigability.
+Detecta fricción arquitectónica y propone **oportunidades de profundización** (deepening): refactors que convierten módulos someros en módulos profundos. El objetivo es la testabilidad y la navegabilidad por IA.
 
-This command is _informed_ by the project's domain model and built on a shared design vocabulary:
+Esta skill se apoya en el modelo de dominio del proyecto y en un vocabulario de diseño compartido:
 
-- Run the `/codebase-design` skill for the architecture vocabulary (**module**, **interface**, **depth**, **seam**, **adapter**, **leverage**, **locality**) and its principles (the deletion test, "the interface is the test surface", "one adapter = hypothetical seam, two = real"). Use these terms exactly in every suggestion — don't drift into "component," "service," "API," or "boundary."
-- The domain language in `CONTEXT.md` gives names to good seams; ADRs in `docs/adr/` record decisions this command should not re-litigate.
+- La skill `/codebase-design` aporta el vocabulario de arquitectura (**módulo**, **interfaz**, **profundidad**, **seam**, **adapter**, **leverage**, **locality**) y sus principios (el test de borrado, «la interfaz es la superficie de test», «un adapter = seam hipotético, dos = real»). Usa estos términos exactos en cada sugerencia; no derives a «componente», «servicio», «API» o «frontera».
+- El lenguaje de dominio de `CONTEXT.md` da nombre a buenos seams; los ADR de `docs/adr/` registran decisiones que esta skill no debe re-litigar.
 
 ## Qué hace / Propósito
 
@@ -31,63 +31,72 @@ Analiza un codebase para detectar fricción arquitectónica y proponer oportunid
 - Cuando se sospechen módulos someros, acoplamiento excesivo, interfaces más complejas que su implementación o código difícil de testear.
 - Frases como "improve architecture", "deepening opportunities", "revisa la arquitectura de este proyecto" o "¿qué refactorizo primero?".
 - Cuando se quiera un informe visual HTML con candidatos antes/después y una recomendación priorizada.
+- Para mapear dependencias con dependency-cruiser/madge, modelar con C4/Structurizr o registrar decisiones con la plantilla ADR (ver `references/`).
 - **NO usar cuando**: el trabajo sea revisión de seguridad del código (usar `web-seguridad`) o hardening y mantenimiento de un sistema Linux (usar `linux-seguridad`); esta skill es análisis y refactor de codebase.
 
 ## Referencias internas
 
-- `HTML-REPORT.md` — léelo antes de generar el informe: contiene el scaffold HTML completo, los patrones de diagramas (Mermaid, CSS y SVG) y la guía de estilos.
+- `references/html-report.md` — léelo antes de generar el informe: contiene el scaffold HTML completo, los patrones de diagramas (Mermaid, CSS y SVG) y la guía de estilos.
+- `references/analisis-dependencias.md` — dependency-cruiser y madge: mapas de dependencias, reglas de acoplamiento y detección de ciclos.
+- `references/c4-structurizr.md` — modelado C4 con Structurizr (Contexto, Contenedores, Componentes, Código).
+- `references/plantilla-adr.md` — plantilla de Architecture Decision Record para registrar decisiones.
+- `references/monolito-modular.md` — patrones de monolito modular: módulos con fronteras explícitas sin microservicios.
 
-## Process
+## Proceso
 
-### 1. Explore
+### 1. Explorar
 
-Read the project's domain glossary (`CONTEXT.md`) and any ADRs in the area you're touching first.
+Lee primero el glosario de dominio del proyecto (`CONTEXT.md`) y los ADR de la zona que vayas a tocar.
 
-Then use the Agent tool with `subagent_type=Explore` to walk the codebase. Don't follow rigid heuristics — explore organically and note where you experience friction:
+Después usa la herramienta Agent con `subagent_type=Explore` para recorrer el codebase. No sigas heurísticas rígidas: explora de forma orgánica y anota dónde sientes fricción:
 
-- Where does understanding one concept require bouncing between many small modules?
-- Where are modules **shallow** — interface nearly as complex as the implementation?
-- Where have pure functions been extracted just for testability, but the real bugs hide in how they're called (no **locality**)?
-- Where do tightly-coupled modules leak across their seams?
-- Which parts of the codebase are untested, or hard to test through their current interface?
+- ¿Dónde exige entender un concepto saltar entre muchos módulos pequeños?
+- ¿Dónde hay módulos **someros** (shallow): interfaz casi tan compleja como la implementación?
+- ¿Dónde se han extraído funciones puras solo por testabilidad, pero los bugs reales esconden en cómo se las llama (sin **locality**)?
+- ¿Dónde hay módulos fuertemente acoplados con fugas a través de sus seams?
+- ¿Qué partes del codebase no tienen tests o son difíciles de testear con su interfaz actual?
 
-Apply the **deletion test** to anything you suspect is shallow: would deleting it concentrate complexity, or just move it? A "yes, concentrates" is the signal you want.
+Aplica el **test de borrado** a todo lo que sospeches somero: ¿borrarlo concentraría la complejidad o solo la movería? Un «sí, la concentra» es la señal buscada.
 
-### 2. Present candidates as an HTML report
+Para un mapa objetivo de dependencias, apoya la exploración con `references/analisis-dependencias.md` (dependency-cruiser/madge) antes de redactar candidatos.
 
-Write a self-contained HTML file to the OS temp directory so nothing lands in the repo. Resolve the temp dir from `$TMPDIR`, falling back to `/tmp` (or `%TEMP%` on Windows), and write to `<tmpdir>/architecture-review-<timestamp>.html` so each run gets a fresh file. Open it for the user — `xdg-open <path>` on Linux, `open <path>` on macOS, `start <path>` on Windows — and tell them the absolute path.
+### 2. Presentar candidatos como informe HTML
 
-The report uses **Tailwind via CDN** for layout and styling, and **Mermaid via CDN** for diagrams where a graph/flow/sequence reliably communicates the structure. Mix Mermaid with hand-crafted CSS/SVG visuals — use Mermaid when relationships are graph-shaped (call graphs, dependencies, sequences), and hand-built divs/SVG when you want something more editorial (mass diagrams, cross-sections, collapse animations). Each candidate gets a **before/after visualisation**. Be visual.
+Escribe un HTML autónomo en el directorio temporal del SO para no ensuciar el repo. Resuelve el temp desde `$TMPDIR`, con fallback a `/tmp` (o `%TEMP%` en Windows), y escribe en `<tmpdir>/architecture-review-<timestamp>.html` para que cada ejecución tenga fichero fresco. Ábrelo para el usuario (`xdg-open <ruta>` en Linux, `open <ruta>` en macOS, `start <ruta>` en Windows) e indícale la ruta absoluta.
 
-For each candidate, render a card with:
+El informe usa **Tailwind por CDN** para maquetación y estilo, y **Mermaid por CDN** para diagramas donde un grafo/flujo/secuencia comunique bien la estructura. Mezcla Mermaid con visuales CSS/SVG hechos a mano: Mermaid cuando las relaciones tienen forma de grafo (call graphs, dependencias, secuencias), divs/SVG a mano cuando quieras algo más editorial (diagramas de masa, cortes transversales, animaciones de colapso). Cada candidato lleva visualización **antes/después**. Sé visual.
 
-- **Files** — which files/modules are involved
-- **Problem** — why the current architecture is causing friction
-- **Solution** — plain English description of what would change
-- **Benefits** — explained in terms of locality and leverage, and how tests would improve
-- **Before / After diagram** — side-by-side, custom-drawn, illustrating the shallowness and the deepening
-- **Recommendation strength** — one of `Strong`, `Worth exploring`, `Speculative`, rendered as a badge
+Cada candidato se renderiza como tarjeta con:
 
-End the report with a **Top recommendation** section: which candidate you'd tackle first and why.
+- **Ficheros** — qué ficheros/módulos están implicados
+- **Problema** — por qué la arquitectura actual causa fricción
+- **Solución** — descripción en lenguaje llano de qué cambiaría
+- **Beneficios** — explicados en términos de locality y leverage, y cómo mejorarían los tests
+- **Diagrama antes/después** — lado a lado, dibujado a medida, ilustrando la shallowness y el deepening
+- **Fuerza de recomendación** — una de `Strong`, `Worth exploring`, `Speculative`, renderizada como badge
 
-**Use CONTEXT.md vocabulary for the domain, and the `/codebase-design` vocabulary for the architecture.** If `CONTEXT.md` defines "Order," talk about "the Order intake module" — not "the FooBarHandler," and not "the Order service."
+Cierra el informe con una sección **Recomendación principal**: qué candidato atacarías primero y por qué.
 
-**ADR conflicts**: if a candidate contradicts an existing ADR, only surface it when the friction is real enough to warrant revisiting the ADR. Mark it clearly in the card (e.g. a warning callout: _"contradicts ADR-0007 — but worth reopening because…"_). Don't list every theoretical refactor an ADR forbids.
+**Usa el vocabulario de `CONTEXT.md` para el dominio y el de `/codebase-design` para la arquitectura.** Si `CONTEXT.md` define «Order», habla del «módulo de intake de Order», no del «FooBarHandler» ni del «servicio Order».
 
-See [HTML-REPORT.md](references/html-report.md) for the full HTML scaffold, diagram patterns, and styling guidance.
+**Conflictos con ADR**: si un candidato contradice un ADR existente, solo aflóralo cuando la fricción sea real y merezca reabrir el ADR. Márcalo claramente en la tarjeta (p. ej. callout de aviso: _«contradice ADR-0007, pero merece reabrirse porque…»_). No listes cada refactor teórico que un ADR prohíbe.
 
-Do NOT propose interfaces yet. After the file is written, ask the user: "Which of these would you like to explore?"
+Ver [references/html-report.md](references/html-report.md) para el scaffold HTML completo, patrones de diagramas y guía de estilo.
 
-### 3. Grilling loop
+NO propongas interfaces todavía. Tras escribir el fichero, pregunta al usuario: «¿Cuál de estos quieres explorar?».
 
-Once the user picks a candidate, run the `/grilling` skill to walk the design tree with them — constraints, dependencies, the shape of the deepened module, what sits behind the seam, what tests survive.
+### 3. Bucle de grilling
 
-Side effects happen inline as decisions crystallize — run the `/domain-modeling` skill to keep the domain model current as you go:
+Cuando el usuario elija un candidato, ejecuta la skill `/grilling` para recorrer el árbol de diseño con él: constraints, dependencias, forma del módulo profundizado, qué queda tras el seam, qué tests sobreviven.
 
-- **Naming a deepened module after a concept not in `CONTEXT.md`?** Add the term to `CONTEXT.md`. Create the file lazily if it doesn't exist.
-- **Sharpening a fuzzy term during the conversation?** Update `CONTEXT.md` right there.
-- **User rejects the candidate with a load-bearing reason?** Offer an ADR, framed as: _"Want me to record this as an ADR so future architecture reviews don't re-suggest it?"_ Only offer when the reason would actually be needed by a future explorer to avoid re-suggesting the same thing — skip ephemeral reasons ("not worth it right now") and self-evident ones.
-- **Want to explore alternative interfaces for the deepened module?** Run the `/codebase-design` skill and use its design-it-twice parallel sub-agent pattern.
+Los efectos laterales ocurren inline a medida que las decisiones cristalizan; ejecuta la skill `/domain-modeling` para mantener el modelo de dominio al día:
+
+- **¿Nombras un módulo profundizado con un concepto que no está en `CONTEXT.md`?** Añade el término a `CONTEXT.md`. Crea el fichero de forma perezosa si no existe.
+- **¿Afinas un término difuso durante la conversación?** Actualiza `CONTEXT.md` ahí mismo.
+- **¿El usuario rechaza el candidato con una razón de peso?** Ofrece un ADR con: _«¿Quieres que lo registre como ADR para que futuras revisiones no lo vuelvan a sugerir?»_ Solo cuando la razón la necesitaría un futuro explorador para no re-sugerir lo mismo; omite razones efímeras («ahora no compensa») y autoevidentes.
+- **¿Quieres explorar interfaces alternativas para el módulo profundizado?** Ejecuta `/codebase-design` con su patrón de subagentes paralelos «design-it-twice».
+
+Registra la decisión final con [references/plantilla-adr.md](references/plantilla-adr.md).
 
 ## Uso
 
@@ -95,17 +104,28 @@ Análisis y refactor de arquitectura: invocar ante «revisa la arquitectura», s
 
 ## Estructura
 
-- `SKILL.md` — proceso Explore → informe HTML → grilling loop.
-- `HTML-REPORT.md` — extra top-level: scaffold HTML, patrones de diagramas y guía de estilo (leer antes de generar el informe).
+- `SKILL.md` — proceso Explorar → informe HTML → bucle de grilling.
+- `references/html-report.md` — scaffold HTML, patrones de diagramas y guía de estilo (leer antes de generar el informe).
+- `references/analisis-dependencias.md` — dependency-cruiser y madge.
+- `references/c4-structurizr.md` — modelado C4 con Structurizr.
+- `references/plantilla-adr.md` — plantilla ADR.
+- `references/monolito-modular.md` — patrones de monolito modular.
 - Sin `scripts/`: skill puramente analítica.
 
+## Herramientas
+
+Sin `scripts/` propios. Las herramientas externas viven documentadas en `references/`:
+
+| Recurso | Propósito |
+|---|---|
+| `references/analisis-dependencias.md` | dependency-cruiser, madge (mapas y reglas) |
+| `references/c4-structurizr.md` | C4 + Structurizr (modelado) |
+| `references/plantilla-adr.md` | Plantilla ADR |
+| `references/monolito-modular.md` | Patrones de monolito modular |
+
 ## Referencias
 
-- Internas: `HTML-REPORT.md` (existe).
+- Internas: `references/html-report.md` (scaffold del informe), `references/analisis-dependencias.md`, `references/c4-structurizr.md`, `references/plantilla-adr.md`, `references/monolito-modular.md`.
 - Canon externo (no incluido en este repo): skills `/codebase-design`, `/grilling`, `/domain-modeling`.
 - `CONTEXT.md` y `docs/adr/` _(ejemplo)_: rutas del proyecto objetivo, no de esta skill.
-
-## Referencias
-
-- [references/html-report.md](references/html-report.md): informe HTML de ejemplo generado por la skill.
-- Para tipado avanzado → `typescript-avanzado`.
+- Para tipado avanzado → `codigo-typescript`.

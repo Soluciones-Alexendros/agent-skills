@@ -90,7 +90,56 @@ def severity_color(severity):
     }.get(severity, "#000")
 
 
-def render_markdown(data, history=None):
+def _is_bad(finding) -> bool:
+    return isinstance(finding, dict) and finding.get("status") in ("FAIL", "WARN")
+
+
+def _finding_label(finding) -> str:
+    if not isinstance(finding, dict):
+        return "?"
+    return f"{finding.get('id', '?')} — {finding.get('title', 'sin titulo')}"
+
+
+def diff_findings(prev_findings, curr_findings) -> dict:
+    """Diff temporal entre dos listas de hallazgos.
+
+    nuevos: FAIL/WARN ahora, antes PASS/ausente. resueltos: FAIL/WARN antes,
+    ahora PASS/ausente. persistentes: FAIL/WARN en ambos. regresados: PASS
+    antes y FAIL/WARN ahora (subconjunto de nuevos que existian como PASS).
+    """
+    prev = prev_findings if isinstance(prev_findings, list) else []
+    curr = curr_findings if isinstance(curr_findings, list) else []
+    prev_by_id = {f.get("id"): f for f in prev if isinstance(f, dict) and f.get("id")}
+    curr_by_id = {f.get("id"): f for f in curr if isinstance(f, dict) and f.get("id")}
+    nuevos, resueltos, persistentes, regresados = [], [], [], []
+    for fid, f in curr_by_id.items():
+        if not _is_bad(f):
+            continue
+        prev_f = prev_by_id.get(fid)
+        if prev_f is None or not _is_bad(prev_f):
+            nuevos.append(_finding_label(f))
+            if prev_f is not None:
+                regresados.append(_finding_label(f))
+        else:
+            persistentes.append(_finding_label(f))
+    for fid, f in prev_by_id.items():
+        if _is_bad(f) and not _is_bad(curr_by_id.get(fid)):
+            resueltos.append(_finding_label(f))
+    return {"nuevos": sorted(nuevos), "resueltos": sorted(resueltos),
+            "persistentes": sorted(persistentes), "regresados": sorted(regresados)}
+
+
+def _extract_prev_findings(history, prev_data) -> list | None:
+    if isinstance(prev_data, dict) and isinstance(prev_data.get("findings"), list):
+        return prev_data["findings"]
+    if isinstance(history, list):
+        for run in reversed(history):
+            if isinstance(run, dict) and isinstance(run.get("findings"), list):
+                return run["findings"]
+    return None
+
+
+def render_markdown(data, history=None, prev_data=None):
     """Genera informe en Markdown."""
     meta = data.get("metadata", {})
     hs = data.get("health_score", {})
@@ -166,6 +215,21 @@ def render_markdown(data, history=None):
         lines.append(f"- {severity_emoji(sev)} **{sev}:** {count}")
     lines.append("")
 
+    # Diff temporal contra auditoria previa (--prev o historial con findings)
+    prev_findings = _extract_prev_findings(history, prev_data)
+    if prev_findings is not None:
+        diff = diff_findings(prev_findings, findings)
+        lines.append("## Diff temporal (vs auditoria previa)")
+        lines.append("")
+        for key, label in (("nuevos", "🆕 Nuevos"), ("resueltos", "✅ Resueltos"),
+                           ("persistentes", "🔁 Persistentes"), ("regresados", "⚠️ Regresados")):
+            items = diff[key]
+            lines.append(f"### {label} ({len(items)})")
+            lines.append("")
+            for item in items:
+                lines.append(f"- {item}")
+            lines.append("")
+
     # Hallazgos detallados
     if findings:
         lines.append("## Hallazgos")
@@ -196,7 +260,7 @@ def render_markdown(data, history=None):
     return "\n".join(lines)
 
 
-def render_html(data, history=None):
+def render_html(data, history=None, prev_data=None):
     """Genera informe HTML."""
     meta = data.get("metadata", {})
     hs = data.get("health_score", {})
@@ -352,6 +416,20 @@ def render_html(data, history=None):
                 html += "            </div>\n"
         html += "        </div>\n"
 
+    prev_findings = _extract_prev_findings(history, prev_data)
+    if prev_findings is not None:
+        diff = diff_findings(prev_findings, findings)
+        html += """        <div class="section">
+            <h2>Diff temporal (vs auditoria previa)</h2>
+"""
+        for key, label in (("nuevos", "Nuevos"), ("resueltos", "Resueltos"),
+                           ("persistentes", "Persistentes"), ("regresados", "Regresados")):
+            items = diff[key]
+            html += f"            <h3>{label} ({len(items)})</h3>\n"
+            for item in items:
+                html += f"            <div class='detail'>- {_html.escape(item)}</div>\n"
+        html += "        </div>\n"
+
     html += f"""        <footer>
             Generado por mantenimiento-linux v{SKILL_VERSION} · {meta.get("timestamp", "")}
         </footer>
@@ -376,6 +454,7 @@ def main(argv: list[str] | None = None) -> int:
         "--format", "-f", choices=["md", "html"], default="md", help="Formato de salida"
     )
     parser.add_argument("--history", help="Directorio de historial")
+    parser.add_argument("--prev", default="", help="Auditoria previa JSON para diff temporal")
     parser.add_argument(
         "--mode",
         choices=["report", "optimize"],
@@ -396,6 +475,8 @@ def main(argv: list[str] | None = None) -> int:
     history = None
     if args.history:
         history = load_history(args.history)
+
+    prev_data = load_json(args.prev) if args.prev else None
 
     if args.mode == "optimize":
         # Generar plan de optimización basado en hallazgos
@@ -423,10 +504,10 @@ def main(argv: list[str] | None = None) -> int:
         ext = ".md"
     else:
         if args.format == "html":
-            output = render_html(data, history)
+            output = render_html(data, history, prev_data)
             ext = ".html"
         else:
-            output = render_markdown(data, history)
+            output = render_markdown(data, history, prev_data)
             ext = ".md"
 
     # Asegurar extensión correcta

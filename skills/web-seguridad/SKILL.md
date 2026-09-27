@@ -4,7 +4,7 @@ description: >-
   Revisión de seguridad de código (OWASP): inyección, XSS, authn/authz, criptografía, SSRF,
   secretos y misconfiguración. Usar ante security review, OWASP o 'busca vulnerabilidades en
   este código'. No usar para hardening del SO (→ linux-seguridad) ni cierre de release (→
-  repo-ending).
+  repo-release).
 license: MIT
 metadata:
   author: Soluciones-Alexendros
@@ -58,167 +58,167 @@ Carga solo las referencias que correspondan al tipo de código revisado (ver "De
 - `references/languages-javascript.md` — patrones de Node, Express, React, Vue y Next.js.
 - `references/infrastructure-docker.md` — seguridad de contenedores y Dockerfile.
 
-## Scope: Research vs. Reporting
+## Alcance: investigación vs. informe
 
-**CRITICAL DISTINCTION:**
+**DISTINCIÓN CRÍTICA:**
 
-- **Report on**: Only the specific file, diff, or code provided by the user
-- **Research**: The ENTIRE codebase to build confidence before reporting
+- **Informa sobre**: solo el fichero, diff o código concreto que entrega el usuario
+- **Investiga en**: TODO el codebase para ganar confianza antes de informar
 
-Before flagging any issue, you MUST research the codebase to understand:
-- Where does this input actually come from? (Trace data flow)
-- Is there validation/sanitization elsewhere?
-- How is this configured? (Check settings, config files, middleware)
-- What framework protections exist?
+Antes de marcar cualquier hallazgo, DEBES investigar el codebase para entender:
+- ¿De dónde viene realmente esta entrada? (traza el flujo de datos)
+- ¿Hay validación/sanitización en otro punto?
+- ¿Cómo está configurado? (revisa settings, ficheros de configuración, middleware)
+- ¿Qué protecciones aporta el framework?
 
-**Do NOT report issues based solely on pattern matching.** Investigate first, then report only what you're confident is exploitable.
+**NO informes de hallazgos basándote solo en coincidencia de patrones.** Investiga primero e informa solo de lo que estés seguro de que es explotable.
 
-## Confidence Levels
+## Niveles de confianza
 
-| Level | Criteria | Action |
+| Nivel | Criterio | Acción |
 |-------|----------|--------|
-| **HIGH** | Vulnerable pattern + attacker-controlled input confirmed | **Report** with severity |
-| **MEDIUM** | Vulnerable pattern, input source unclear | **Note** as "Needs verification" |
-| **LOW** | Theoretical, best practice, defense-in-depth | **Do not report** |
+| **HIGH** | Patrón vulnerable + entrada controlada por el atacante confirmada | **Informar** con severidad |
+| **MEDIUM** | Patrón vulnerable, origen de la entrada sin aclarar | **Anotar** como «Needs verification» |
+| **LOW** | Teórico, buena práctica, defensa en profundidad | **No informar** |
 
-## Do Not Flag
+## No marcar
 
-### General Rules
-- Test files (unless explicitly reviewing test security)
-- Dead code, commented code, documentation strings
-- Patterns using **constants** or **server-controlled configuration**
-- Code paths that require prior authentication to reach (note the auth requirement instead)
+### Reglas generales
+- Ficheros de tests (salvo que se revise explícitamente la seguridad de los tests)
+- Código muerto, código comentado, docstrings
+- Patrones que usan **constantes** o **configuración controlada por el servidor**
+- Rutas de código que exigen autenticación previa para alcanzarse (anota el requisito de auth en su lugar)
 
-### Server-Controlled Values (NOT Attacker-Controlled)
+### Valores controlados por el servidor (NO controlados por el atacante)
 
-These are configured by operators, not controlled by attackers:
+Los configuran los operadores, no los controlan los atacantes:
 
-| Source | Example | Why It's Safe |
-|--------|---------|---------------|
-| Django settings | `settings.API_URL`, `settings.ALLOWED_HOSTS` | Set via config/env at deployment |
-| Environment variables | `os.environ.get('DATABASE_URL')` | Deployment configuration |
-| Config files | `config.yaml`, `app.config['KEY']` | Server-side files |
-| Framework constants | `django.conf.settings.*` | Not user-modifiable |
-| Hardcoded values | `BASE_URL = "https://api.internal"` | Compile-time constants |
+| Origen | Ejemplo | Por qué es seguro |
+|--------|---------|-------------------|
+| Django settings | `settings.API_URL`, `settings.ALLOWED_HOSTS` | Se fijan vía config/env en el despliegue |
+| Variables de entorno | `os.environ.get('DATABASE_URL')` | Configuración de despliegue |
+| Ficheros de configuración | `config.yaml`, `app.config['KEY']` | Ficheros del lado servidor |
+| Constantes del framework | `django.conf.settings.*` | No modificables por el usuario |
+| Valores hardcodeados | `BASE_URL = "https://api.internal"` | Constantes en tiempo de compilación |
 
-**SSRF Example - NOT a vulnerability:**
+**Ejemplo SSRF: NO es vulnerabilidad:**
 ```python
 # SAFE: URL comes from Django settings (server-controlled)
 response = requests.get(f"{settings.SEER_AUTOFIX_URL}{path}")
 ```
 
-**SSRF Example - IS a vulnerability:**
+**Ejemplo SSRF: SÍ es vulnerabilidad:**
 ```python
 # VULNERABLE: URL comes from request (attacker-controlled)
 response = requests.get(request.GET.get('url'))
 ```
 
-### Framework-Mitigated Patterns
-Check language guides before flagging. Common false positives:
+### Patrones mitigados por el framework
+Consulta las guías de lenguaje antes de marcar. Falsos positivos habituales:
 
-| Pattern | Why It's Usually Safe |
+| Patrón | Por qué suele ser seguro |
 |---------|----------------------|
-| Django `{{ variable }}` | Auto-escaped by default |
-| React `{variable}` | Auto-escaped by default |
-| Vue `{{ variable }}` | Auto-escaped by default |
-| `User.objects.filter(id=input)` | ORM parameterizes queries |
-| `cursor.execute("...%s", (input,))` | Parameterized query |
-| `innerHTML = "<b>Loading...</b>"` | Constant string, no user input |
+| Django `{{ variable }}` | Auto-escaped por defecto |
+| React `{variable}` | Auto-escaped por defecto |
+| Vue `{{ variable }}` | Auto-escaped por defecto |
+| `User.objects.filter(id=input)` | El ORM parametriza las queries |
+| `cursor.execute("...%s", (input,))` | Query parametrizada |
+| `innerHTML = "<b>Loading...</b>"` | String constante, sin entrada de usuario |
 
-**Only flag these when:**
+**Marca estos solo cuando:**
 - Django: `{{ var|safe }}`, `{% autoescape off %}`, `mark_safe(user_input)`
 - React: `dangerouslySetInnerHTML={{__html: userInput}}`
 - Vue: `v-html="userInput"`
-- ORM: `.raw()`, `.extra()`, `RawSQL()` with string interpolation
+- ORM: `.raw()`, `.extra()`, `RawSQL()` con interpolación de strings
 
-## Review Process
+## Proceso de revisión
 
-### 1. Detect Context
+### 1. Detectar el contexto
 
-What type of code am I reviewing?
+¿Qué tipo de código estoy revisando?
 
-| Code Type | Load These References |
+| Tipo de código | References a cargar |
 |-----------|----------------------|
-| API endpoints, routes | `authorization.md`, `authentication.md`, `injection.md` |
-| Frontend, templates | `xss.md`, `csrf.md` |
-| File handling, uploads | `file-security.md` |
-| Crypto, secrets, tokens | `cryptography.md`, `data-protection.md` |
-| Data serialization | `deserialization.md` |
-| External requests | `ssrf.md` |
-| Business workflows | `business-logic.md` |
-| GraphQL, REST design | `api-security.md` |
-| Config, headers, CORS | `misconfiguration.md` |
-| CI/CD, dependencies | `supply-chain.md` |
-| Error handling | `error-handling.md` |
-| Audit, logging | `logging.md` |
+| Endpoints API, rutas | `authorization.md`, `authentication.md`, `injection.md` |
+| Frontend, plantillas | `xss.md`, `csrf.md` |
+| Manejo de ficheros, subidas | `file-security.md` |
+| Cripto, secretos, tokens | `cryptography.md`, `data-protection.md` |
+| Serialización de datos | `deserialization.md` |
+| Peticiones externas | `ssrf.md` |
+| Flujos de negocio | `business-logic.md` |
+| Diseño GraphQL, REST | `api-security.md` |
+| Config, cabeceras, CORS | `misconfiguration.md` |
+| CI/CD, dependencias | `supply-chain.md` |
+| Manejo de errores | `error-handling.md` |
+| Auditoría, logging | `logging.md` |
 
-### 2. Load Language Guide
+### 2. Cargar la guía de lenguaje
 
-Based on file extension or imports:
+Según la extensión del fichero o los imports:
 
-| Indicators | Guide |
+| Indicadores | Guía |
 |------------|-------|
 | `.py`, `django`, `flask`, `fastapi` | `references/languages-python.md` |
 | `.js`, `.ts`, `express`, `react`, `vue`, `next` | `references/languages-javascript.md` |
 | `.go`, `.rs`, `.java`, `go.mod`, `Cargo.toml`, Spring | Sin guía propia en esta distribución: aplicar los references por vulnerabilidad |
 
-### 3. Load Infrastructure Guide (if applicable)
+### 3. Cargar la guía de infraestructura (si aplica)
 
-| File Type | Guide |
+| Tipo de fichero | Guía |
 |-----------|-------|
 | `Dockerfile`, `.dockerignore` | `references/infrastructure-docker.md` |
 | K8s, Terraform, GitHub Actions, `.gitlab-ci.yml`, cloud/IAM | Sin guía propia en esta distribución: aplicar `references/supply-chain.md` y `references/misconfiguration.md` |
 
-### 4. Research Before Flagging
+### 4. Investigar antes de marcar
 
-**For each potential issue, research the codebase to build confidence:**
+**Ante cada posible hallazgo, investiga el codebase para ganar confianza:**
 
-- Where does this value actually come from? Trace the data flow.
-- Is it configured at deployment (settings, env vars) or from user input?
-- Is there validation, sanitization, or allowlisting elsewhere?
-- What framework protections apply?
+- ¿De dónde viene realmente este valor? Traza el flujo de datos.
+- ¿Se configura en el despliegue (settings, env vars) o viene de la entrada del usuario?
+- ¿Hay validación, sanitización o allowlisting en otro punto?
+- ¿Qué protecciones del framework aplican?
 
-Only report issues where you have HIGH confidence after understanding the broader context.
+Informa solo de hallazgos con confianza HIGH tras entender el contexto general.
 
-### 5. Verify Exploitability
+### 5. Verificar la explotabilidad
 
-For each potential finding, confirm:
+Para cada posible hallazgo, confirma:
 
-**Is the input attacker-controlled?**
+**¿La entrada está controlada por el atacante?**
 
-| Attacker-Controlled (Investigate) | Server-Controlled (Usually Safe) |
+| Controlada por el atacante (investigar) | Controlada por el servidor (suele ser segura) |
 |-----------------------------------|----------------------------------|
 | `request.GET`, `request.POST`, `request.args` | `settings.X`, `app.config['X']` |
 | `request.json`, `request.data`, `request.body` | `os.environ.get('X')` |
-| `request.headers` (most headers) | Hardcoded constants |
-| `request.cookies` (unsigned) | Internal service URLs from config |
-| URL path segments: `/users/<id>/` | Database content from admin/system |
-| File uploads (content and names) | Signed session data |
-| Database content from other users | Framework settings |
-| WebSocket messages | |
+| `request.headers` (la mayoría de cabeceras) | Constantes hardcodeadas |
+| `request.cookies` (sin firmar) | URLs de servicios internos desde config |
+| Segmentos de la URL: `/users/<id>/` | Contenido de BD creado por admin/sistema |
+| Subidas de ficheros (contenido y nombres) | Datos de sesión firmados |
+| Contenido de BD creado por otros usuarios | Settings del framework |
+| Mensajes WebSocket | |
 
-**Does the framework mitigate this?**
-- Check language guide for auto-escaping, parameterization
-- Check for middleware/decorators that sanitize
+**¿Lo mitiga el framework?**
+- Consulta la guía de lenguaje: auto-escaping, parametrización
+- Busca middleware/decoradores que saniticen
 
-**Is there validation upstream?**
-- Input validation before this code
-- Sanitization libraries (DOMPurify, bleach, etc.)
+**¿Hay validación aguas arriba?**
+- Validación de la entrada antes de este código
+- Librerías de sanitización (DOMPurify, bleach, etc.)
 
-### 6. Report HIGH Confidence Only
+### 6. Informar solo con confianza HIGH
 
-Skip theoretical issues. Report only what you've confirmed is exploitable after research.
+Omite los hallazgos teóricos. Informa solo de lo que hayas confirmado como explotable tras investigar.
 
 ---
 
-## Severity Classification
+## Clasificación de severidad
 
-| Severity | Impact | Examples |
+| Severidad | Impacto | Ejemplos |
 |----------|--------|----------|
-| **Critical** | Direct exploit, severe impact, no auth required | RCE, SQL injection to data, auth bypass, hardcoded secrets |
-| **High** | Exploitable with conditions, significant impact | Stored XSS, SSRF to metadata, IDOR to sensitive data |
-| **Medium** | Specific conditions required, moderate impact | Reflected XSS, CSRF on state-changing actions, path traversal |
-| **Low** | Defense-in-depth, minimal direct impact | Missing headers, verbose errors, weak algorithms in non-critical context |
+| **Critical** | Explotación directa, impacto grave, sin auth requerida | RCE, inyección SQL a datos, bypass de auth, secretos hardcodeados |
+| **High** | Explotable con condiciones, impacto significativo | XSS almacenado, SSRF a metadatos, IDOR a datos sensibles |
+| **Medium** | Requiere condiciones específicas, impacto moderado | XSS reflejado, CSRF en acciones con estado, path traversal |
+| **Low** | Defensa en profundidad, impacto directo mínimo | Cabeceras ausentes, errores verbosos, algoritmos débiles en contexto no crítico |
 
 ---
 
@@ -230,7 +230,7 @@ Patrones de código que deben marcarse inmediatamente durante la revisión. Se o
 
 ---
 
-## Output Format
+## Formato de salida
 
 ```markdown
 ## Security Review: [File/Component Name]
@@ -245,55 +245,55 @@ Patrones de código que deben marcarse inmediatamente durante la revisión. Se o
 #### [VULN-001] [Vulnerability Type] (Severity)
 - **Location**: `file.py:123`
 - **Confidence**: High
-- **Issue**: [What the vulnerability is]
-- **Impact**: [What an attacker could do]
+- **Issue**: [Qué vulnerabilidad es]
+- **Impact**: [Qué podría hacer un atacante]
 - **Evidence**:
   ```python
   [Vulnerable code snippet]
   ```
-- **Fix**: [How to remediate]
+- **Fix**: [Cómo remediarlo]
 
 ### Needs Verification
 
 #### [VERIFY-001] [Potential Issue]
 - **Location**: `file.py:456`
-- **Question**: [What needs to be verified]
+- **Question**: [Qué hay que verificar]
 ```
 
-If no vulnerabilities found, state: "No high-confidence vulnerabilities identified."
+Si no se encuentran vulnerabilidades, indica: «No high-confidence vulnerabilities identified.» (sin hallazgos de alta confianza).
 
 ---
 
-## Reference Files
+## Ficheros de referencia
 
-### Core Vulnerabilities (`references/`)
-| File | Covers |
+### Vulnerabilidades principales (`references/`)
+| Fichero | Cubre |
 |------|--------|
-| `injection.md` | SQL, NoSQL, OS command, LDAP, template injection |
-| `xss.md` | Reflected, stored, DOM-based XSS |
-| `authorization.md` | Authorization, IDOR, privilege escalation |
-| `authentication.md` | Sessions, credentials, password storage |
-| `cryptography.md` | Algorithms, key management, randomness |
-| `deserialization.md` | Pickle, YAML, Java, PHP deserialization |
-| `file-security.md` | Path traversal, uploads, XXE |
+| `injection.md` | Inyección SQL, NoSQL, de comandos OS, LDAP y de plantillas |
+| `xss.md` | XSS reflejado, almacenado y basado en DOM |
+| `authorization.md` | Autorización, IDOR, escalada de privilegios |
+| `authentication.md` | Sesiones, credenciales, almacenamiento de contraseñas |
+| `cryptography.md` | Algoritmos, gestión de claves, aleatoriedad |
+| `deserialization.md` | Deserialización Pickle, YAML, Java, PHP |
+| `file-security.md` | Path traversal, subidas, XXE |
 | `ssrf.md` | Server-side request forgery |
 | `csrf.md` | Cross-site request forgery |
-| `data-protection.md` | Secrets exposure, PII, logging |
+| `data-protection.md` | Exposición de secretos, PII, logging |
 | `api-security.md` | REST, GraphQL, mass assignment |
-| `business-logic.md` | Race conditions, workflow bypass |
-| `modern-threats.md` | Prototype pollution, LLM injection, WebSocket |
-| `misconfiguration.md` | Headers, CORS, debug mode, defaults |
-| `error-handling.md` | Fail-open, information disclosure |
-| `supply-chain.md` | Dependencies, build security |
-| `logging.md` | Audit failures, log injection |
+| `business-logic.md` | Race conditions, bypass de flujos de negocio |
+| `modern-threats.md` | Prototype pollution, inyección en LLM, WebSocket |
+| `misconfiguration.md` | Cabeceras, CORS, modo debug, valores por defecto |
+| `error-handling.md` | Fail-open, divulgación de información |
+| `supply-chain.md` | Dependencias, seguridad del build |
+| `logging.md` | Fallos de auditoría, inyección de logs |
 
-### Language Guides (`languages/`)
-- `python.md` - Django, Flask, FastAPI patterns
-- `javascript.md` - Node, Express, React, Vue, Next.js
+### Guías de lenguaje (`languages/`)
+- `python.md` — patrones Django, Flask, FastAPI
+- `javascript.md` — patrones Node, Express, React, Vue, Next.js
 - Go, Rust y Java: sin guía específica incluida en esta distribución
 
-### Infrastructure (`infrastructure/`)
-- `docker.md` - Container security
+### Infraestructura (`infrastructure/`)
+- `docker.md` — seguridad de contenedores
 - Kubernetes, Terraform, CI/CD y cloud: sin guía específica incluida en esta distribución
 
 ## Auditoría de dependencias (absorbida de dependency-audit)

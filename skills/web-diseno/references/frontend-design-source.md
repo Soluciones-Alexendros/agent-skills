@@ -14,9 +14,9 @@ Approach this as the design lead at a boutique frontend studio. Your job is not 
 
 ## Contrato Fuerte (Fase 1)
 
-**REQUIRES tokens from `design-system-builder`.** Before generating ANY code:
+**REQUIRES tokens from `web-design-system`.** Before generating ANY code:
 
-1. **Read `tokens.json`** (DTCG format) from the design system. If not found → ERROR: design system must be installed first via `design-system-builder` skill.
+1. **Read `tokens.json`** (DTCG format) from the design system. If not found → ERROR: design system must be installed first via `web-design-system` skill.
 2. **Consume semantic tokens** — All colors, spacing, typography, shadows MUST come from `tokens.json`. Never invent new values.
 3. **Emit `Component.stories.tsx`** — Every component generated MUST include a CSF 3.0 story file with play functions. Use `contracts/csf-template.stories.tsx` as base.
 4. **ARIA compliance** — Every interactive element MUST include the role, attributes, and states documented in `contracts/aria-component-map.json`.
@@ -33,7 +33,7 @@ Approach this as the design lead at a boutique frontend studio. Your job is not 
 
 ### Modo con Design System (requerido por defecto)
 
-Cuando existe un design system (`tokens.json` + `tokens.css` de `design-system-builder`):
+Cuando existe un design system (`tokens.json` + `tokens.css` de `web-design-system`):
 
 1. **Leer tokens existentes.** Consumir `tokens.json` como fuente canónica. No inventar nuevos valores de color, spacing, o typography.
 2. **Ground the brief.** Ask: purpose, audience, constraints, aesthetic direction. Never skip this.
@@ -168,7 +168,7 @@ Do NOT use when:
 Related skills:
 
 - `interaction-design` — motion patterns and microinteractions
-- `design-system-builder` — **REQUIRED** token source. Must consume `tokens.json` (DTCG format) from this skill before generating any UI code.
+- `web-design-system` — **REQUIRED** token source. Must consume `tokens.json` (DTCG format) from this skill before generating any UI code.
 
 ## Contracts
 
@@ -180,7 +180,7 @@ Related skills:
 | `contracts/wcag22-checklist.json`    | WCAG 2.2 A+AA success criteria (automatable subset) |
 | `contracts/csf-template.stories.tsx` | CSF 3.0 template for story generation               |
 
-## References (design-system-builder)
+## References (web-design-system)
 
 | File                                 | Description                                               |
 | ------------------------------------ | --------------------------------------------------------- |

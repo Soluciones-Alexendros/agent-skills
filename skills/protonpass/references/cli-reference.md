@@ -1,5 +1,7 @@
 # pass-cli — referencia de comandos
 
+> LEGACY: el canon vive en protonsuite-tools @ v1.5.0 (`docs/mcp-tools/pass.md`). Este fichero conserva la referencia local (v2.2.0+; para JSON ver v2.3+ en `protonsuite-2024-2026.md`).
+
 Referencia operativa del CLI oficial `pass-cli` para Proton Pass (v2.2.0+). Sintaxis de
 items: `pass://<Bóveda>/<Item>/<campo>`.
 

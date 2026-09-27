@@ -1,17 +1,17 @@
 ---
 name: alignux-constitucion
 description: >-
-  Constitución ALIGNUX: identidad, coherencia operativa y límites del agente en sistemas
-  Linux. Usar solo cuando el operador pida la constitución Alignux, principios ALIGNUX o
-  alinear una respuesta con la identidad del sistema. No usar para mantenimiento ni
-  seguridad concreta.
+  Constitución ALIGNUX: marco pasivo de identidad, coherencia operativa y límites
+  del agente en sistemas Linux. Usar solo cuando el operador pida la constitución
+  ALIGNUX, principios ALIGNUX, alinear una respuesta con la identidad del sistema o
+  validar una decisión o estructura contra el marco constitucional. No invocar de
+  forma proactiva. No usar para mantenimiento ni seguridad concreta.
 license: MIT
 metadata:
   author: Soluciones-Alexendros
   version: "0.2.1"
   dominio: alignux
   idioma: es
-disable-model-invocation: true
 ---
 # Constitución ALIGNUX
 
@@ -109,7 +109,7 @@ Consulta de identidad y estándares ALIGNUX: invocar solo cuando el operador pid
 ## Estructura
 
 - `SKILL.md` — constitución, triggering, estándares y metodología.
-- `references/reflexiones.md` — extra: registro de razonamientos del autor (no normativo).
+- `../../docs/archives/reflexiones-constitucion.md` — extra: registro de razonamientos del autor (no normativo, archivado).
 - `references/` — identidad, historia computacional, estándares de estructura, principios, despliegue de aprendizajes, directorios esenciales y registro del home.
 - Sin `scripts/`: skill puramente documental.
 

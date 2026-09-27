@@ -37,6 +37,7 @@ KEEP_VERSIONS = 3
 JOURNAL_VACUUM_TIME = "7d"
 JOURNAL_VACUUM_SIZE = "500M"
 JSON_MODE = False
+WITH_FIRMWARE = False
 
 logger = logging.getLogger("mantenimiento.clean")
 
@@ -85,6 +86,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--journal-time", default="7d", help="Vacuum time del journal (defecto 7d)")
     parser.add_argument("--journal-size", default="500M", help="Vacuum size del journal (defecto 500M)")
     parser.add_argument("--json", nargs="?", const="", default=None, help="Generar JSON (opcional fichero)")
+    parser.add_argument("--firmware", action="store_true", default=False, help="Incluir fwupdmgr update (R2, solo con --execute)")
     parser.add_argument("--verbose", action="store_true", help="Logging verboso a stderr")
     return parser
 
@@ -92,6 +94,7 @@ def build_parser() -> argparse.ArgumentParser:
 def apply_args(args: argparse.Namespace) -> None:
     global DRY_RUN, EXECUTE, SNAPSHOT_ID, OUTPUT_FILE, JSON_OUTPUT
     global KEEP_VERSIONS, JOURNAL_VACUUM_TIME, JOURNAL_VACUUM_SIZE, JSON_MODE
+    global WITH_FIRMWARE
     if args.execute:
         DRY_RUN, EXECUTE = False, True
     else:
@@ -101,6 +104,7 @@ def apply_args(args: argparse.Namespace) -> None:
     KEEP_VERSIONS = args.keep_versions
     JOURNAL_VACUUM_TIME = args.journal_time
     JOURNAL_VACUUM_SIZE = args.journal_size
+    WITH_FIRMWARE = bool(args.firmware)
     if args.json is not None:
         JSON_MODE = True
         JSON_OUTPUT = args.json or ""
@@ -215,6 +219,66 @@ def clean_temp() -> None:
         log_success("Temporales limpiados")
 
 
+def clean_needrestart() -> None:
+    """needrestart: lista servicios que piden reinicio (R1); reinicia solo en --execute."""
+    log_info("=== Servicios que piden reinicio (needrestart) ===")
+    if which("needrestart") is None:
+        log_info("needrestart no instalado (instalar para detectar reinicios pendientes)")
+        return
+    pending = run("needrestart -r l 2>/dev/null | head -20", timeout=120).strip()
+    if DRY_RUN:
+        log_info("needrestart -r l (solo lista):")
+        for line in pending.splitlines()[:20]:
+            if line.strip():
+                log_info(f"  {line.strip()}")
+        run_safe("needrestart -r a", "R1", "Reiniciar servicios obsoletos tras actualizacion")
+    else:
+        rc, _ = run_capture("needrestart -r a 2>/dev/null", timeout=600)
+        if rc != 0:
+            log_warn("needrestart -r a fallo o requirio intervencion")
+
+
+def update_firmware() -> None:
+    """fwupdmgr update (R2): solo con --firmware + --execute + snapshot previo."""
+    log_info("=== Firmware (fwupdmgr, R2) ===")
+    if which("fwupdmgr") is None:
+        log_info("fwupd no instalado")
+        return
+    if DRY_RUN:
+        pending = run("fwupdmgr get-updates 2>/dev/null | grep '^Device:' | head -10", timeout=120).strip()
+        if pending:
+            log_info("Dispositivos con updates:")
+            for line in pending.splitlines():
+                log_info(f"  {line.strip()}")
+        run_safe("fwupdmgr update", "R2", "Actualizar firmware de dispositivos")
+        return
+    if not WITH_FIRMWARE:
+        log_info("Omitido: requiere --firmware explicito (R2)")
+        return
+    rc, _ = run_capture("fwupdmgr update 2>/dev/null", timeout=900)
+    if rc != 0:
+        log_warn("fwupdmgr update fallo")
+
+
+def clean_userspace_caches() -> None:
+    """Caches userspace seguras: thumbnails + ficheros >30 dias (excluye navegadores)."""
+    import os as _os
+    log_info("=== Caches userspace ===")
+    home = _os.path.expanduser("~")
+    cache_dir = _os.path.join(home, ".cache")
+    size = run(f"du -sh {cache_dir} 2>/dev/null | cut -f1", timeout=60).strip()
+    log_info(f"Tamano ~/.cache: {size or '?'}")
+    thumb = _os.path.join(cache_dir, "thumbnails")
+    if DRY_RUN:
+        run_safe(f"rm -rf {thumb}/* + find {cache_dir} -type f -atime +30 "
+                 "(excluye *mozilla* *chromium* *Proton*)", "R1", "Limpiar caches userspace")
+    else:
+        run(f"rm -rf {thumb}/* 2>/dev/null", timeout=120)
+        run(f"find {cache_dir} -type f -atime +30 ! -path '*mozilla*' ! -path '*chromium*' "
+            "! -path '*Chromium*' ! -path '*Proton*' -delete 2>/dev/null", timeout=300)
+        log_success("Caches userspace limpiadas")
+
+
 def verify_clean() -> None:
     log_info("=== Verificación post-limpieza ===")
     failed = run("systemctl --failed --no-legend --no-pager 2>/dev/null", timeout=15)
@@ -249,10 +313,13 @@ def generate_json_output() -> None:
             {"action": "clean_journal", "status": "completed"},
             {"action": "clean_orphans", "status": "completed"},
             {"action": "clean_temp", "status": "completed"},
+            {"action": "clean_needrestart", "status": "completed"},
+            {"action": "update_firmware", "status": "completed" if WITH_FIRMWARE else "skipped"},
+            {"action": "clean_userspace_caches", "status": "completed"},
         ],
         "summary": {
-            "total_actions": 4,
-            "completed": 4,
+            "total_actions": 7,
+            "completed": 7 if WITH_FIRMWARE else 6,
             "failed": 0,
         },
     }
@@ -297,6 +364,9 @@ def main(argv: list[str] | None = None) -> int:
     clean_journal()
     clean_orphans()
     clean_temp()
+    clean_needrestart()
+    update_firmware()
+    clean_userspace_caches()
 
     if EXECUTE:
         verify_clean()

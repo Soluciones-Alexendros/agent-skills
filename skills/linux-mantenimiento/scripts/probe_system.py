@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
 
 from common import (
@@ -246,11 +247,68 @@ def get_journal_info() -> dict:
 def get_firmware_info() -> dict:
     fwupd_available = which("fwupdmgr") is not None
     updates_available = 0
+    devices = 0
     if fwupd_available:
         updates_available = to_int(
             run("fwupdmgr get-updates 2>/dev/null | grep -c '^Device:'", timeout=30).strip()
         )
-    return {"fwupd_available": fwupd_available, "updates_available": updates_available}
+        devices = to_int(
+            run("fwupdmgr get-devices 2>/dev/null | grep -c '^Device:'", timeout=30).strip()
+        )
+    return {"fwupd_available": fwupd_available, "updates_available": updates_available,
+            "devices": devices}
+
+
+def get_modern_stack() -> dict:
+    """Stack moderno: homed, btrfs/snapshots, energia, oomd/zram, helpers (ES)."""
+    homed_active = service_active("systemd-homed")
+    homectl_users = []
+    if which("homectl") is not None:
+        out = run("homectl list --no-legend --no-pager 2>/dev/null", timeout=10)
+        homectl_users = [l.split()[0] for l in out.splitlines() if l.split()]
+    timers = run("systemctl list-timers --all --no-legend --no-pager 2>/dev/null", timeout=15)
+    snapper_cfgs = []
+    if which("snapper") is not None:
+        out = run("snapper list-configs --no-headers 2>/dev/null", timeout=15)
+        snapper_cfgs = [l.split()[0] for l in out.splitlines() if l.split()]
+    ppd_profile = ""
+    if which("powerprofilesctl") is not None:
+        ppd_profile = run("powerprofilesctl get 2>/dev/null", timeout=10).strip()
+    zram_devs = run("zramctl --noheadings --output NAME,DISKSIZE 2>/dev/null", timeout=10).strip()
+    needrestart_pending = ""
+    if which("needrestart") is not None:
+        needrestart_pending = run("needrestart -r l 2>/dev/null | head -5", timeout=60).strip()
+    return {
+        "identity": {
+            "systemd_homed_active": homed_active,
+            "homectl_users": homectl_users,
+        },
+        "snapshots": {
+            "btrfs_assistant": which("btrfs-assistant") is not None,
+            "snapper_configs": snapper_cfgs,
+            "timeshift": which("timeshift") is not None,
+            "timeshift_auto_timer": "timeshift" in timers,
+        },
+        "power": {
+            "auto_cpufreq": service_active("auto-cpufreq"),
+            "tuned": service_active("tuned"),
+            "tuned_ppd": service_active("tuned-ppd"),
+            "power_profiles_daemon": service_active("power-profiles-daemon"),
+            "power_profile": ppd_profile,
+        },
+        "memory_pressure": {
+            "systemd_oomd": service_active("systemd-oomd"),
+            "zram_generator_conf": os.path.isfile("/etc/systemd/zram-generator.conf"),
+            "zram_devices": zram_devs,
+        },
+        "helpers": {
+            "nvchecker": which("nvchecker") is not None,
+            "needrestart": which("needrestart") is not None,
+            "needrestart_pending": needrestart_pending,
+            "pacdiff": which("pacdiff") is not None,
+            "ucf": which("ucf") is not None,
+        },
+    }
 
 
 logger = logging.getLogger("mantenimiento.probe")
@@ -297,6 +355,7 @@ def main(argv: list[str] | None = None) -> int:
             "packages": get_package_info(pkg_mgr),
             "journal": get_journal_info(),
             "firmware": get_firmware_info(),
+            "modern_stack": get_modern_stack(),
         }
     except (OSError, ValueError) as exc:
         logger.error("fallo recolectando perfil: %s", exc)

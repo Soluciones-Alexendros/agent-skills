@@ -1,5 +1,7 @@
 # Referencia del script proton_bridge.py
 
+> LEGACY: el canon vive en protonsuite-tools @ v1.5.0 (`docs/bridge-core/api-reference.md`, `docs/mcp-tools/mail.md`). Este fichero documenta el script local deprecado pero funcional.
+
 Todos los subcomandos imprimen por stdout; errores a stderr con código
 de salida distinto de 0.
 

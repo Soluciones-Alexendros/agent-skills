@@ -15,7 +15,7 @@
 - [Trazabilidad](#trazabilidad)
 
 ## Propósito
-Definir los **directorios esenciales** del home del operador ALIGNUX: qué directorio sirve a qué propósito, con qué ownership e invariantes, y cuáles están **certificados** por ALIGNUX. Extiende al home completo el canon que ya regía para `··Terminal/` (ver `../../alignux-seguridad/references/postura-defensiva.md`).
+Definir los **directorios esenciales** del home del operador ALIGNUX: qué directorio sirve a qué propósito, con qué ownership e invariantes, y cuáles están **certificados** por ALIGNUX. Extiende al home completo el canon que ya regía para `··Terminal/` (ver `../../linux-seguridad/references/postura-defensiva.md`).
 
 ## Principio rector
 **Una raíz por dominio; un propósito por directorio dentro de ella** (Principio 2 — Coherencia sobre consistencia):

@@ -1,5 +1,7 @@
 # Proton Pass — notas de seguridad
 
+> LEGACY: el canon vive en protonsuite-tools @ v1.5.0 (`docs/bridge-core/security-notes.md`). Este fichero se conserva como referencia local.
+
 Consideraciones de seguridad al operar con `pass-cli` y secretos en el agente.
 
 ## Manejo de sesión

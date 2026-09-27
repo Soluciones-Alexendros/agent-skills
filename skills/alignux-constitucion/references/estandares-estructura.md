@@ -7,13 +7,13 @@
 | Tipo | Patrón | Ejemplos | Validación |
 |------|--------|----------|------------|
 | **Sistema ALIGNUX** | `ALIGNUX.subdominio` | `ALIGNUX.mantenimiento`, `ALIGNUX.seguridad`, `ALIGNUX.constitucion` | `IDENTIDAD_ALIGNUX_PATTERN` |
-| **Genéricas** | `dominio-subdominio-accion` | `web-diseno`, `datos-redis`, `codigo-seguridad` | `OPENCODE_NAME_PATTERN` |
+| **Genéricas** | `dominio-subdominio-accion` | `web-diseno`, `datos-redis`, `web-seguridad` | `OPENCODE_NAME_PATTERN` |
 
 ### Reglas Normativas
 
 1. **Español por defecto** — `web-diseno` no `web-design`
-2. **Sustantivo, no verbo** — `planificacion-archivos` no `planning-with-files`
-3. **Sin sufijos redundantes** — `datos-postgres` no `supabase-postgres-best-practices`
+2. **Sustantivo, no verbo** — `planificacion-archivos` (histórica, suprimida 2026-09) no `planning-with-files`
+3. **Sin sufijos redundantes** — `datos-postgres` (histórica, suprimida 2026-09) no `supabase-postgres-best-practices`
 4. **SDK/CLI en submódulo** — `datos-redis` + `references/redis.md` no `upstash-redis-js`
 5. **Nombre = Directorio** — obligatorio, validador lo verifica
 

@@ -42,4 +42,4 @@ Toda skill ALIGNUX debe referenciar:
 - Otras skills ALIGNUX — para frontera de alcances
 - Tags `sistema.ALIGNUX` — para descubrimiento automático
 
-> Nota de slugs: en este repo los directorios y `name` usan minúsculas con guiones (`alignux-constitucion`, `alignux-mantenimiento`, `alignux-seguridad`); `ALIGNUX.*` arriba es convención de identidad, no ruta literal.
+> Nota de slugs: en este repo los directorios y `name` usan minúsculas con guiones (`alignux-constitucion`, `linux-mantenimiento`, `linux-seguridad`); `ALIGNUX.*` arriba es convención de identidad, no ruta literal.

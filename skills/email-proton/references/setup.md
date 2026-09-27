@@ -1,5 +1,7 @@
 # Instalación y configuración de Proton Mail Bridge
 
+> LEGACY: el canon vive en protonsuite-tools @ v1.5.0 (`docs/bridge-core/setup.md`). Este fichero se conserva como fallback local.
+
 ## Requisitos
 
 - Cuenta Proton Mail de pago (Bridge no está disponible en el plan

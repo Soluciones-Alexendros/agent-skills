@@ -1,0 +1,1 @@
+{"checks": [{"accion": "Anadir alt descriptivo", "evidencia": "img/logo.png sin alt", "id": "ACC-01", "resultado": "FAIL"}, {"evidencia": "ratio 7.2:1", "id": "ACC-02", "resultado": "PASS"}, {"evidencia": "https", "id": "TEC-01", "resultado": "PASS"}], "target": "https://ejemplo.test"}

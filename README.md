@@ -15,22 +15,22 @@ cp -r agent-skills/skills/<nombre> ~/.claude/skills/
 |---|---|---|
 | `alignux` | alignux-constitucion | Constitución y memoria del agente |
 | `codigo` | codigo-arquitectura | Análisis y refactor de código |
-| | typescript-avanzado | Tipos avanzados de TypeScript |
+| | codigo-typescript | Tipos avanzados de TypeScript |
 | `datos` | upstash | Ecosistema serverless Upstash |
 | `integraciones` | email-proton | Correo Proton Mail (thin-skill → protonsuite-tools) |
 | | protonpass | Secretos Proton Pass (thin-skill → protonsuite-tools) |
 | `linux` | linux-mantenimiento | Higiene y salud del sistema Linux |
 | | linux-seguridad | Seguridad defensiva de Linux |
-| `repo` | repo-ending | Finalización de repositorio |
-| | repo-precommit | Hooks pre-commit con Husky |
-| | repo-starting | Arranque de repositorio |
-| `web` | design-system | Sistema de diseño |
+| `repo` | repo-audit | Auditoría y health check de repositorio |
+| | repo-hooks | Hooks pre-commit con Husky |
+| | repo-release | Cierre y publicación de repositorio |
+| | repo-lifecycle | Enrutador audit/hooks/release |
+| `web` | web-design-system | Sistema de diseño |
 | | web-compliance | Auditoría compliance web (A11y, legal, SEO/SEM) |
 | | web-diseno | Diseño visual de interfaces |
-| | web-playwright | Auditoría E2E con Playwright |
-| | web-rendimiento | Auditoría performance y calidad técnica web |
+| | web-fullaudit | Orquestador de auditoría web completa |
+| | web-performance | Auditoría performance y calidad técnica web |
 | | web-seguridad | Revisión seguridad código y dependencias (OWASP) |
-| | webapp-testing | Pruebas de aplicaciones web |
 
 ## Estructura del repo
 

@@ -1,6 +1,5 @@
 ---
 name: web-compliance
-version: "1.0.0"
 description: >
   Auditoría de compliance web: accesibilidad (WCAG 2.2 AA / EN 301 549), legal
   (RGPD, Consent Mode v2, aviso legal, cookies), SEO on-page/off-page/SEM/analítica.
@@ -10,6 +9,7 @@ description: >
 license: MIT
 metadata:
   author: Soluciones-Alexendros
+  version: "1.0.0"
   dominio: web
   idioma: es
 
@@ -68,11 +68,11 @@ Ejecutar **siempre** `python3 scripts/selftest.py` tras cualquier modificación 
 - `references/sem.md` — auditoría Google Ads, benchmarks por industria, checklist de landing pages.
 - `references/seo-source.md` — SEO avanzado (absorbida de `web-audit`).
 - `references/a11y-source.md` — accesibilidad y UX (absorbida de `web-audit`).
-- Rendimiento/CWV: ver `web-rendimiento` (split 2026-09; esta skill conserva compliance).
+- Rendimiento/CWV: ver `web-performance` (antes `web-rendimiento`, renombrada 2026-09; esta skill conserva compliance).
 - `references/remediation.md` — roadmap 5 fases, matriz esfuerzo-impacto, templates de código (skip-link, form accesible, JSON-LD).
 - `references/glossary.md` — glosario técnico y stack de herramientas.
 - `references/troubleshooting.md` — problemas conocidos de los scripts y su resolución.
-- Producto distinto: `web-playwright` — auditoría E2E con Playwright (UI funcional y RICE por sprint); no duplicar: esta skill es scoring de compliance SEO/A11y/SEM/legal, aquella es QA funcional/UI con evidencias de navegador.
+- Producto distinto: `web-fullaudit` (modos e2e/full) — auditoría E2E con Playwright (UI funcional y RICE por sprint); no duplicar: esta skill es scoring de compliance SEO/A11y/SEM/legal, aquella es QA funcional/UI con evidencias de navegador.
 
 ## Caso de referencia: alexendros.dev
 

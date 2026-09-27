@@ -1,4 +1,4 @@
-# Security checklist (codigo-seguridad)
+# Security checklist (web-seguridad)
 
 Checklist operativo. Detalle en cada referencia.
 

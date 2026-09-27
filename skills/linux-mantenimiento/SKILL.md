@@ -161,16 +161,16 @@ Fórmula ponderada (ver `references/metrics-scoring.md`):
 
 | Script | Propósito | Modo |
 |--------|-----------|------|
-| `probe_system.py` | Fingerprint del sistema (solo lectura) | Todos |
-| `audit_quick.py` | Health-check read-only, salida JSON | audit-quick |
-| `audit_full.py` | Auditoría completa: 46+ controles P0-P4 + integración lynis | audit-full |
-| `risk_gate.py` | Validador determinista pre-ejecución (hook) | clean, routine |
-| `snapshot_state.py` | Captura pre-cambio: paquetes, configs, espacio, servicios | routine, clean |
-| `clean_routine.py` | Limpieza aprobada: paccache, journal vacuum, huérfanos | routine, clean |
-| `report_render.py` | Genera informe MD/HTML con puntuación, hallazgos, diff | Todos |
+| `probe_system.py` | Fingerprint del sistema + stack moderno (homed, btrfs/snapper, energía, oomd/zram, helpers), salida JSON | Todos |
+| `audit_quick.py` | Health-check higiene/updates P0+P1 (PKG-01/03/05/07, FS-10, LOG-06, SRV-02, NET-04), salida JSON | audit-quick |
+| `audit_full.py` | Higiene/updates P0-P4: reutiliza audit_quick + fase extendida (PKG-04/06/09, ARC-07, DEB-04, FS-09/11, LOG-08) | audit-full |
+| `risk_gate.py` | Validador determinista pre-ejecución, anti-evasión sudo/env/subshells (hook) | clean, routine |
+| `snapshot_state.py` | Captura pre-cambio + `--list` y `--rollback` (dry-run; `--execute` restaura /etc) | routine, clean |
+| `clean_routine.py` | Limpieza aprobada: paccache, journal vacuum, huérfanos, needrestart, caches userspace, fwupdmgr opt-in `--firmware` (R2) | routine, clean |
+| `report_render.py` | Genera informe MD/HTML con puntuación, hallazgos, diff temporal `--prev` | Todos |
 | `session_logger.py` | Registro forense append-only por sesión | Todos (fuente) |
 | `check_deps.py` | Verifica dependencias requeridas y opcionales | Pre-flight |
-| `common.py` | Helpers compartidos (subprocess, distro, scoring, sshd_effective) | Interno |
+| `common.py` | Checks compartidos audit_quick/full (check_pkg_*, check_fs_*, check_log_*, check_srv_02, check_net_04) + scoring/sshd | Interno |
 
 > Los scripts canónicos son **Python nativo** (sin subproceso a bash ni dependencia de `jq`). Las versiones `.sh` legado fueron eliminadas en v0.1.0; los scripts canónicos son Python nativo.
 

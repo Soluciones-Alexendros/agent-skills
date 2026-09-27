@@ -95,7 +95,12 @@ Igual que en `linux-mantenimiento`: **P0** compromiso activo/inminente · **P1**
 
 | Script | Propósito | Modo |
 |--------|-----------|------|
-| `postura_seguridad.sh` | Fingerprint read-only de defensas activas (firewall, AppArmor, auditd, AIDE, AV, SSH) | postura (y pre-flight de todos) |
+| `postura_seguridad.sh` | Fingerprint read-only de defensas activas (firewall, AppArmor, auditd, AIDE, AV, SSH, lockdown/IMA/landlock/TPM2/syft; `--json`) | postura (y pre-flight de todos) |
+| `scan_orchestrator.py` | Orquesta ClamAV/rkhunter/AIDE/debsums/Lynis con validación cruzada (solo lectura) | scan |
+| `vulns_check.py` | Chequeo apt + snap/flatpak, degradado sin red (solo lectura) | vulns |
+| `harden_plan.py` | Plan P1–P4 + diff + rollback desde el baseline canónico (solo lectura) | harden |
+| `apparmor_lifecycle.py` | Ciclo genprof→complain→soak→logprof→enforce (dry-run por defecto) | apparmor |
+| `forense_collector.py` | Recetas de forense-logs.md a cronología JSON (solo lectura) | logs |
 
 ## Interacción
 
@@ -131,8 +136,8 @@ Seguridad defensiva del host: invocar ante auditoría de seguridad, hardening, r
 ## Estructura
 
 - `SKILL.md` — modos, flujo, Posture Score y límites.
-- `references/` — postura-defensiva, forense-logs, escaneos, apparmor-playbook, hardening-baseline y linux-security-source (fuente absorbida).
-- `scripts/` — `postura_seguridad.sh`, `test_postura.py` y `tests/`.
+- `references/` — postura-defensiva, forense-logs, escaneos, apparmor-playbook, hardening-baseline (canónico) y linux-security-source (fuente absorbida).
+- `scripts/` — `postura_seguridad.sh`, `scan_orchestrator.py`, `vulns_check.py`, `harden_plan.py`, `apparmor_lifecycle.py`, `forense_collector.py`, `test_postura.py` y `tests/`.
 
 ## Referencias
 

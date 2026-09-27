@@ -1,7 +1,7 @@
 # Estándar: Estructura del home y notación de referencia ALIGNUX (`·`)
 
 > Registro constitucional conforme a la plantilla de salida de `ALIGNUX.constitucion`.
-> Norma completa: `references/DirectoriosEsenciales.md`. Fecha: 2026-09-14. Registro: **2.5.1** (skill `ALIGNUX.constitucion` 2.8.1).
+> Norma completa: `references/DirectoriosEsenciales.md`. Fecha: 2026-09-14. Registro: **0.2.1** (numeración anterior 2.5.1 / skill 2.8.1, histórica pre-STANDARD).
 
 ## Contexto histórico (qué limitación supera)
 La organización del home derivó sin canon y por **contenedor**, no por propósito:
@@ -44,7 +44,7 @@ Segunda limitación: sin una marca, los directorios **certificados** por el cano
 
 ## Validación de coherencia
 - [x] `DirectoriosEsenciales.md`: secciones requeridas, ≤300 líneas, TOC.
-- [x] `SKILL.md`: referencias actualizadas; versión 2.8.1.
+- [x] `SKILL.md`: referencias actualizadas; versión 0.2.1.
 - [x] Referencia cruzada desde `../../linux-seguridad/references/postura-defensiva.md` (canon `··Terminal` y exclusiones `Shell/`/`Agentes/`).
 - [x] Registro en `MIGRACION_LOG.md`; `~/Documentos/MantenimientoLocal` actualizado y commiteado.
 - [x] Invariantes verificados: `lsattr -d ~/Aplicaciones/Terminal` = `+i`; `aide --config-check` OK; shims `kimi`/`opencode` → `Agentes/`; regla auditd reescrita (aplicación tras reinicio por `-e 2`).
@@ -53,18 +53,18 @@ Segunda limitación: sin una marca, los directorios **certificados** por el cano
 
 ---
 
-# Registro anterior — 2026-09-14 (b/c) · 2.4.0 → 2.5.0 (superado)
+# Registro anterior — 2026-09-14 (b/c) · 2.4.0 → 2.5.0 (superado, numeración histórica pre-STANDARD)
 
 > `·Programas` → `·Aplicaciones` como **raíz única** (producto: `··Ventana`/`··Terminal`; más `··Fuentes`, `··Websites`, `··Formatos`, `··dotfiles`), absorbiendo `·Codexdev`. Canon CLI completo (`Scripts/`, `Shell/`, `Estado/`). Estrato 1: `·Audiovisual`, `·Aplicaciones`; estrato 2: `··Audio/Imágenes/Vídeos`, `··Fuentes/Websites/Formatos/dotfiles`, `··Ventana/··Terminal`; estrato 3: `···Scripts/Shell/Estado`. XDG: `XDG_TEMPLATES_DIR` → `··Formatos`.
 
 ---
 
-# Registro anterior — 2026-09-14 (b) · 2.4.0 (superado)
+# Registro anterior — 2026-09-14 (b) · 2.4.0 (superado, numeración histórica pre-STANDARD)
 
 > `·Programas` (producto: `··Ventana`/`··Terminal`) + `··Fuentes` (en `·Codexdev`) + canon CLI completo. Estrato 1: `·Audiovisual`, `·Codexdev`, `·Programas`. Invariantes de `··Terminal` (canon inmutable vs estado mutable).
 
 ---
 
-# Registro anterior — 2026-09-14 (a) · 2.3.0 (superado)
+# Registro anterior — 2026-09-14 (a) · 2.3.0 (superado, numeración histórica pre-STANDARD)
 
 > `·Codexdev` (fuente) + `·Aplicaciones`/`·Terminal` (producto) + `·Audiovisual`, con la notación `·` de estratos. `Programas` era **fuente**; el producto se instalaba en `·Aplicaciones`/`·Terminal`. Invariantes: `·Terminal` = `root:root`, 0755, `chattr +i`, auditd `terminal_canon`, AIDE.
