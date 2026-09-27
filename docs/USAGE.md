@@ -6,9 +6,9 @@ Copiar o enlazar la carpeta de la skill al directorio de skills del usuario o de
 
 ```bash
 # global
-cp -r skills/codigo-seguridad ~/.claude/skills/
+cp -r skills/web-seguridad ~/.claude/skills/
 # o por proyecto
-cp -r skills/codigo-seguridad /ruta/proyecto/.claude/skills/
+cp -r skills/web-seguridad /ruta/proyecto/.claude/skills/
 ```
 
 Claude Code descubre el `SKILL.md` por su frontmatter (`name` + `description`).

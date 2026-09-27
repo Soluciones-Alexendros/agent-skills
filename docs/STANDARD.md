@@ -52,7 +52,7 @@ Prohibido en el repo: `__pycache__/`, `.pytest_cache/`, dirs `.archivado-*`, fic
 | `patch` | parche, parcheado, fix, corrección | `x.y.Z` → `x.y.Z+1` | fix compatible, docs, typos |
 
 ```bash
-python3 tools/version/bump.py --type minor --skills codigo-seguridad
+python3 tools/version/bump.py --type minor --skills web-seguridad
 python3 tools/version/bump.py --type parche --all --dry-run
 python3 tools/version/bump.py --type fix --auto --base origin/main
 python3 tools/version/bump.py --check --auto --base origin/main  # lo que exige la CI

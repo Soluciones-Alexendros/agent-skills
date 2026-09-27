@@ -7,77 +7,51 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.2.0"
+  version: "1.0.0"
   dominio: integraciones
   idioma: es
 
 ---
 
-# Proton Pass — operativa de secretos
+# Proton Pass — Thin-skill: criterio de enrutado a protonsuite-tools
 
 ## Propósito
 
-Leer credenciales del almacén Proton Pass e inyectarlas en fichero o proceso. Nunca pegar el secreto en el chat ni en commits.
+**Thin-skill**: criterio de enrutado para secretos Proton Pass. La operativa completa (pass-cli, bóvedas, campos) vive en **protonsuite-tools**.
 
-## Pre-flight
+**Cuándo usar esta skill**: para decidir si la petición va a protonsuite-tools (Pass).
 
-- `pass-cli` instalado: `which pass-cli && pass-cli --version` (v2.2.0+)
-- Sesión activa en `~/.local/share/proton-pass-cli/.session/`
-- Si falta pass-cli → instalar desde https://proton.me/pass _(externo)_
-- Si sesión caducada → `pass-cli login` (flujo web, idempotente)
+## Cuándo usarme / Triggering
 
-Almacén: **Proton Pass**, CLI oficial **`pass-cli`** (`~/.local/bin/pass-cli`, backend keyring).
+Derivar a **protonsuite-tools (Pass)** cuando el usuario pida:
+- Leer/buscar/listar secretos (tokens, passwords, API keys) en Proton Pass
+- Operar con `pass-cli` (v2.2.0+): list, search, get, insert, edit, generate, login, sync
+- Acceder a bóvedas: Personal, Estatal, Finanzas, Infraestructura, Archivo
+- Sintaxis URI: `pass://<Bóveda>/<Item>/<campo>`
 
-Bóvedas habituales: **Personal · Estatal · Finanzas · Infraestructura · Archivo**.
+**NO derivar aquí**: correo Proton Mail (→ `email-proton`), secretos de CI/GitHub (settings remoto).
 
-Sintaxis URI: `pass://<Bóveda>/<Item>/<campo>`.
+## Referencias → protonsuite-tools
 
-## Acceso
+| Qué necesitas | Enlace a protonsuite-tools (tag v1.4.0) |
+|---|---|
+| CLI Reference (pass-cli commands) | `docs/mcp-tools/pass.md` |
+| Security notes (sesión, env, clipboard) | `docs/bridge-core/security-notes.md` |
+| Agent quickstart / deployment | `docs/agent-quickstart.md`, `docs/deployment.md` |
 
-```bash
-# Listar / buscar (sin volcar secretos al chat)
-pass-cli list
-pass-cli search "<término>"
+**URL base pinneada**: https://github.com/Soluciones-Alexendros/protonsuite-tools/tree/v1.4.0
 
-# Leer un campo a variable de entorno en la misma shell
-export TOKEN="$(pass-cli get 'pass://Infraestructura/<Item>/password')"
-# Usar $TOKEN en el comando siguiente; no echo ni printf del valor
-```
-
-Si una lectura falla por sesión: `pass-cli login` y reintentar una vez.
-
-## Reglas
-
-1. No mostrar el valor del secreto en la respuesta al usuario.
-2. No escribir secretos en ficheros versionados; preferir env o ficheros fuera del repo (`chmod 600`).
-3. Tras usar, no dejar el valor en historial de shell si se puede evitar (`set +o history` en la sesión puntual).
-4. Si el ítem no existe, preguntar la ruta URI; no inventar bóvedas.
-
-## Frontera
-
-- Correo Proton Mail → `email-proton`.
-- Secretos de CI/GitHub → settings del remoto o `gh secret`, no esta skill.
+> Licencia: protonsuite-tools es AGPL-3.0; este repo es MIT. Solo enlazar, no vendorizar código.
 
 ## Uso
 
-Obtener secretos desde Proton Pass vía pass-cli cuando haga falta token, password o API key almacenado, sin pedirlos ni hardcodearlos. No usar para correo (ver `email-proton`). Ver frontmatter `description`.
+Thin-skill: criterio de enrutado a protonsuite-tools (Pass). Ver `description` del frontmatter y tabla de referencias arriba.
 
 ## Estructura
 
-- `SKILL.md` — operativa de acceso y reglas.
-- `references/cli-reference.md` — comandos de `pass-cli` (list, show, insert, edit, rm, mv, cp, generate, login, logout, sync, share).
-- `references/security-notes.md` — manejo de sesión, inyección por variables de entorno y limpieza de portapapeles.
-- URI _(ejemplos)_: `pass://<Bóveda>/<Item>/<campo>`; rutas locales _(ejemplos)_: `~/.local/share/proton-pass-cli/.session/`, `~/.local/bin/pass-cli`.
-
-## Herramientas
-
-Sin `scripts/` propios. Herramienta externa invocada (no versionada aquí):
-
-| Herramienta | Propósito |
-|---|---|
-| `pass-cli` (v2.2.0+) | Listar/buscar/leer secretos de Proton Pass |
+- `SKILL.md` — criterio de enrutado y enlaces a protonsuite-tools (canon operativo).
+- `references/cli-reference.md`, `references/security-notes.md` — detalle local heredado; el canon vive en protonsuite-tools.
 
 ## Referencias
 
-- Pre-flight, Acceso y Reglas en este `SKILL.md`.
-- Producto distinto: `email-proton` (correo Proton Mail).
+Ver tabla **Referencias → protonsuite-tools** arriba.

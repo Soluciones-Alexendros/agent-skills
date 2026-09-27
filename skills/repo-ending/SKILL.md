@@ -11,7 +11,7 @@ description: >
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.2.0"
+  version: "0.2.1"
   dominio: repo
   idioma: es
 
@@ -185,4 +185,4 @@ Sin scripts en esta skill. Herramientas externas citadas: `gh`, `git`, `actionli
 - `assets/checklist-readiness.md`, `assets/labels.json`, `assets/CHANGELOG.md`, `assets/workflows/`.
 - `references/actions-security.md`, `references/ci-cd-patterns.md`, `references/merge-watch.md`.
 - Fuentes oficiales externas (texto): SemVer, Conventional Commits, Keep a Changelog, docs GitHub.
-- Para hooks pre-commit → `git-hooks`.
+- Para hooks pre-commit → `repo-precommit`.

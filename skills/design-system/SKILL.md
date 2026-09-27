@@ -3,12 +3,11 @@ name: design-system
 description: >-
   Construye design systems con tokens, Tailwind v4 y componentes reutilizables (DESIGN.md,
   librería de UI). Usar al crear design system, tokens o librería de componentes. No usar
-  para dirección estética puntual de una pantalla (→ web-diseno) ni auditoría a11y (→ web-
-  audit).
+  para dirección estética puntual de una pantalla (→ web-diseno) ni auditoría a11y (→ web-compliance).
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"
+  version: "0.1.1"
   dominio: web
   idioma: es
 
@@ -26,7 +25,7 @@ Construir o evolucionar un design system reutilizable: `DESIGN.md` _(ejemplo: ar
 - Unificar Tailwind v4 + tipografía/color/spacing.
 - Generar árbol de archivos y convenciones de componentes (estilo shadcn).
 
-No usar para rediseño visual puntual (→ `web-diseno`) ni auditoría a11y/SEO (→ `web-audit`).
+No usar para rediseño visual puntual (→ `web-diseno`) ni auditoría a11y/SEO (→ `web-compliance`).
 
 ## Workflow
 
@@ -45,7 +44,7 @@ Leer solo la referencia relevante a la fase en curso. Preferir progressive discl
 
 ## Uso
 
-Crear design system, librería de componentes o tokens; unificar Tailwind v4 + tipografía/color/spacing. No usar para rediseño puntual (ver `web-diseno`) ni auditoría a11y/SEO (ver `web-audit`). Ver frontmatter `description`.
+Crear design system, librería de componentes o tokens; unificar Tailwind v4 + tipografía/color/spacing. No usar para rediseño puntual (ver `web-diseno`) ni auditoría a11y/SEO (ver `web-compliance`). Ver frontmatter `description`.
 
 ## Estructura
 
@@ -66,4 +65,4 @@ Sin `scripts/` propios. Referencias versionadas:
 ## Referencias
 
 - Flujo en este `SKILL.md` (Workflow 1–5).
-- Productos distintos: `web-diseno` (dirección estética puntual), `web-audit` (auditoría a11y/SEO).
+- Productos distintos: `web-diseno` (dirección estética puntual), `web-compliance` (auditoría a11y/SEO).

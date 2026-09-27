@@ -44,4 +44,4 @@ Usar las plantillas de `.github/ISSUE_TEMPLATE/` (bug o propuesta de skill/mejor
 
 ## Planificación de tareas
 
-Para proyectos multi-paso o tareas de investigación, usar `planificacion-archivos` para mantener `task_plan.md`, `findings.md` y `progress.md` en disco.
+Para proyectos multi-paso o tareas de investigación, mantener `task_plan.md`, `findings.md` y `progress.md` en disco.

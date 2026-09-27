@@ -45,7 +45,7 @@ Segunda limitación: sin una marca, los directorios **certificados** por el cano
 ## Validación de coherencia
 - [x] `DirectoriosEsenciales.md`: secciones requeridas, ≤300 líneas, TOC.
 - [x] `SKILL.md`: referencias actualizadas; versión 2.8.1.
-- [x] Referencia cruzada desde `../../alignux-seguridad/references/postura-defensiva.md` (canon `··Terminal` y exclusiones `Shell/`/`Agentes/`).
+- [x] Referencia cruzada desde `../../linux-seguridad/references/postura-defensiva.md` (canon `··Terminal` y exclusiones `Shell/`/`Agentes/`).
 - [x] Registro en `MIGRACION_LOG.md`; `~/Documentos/MantenimientoLocal` actualizado y commiteado.
 - [x] Invariantes verificados: `lsattr -d ~/Aplicaciones/Terminal` = `+i`; `aide --config-check` OK; shims `kimi`/`opencode` → `Agentes/`; regla auditd reescrita (aplicación tras reinicio por `-e 2`).
 - [x] XDG: `xdg-user-dir TEMPLATES` → `~/Documentos/Formatos`; sin `~/Plantillas` recreado.

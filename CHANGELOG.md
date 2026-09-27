@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+- Reestructuración de skills 2026-09-27 (21 → 18):
+  - `auditoria-360-web` → `web-compliance` 1.0.0 (major): conserva accesibilidad, legal, SEO/SEM; absorbe SEO/a11y de `web-audit`
+  - Nueva `web-rendimiento` 1.0.0: CWV, carga, caché, SEO técnico (split web + resto de `web-audit`)
+  - Suprimidas: `web-audit` (absorbida), `datos-postgres`, `planificacion-archivos`, `dependency-audit` (absorbida en `web-seguridad`)
+  - `codigo-seguridad` → `web-seguridad` 1.0.0 (major, absorbe dependencias)
+  - `playwright-e2e-audit` → `web-playwright` 1.0.0 (major)
+  - `git-hooks` → `repo-precommit` 1.0.0 (major)
+  - `alignux-seguridad` → `linux-seguridad` 1.0.0, `alignux-mantenimiento` → `linux-mantenimiento` 1.0.0 (major, nuevo dominio `linux`)
+  - `email-proton` / `protonpass` 1.0.0 (major): thin-skills con enlaces pineados a protonsuite-tools v1.4.0
+  - `upstash` 0.3.0 (minor: pierde referencia a `datos-postgres`); retoques de enlaces 0.2.x: `web-diseno`, `webapp-testing`, `design-system`, `repo-starting`, `repo-ending`, `codigo-arquitectura`, `alignux-constitucion` 0.2.1
+
 - `repo-starting` 0.2.0 -> 0.2.1 (patch)
 
   cambios P2 sobre aplanado

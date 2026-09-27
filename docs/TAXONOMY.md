@@ -4,13 +4,13 @@ El prefijo del nombre de cada skill indica su dominio. La taxonomía es cerrada:
 
 | Dominio | Ámbito | Skills |
 |---|---|---|
-| `alignux` | Constitución, higiene y seguridad defensiva de sistemas Linux (metodología ALIGNUX) | alignux-constitucion · alignux-mantenimiento · alignux-seguridad |
-| `codigo` | Calidad, seguridad y arquitectura del código | codigo-arquitectura · codigo-seguridad · dependency-audit · typescript-avanzado |
-| `datos` | Bases de datos y backends serverless | datos-postgres · upstash |
+| `alignux` | Constitución ALIGNUX | alignux-constitucion |
+| `codigo` | Calidad y arquitectura del código | codigo-arquitectura · typescript-avanzado |
+| `datos` | Bases de datos y backends serverless | upstash |
 | `integraciones` | Servicios externos (correo, gestores de secretos) | email-proton · protonpass |
-| `proceso` | Metodologías de trabajo del agente (planificación, releases) | planificacion-archivos |
-| `repo` | Ciclo de vida del repositorio: inicio, hooks, cierre | git-hooks · repo-ending · repo-starting |
-| `web` | Auditoría, diseño, testing y accesibilidad web | auditoria-360-web · design-system · playwright-e2e-audit · web-audit · web-diseno · webapp-testing |
+| `linux` | Mantenimiento y seguridad defensiva de sistemas Linux | linux-mantenimiento · linux-seguridad |
+| `repo` | Ciclo de vida del repositorio: inicio, hooks, cierre | repo-ending · repo-precommit · repo-starting |
+| `web` | Auditoría, diseño, testing, seguridad, rendimiento y accesibilidad web | web-compliance · web-diseno · web-playwright · web-rendimiento · web-seguridad · webapp-testing · design-system |
 
 ## Reglas
 

@@ -8,7 +8,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.2.0"
+  version: "0.2.1"
   dominio: alignux
   idioma: es
 disable-model-invocation: true

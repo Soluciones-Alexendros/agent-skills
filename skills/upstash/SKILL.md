@@ -3,11 +3,11 @@ name: upstash
 description: >-
   Router del ecosistema Upstash: Redis serverless, Vector/RAG, Search, QStash, workflows,
   ratelimit, Blob y Box. Usar ante Upstash, Redis serverless, embeddings/RAG gestionados o
-  colas QStash. No usar para Postgres (→ datos-postgres).
+  colas QStash.
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.2.0"
+  version: "0.3.0"
   dominio: datos
   idioma: es
 

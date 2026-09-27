@@ -7,7 +7,7 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.2.0"
+  version: "0.2.1"
   dominio: codigo
   idioma: es
 
@@ -31,7 +31,7 @@ Analiza un codebase para detectar fricción arquitectónica y proponer oportunid
 - Cuando se sospechen módulos someros, acoplamiento excesivo, interfaces más complejas que su implementación o código difícil de testear.
 - Frases como "improve architecture", "deepening opportunities", "revisa la arquitectura de este proyecto" o "¿qué refactorizo primero?".
 - Cuando se quiera un informe visual HTML con candidatos antes/después y una recomendación priorizada.
-- **NO usar cuando**: el trabajo sea revisión de seguridad del código (usar `codigo-seguridad`) o hardening y mantenimiento de un sistema Linux (usar `alignux-seguridad`); esta skill es análisis y refactor de codebase.
+- **NO usar cuando**: el trabajo sea revisión de seguridad del código (usar `web-seguridad`) o hardening y mantenimiento de un sistema Linux (usar `linux-seguridad`); esta skill es análisis y refactor de codebase.
 
 ## Referencias internas
 

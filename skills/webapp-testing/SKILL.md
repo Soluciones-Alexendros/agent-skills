@@ -3,11 +3,11 @@ name: webapp-testing
 description: >-
   Pruebas de aplicaciones web locales con Playwright: flujos UI, capturas y depuración de
   comportamiento. Usar ante tests E2E, verificar UI en el navegador o capturar regresiones
-  visuales. No usar para auditoría SEO/a11y de un sitio público (→ web-audit).
+  visuales. No usar para auditoría SEO/a11y de un sitio público (→ web-compliance).
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.2.0"
+  version: "0.2.1"
   dominio: web
   idioma: es
 
@@ -25,7 +25,7 @@ Verificar flujos UI en apps locales con Playwright: navegación, formularios, es
 - Depurar comportamiento de UI tras un cambio.
 - Capturar regresiones visuales o de flujo.
 
-No usar para auditoría SEO/a11y de un sitio público (→ `web-audit`).
+No usar para auditoría SEO/a11y de un sitio público (→ `web-compliance`).
 
 ## Enfoque
 
@@ -54,11 +54,11 @@ with sync_playwright() as p:
 
 ## Recursos
 
-Esta skill no incluye `scripts/` propios; para helpers invocables ver `playwright-e2e-audit`. Documentación Playwright oficial _(externo)_ para APIs nuevas.
+Esta skill no incluye `scripts/` propios; para helpers invocables ver `web-playwright`. Documentación Playwright oficial _(externo)_ para APIs nuevas.
 
 ## Uso
 
-Tests E2E o comprobación asistida de una app en `localhost` _(ejemplo: URL local)_; depurar UI tras un cambio; capturar regresiones visuales. No usar para auditoría SEO/a11y de un sitio público (ver `web-audit`). Ver frontmatter `description`.
+Tests E2E o comprobación asistida de una app en `localhost` _(ejemplo: URL local)_; depurar UI tras un cambio; capturar regresiones visuales. No usar para auditoría SEO/a11y de un sitio público (ver `web-compliance`). Ver frontmatter `description`.
 
 ## Estructura
 
@@ -69,14 +69,14 @@ Tests E2E o comprobación asistida de una app en `localhost` _(ejemplo: URL loca
 
 ## Herramientas
 
-Sin `scripts/` propios (corregido a la realidad: no existe `scripts/` en esta skill; las menciones a `scripts/` se refieren al proyecto auditado o a `playwright-e2e-audit`).
+Sin `scripts/` propios (corregido a la realidad: no existe `scripts/` en esta skill; las menciones a `scripts/` se refieren al proyecto auditado o a `web-playwright`).
 
 | Recurso | Propósito |
 |---|---|
-| `playwright-e2e-audit` (skills/scripts) | Helpers invocables E2E (discovery, measure, scoring, report) |
+| `web-playwright` (skills/scripts) | Helpers invocables E2E (discovery, measure, scoring, report) |
 | Documentación Playwright oficial _(externo)_ | APIs nuevas |
 
 ## Referencias
 
 - Enfoque y ejemplo mínimo en este `SKILL.md`.
-- Productos distintos: `playwright-e2e-audit` (auditoría E2E con evidencias y RICE), `web-audit` (auditoría SEO/a11y de sitio público).
+- Productos distintos: `web-playwright` (auditoría E2E con evidencias y RICE), `web-compliance` (auditoría SEO/a11y de sitio público).

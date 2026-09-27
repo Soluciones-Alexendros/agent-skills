@@ -4,11 +4,11 @@ description: >-
   Dirección visual e interacción para UI: estética, tipografía, paleta, motion y
   microinteracciones. Usar al diseñar o rediseñar interfaces, identidad visual o polish de
   interacción. No usar para design system/tokens formales (→ design-system) ni auditoría
-  a11y/SEO (→ web-audit).
+  a11y/SEO (→ web-compliance).
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "0.2.0"
+  version: "0.2.1"
   dominio: web
   idioma: es
 
@@ -23,7 +23,7 @@ Guía el proceso de diseño visual para crear interfaces con **identidad propia*
 - **Nueva UI desde cero**: "Diseña la interfaz para...", "Crea visual identity para..."
 - **Rediseño existente**: "Rediseña mi dashboard", "Moderniza mi UI", "Elimina look templado"
 - **Dirección estética**: "Define paleta y tipografía", "Crea design system base", "Signature element"
-- **NO usar cuando**: auditoría accesibilidad/UX (→ `web-audit`), implementación Next.js (texto plano, sin skill dedicada en este repositorio)
+- **NO usar cuando**: auditoría accesibilidad/UX (→ `web-compliance`), implementación Next.js (texto plano, sin skill dedicada en este repositorio)
 
 ## Referencias internas
 - `references/design-process.md` — Proceso en 2 pasadas: brainstorm plan → review contra brief → build
@@ -50,7 +50,7 @@ Leer la referencia de la fase en curso. Design system formal → skill `design-s
 
 ## Uso
 
-Usar al diseñar o rediseñar interfaces, definir paleta/tipografía o pulir interacción. No usar para design system/tokens formales (→ `design-system`) ni auditoría a11y/SEO (→ `web-audit`).
+Usar al diseñar o rediseñar interfaces, definir paleta/tipografía o pulir interacción. No usar para design system/tokens formales (→ `design-system`) ni auditoría a11y/SEO (→ `web-compliance`).
 
 ## Estructura
 
@@ -70,4 +70,4 @@ Sin scripts en esta skill. El trabajo es de dirección visual y se apoya en las 
 
 - `references/design-process.md`, `references/typography.md`, `references/color-palette.md`, `references/layout-motion.md`, `references/writing-in-design.md`.
 - `references/frontend-design-source.md`, `references/interaction-design-source.md`.
-- Skills relacionadas: `design-system` (texto plano si no está instalada), `web-audit`.
+- Skills relacionadas: `design-system` (texto plano si no está instalada), `web-compliance`.
