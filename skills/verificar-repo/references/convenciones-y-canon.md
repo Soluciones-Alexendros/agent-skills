@@ -2,7 +2,7 @@
 
 Contraste del repositorio contra las normas reconocidas de cada stack. Si el repo declara su propia convención (config de linter, CONTRIBUTING), esa convención local tiene prioridad sobre el canon general — pero la inconsistencia interna es siempre un hallazgo. Si el lenguaje no está en la tabla, no improvisar: verificar en documentación oficial (regla 6 de la skill).
 
-**Contrato de flota (estructura, CI, docs, Renovate):** ver `references/canon.md` antes de aplicar solo este fichero. Este documento cubre estilo y tooling por lenguaje; el esqueleto del repo lo fija [repo-standard](https://github.com/Iniciativas-Alexendros/repo-standard).
+**Contrato de flota (estructura, CI, docs, Renovate):** ver `references/canon.md` antes de aplicar solo este fichero. Este documento cubre estilo y tooling por lenguaje; el esqueleto del repo lo fija [repo-standard](https://github.com/Soluciones-Alexendros/repo-standard).
 
 ## Contenido
 

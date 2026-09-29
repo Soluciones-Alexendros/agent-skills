@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Valida el árbol P0/P1 de un *repo de producto* según Iniciativas-Alexendros/repo-standard.
+# Valida el árbol P0/P1 de un *repo de producto* según Soluciones-Alexendros/repo-standard.
 # Uso: check-product-structure.sh [ruta_repo] [--profile P0|P1|P2]
 # No exige ADRs ni stacks/ del meta-canon.
 

@@ -1,6 +1,6 @@
 # Canon de flota: repo-standard
 
-Fuente de verdad: [Iniciativas-Alexendros/repo-standard](https://github.com/Iniciativas-Alexendros/repo-standard) (plantilla GitHub, contrato SemVer en ADRs).
+Fuente de verdad: [Soluciones-Alexendros/repo-standard](https://github.com/Soluciones-Alexendros/repo-standard) (plantilla GitHub, contrato SemVer en ADRs).
 
 Esta referencia resume estructura, perfiles y normas cerradas. Para alinear un repo existente, leer `reutilizacion.md` completo. No copiar a ciegas el `ci.yml` del meta-canon: usar snippets de `stacks/` en el repo remoto.
 

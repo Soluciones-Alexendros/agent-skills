@@ -6,7 +6,7 @@
 - **Estructura:** Esta meta-sección → qué hay aquí → perfiles / cajas → gates → qué no unifica → enlace a reutilización.
 - **Contenido a integrar según contexto:** En producto, **reescribe** el cuerpo: límites del *producto*, cajas reales, gates del stack. No dejes el texto «esto es el canon». Enlaza overview + ADRs propios.
 
-Este repositorio es el **canon de plataforma** de Iniciativas-Alexendros: un contrato reutilizable, no un runtime.
+Este repositorio es el **canon de plataforma** de Soluciones-Alexendros: un contrato reutilizable, no un runtime.
 
 Detalle: `docs/architecture/overview.md`. Decisiones: `docs/architecture/decisions/` (rutas del repo canon, no incluidas en esta skill).
 

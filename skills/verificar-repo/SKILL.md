@@ -117,7 +117,7 @@ Esta fase no publica nada: prepara el traspaso a `operar-release`.
 | `references/frontend-ui-ux.md` | Fase 6 |
 | `references/plantilla-informe.md` | Fase 7 |
 
-Upstream vivo: https://github.com/Iniciativas-Alexendros/repo-standard. Canon local: [docs/repo-standard](../../docs/repo-standard/structure.md) (`structure.md`, `ci-cd.md`, `release.md`, `security.md`, `templates/`).
+Upstream vivo: https://github.com/Soluciones-Alexendros/repo-standard. Canon local: [docs/repo-standard](../../docs/repo-standard/structure.md) (`structure.md`, `ci-cd.md`, `release.md`, `security.md`, `templates/`).
 
 ## TL;DR
 
@@ -158,6 +158,6 @@ Usar al pedir escanear/auditar un repo, alinear con el estándar de flota o heal
 - `references/reutilizacion.md` — checklist §8 y copiar vs adaptar (verificar case exacto `reutilizacion.md`).
 - `references/*` _(glob: detalle flota)_ — `overview.md`, `architecture-resumen.md`, `adrs-indice.md`, `coding-standards.md`, `testing.md`.
 - `references/higiene-community.md`, `references/convenciones-y-canon.md`, `references/verificacion-y-tests.md`, `references/frontend-ui-ux.md`, `references/plantilla-informe.md`.
-- Rutas del canon externo `docs/architecture/`, `docs/architecture/decisions/` (ADR-0001…0011 y `template.md`) y `stacks/` — código plano, viven en el repo remoto `https://github.com/Iniciativas-Alexendros/repo-standard`, no incluidas en esta skill.
+- Rutas del canon externo `docs/architecture/`, `docs/architecture/decisions/` (ADR-0001…0011 y `template.md`) y `stacks/` — código plano, viven en el repo remoto `https://github.com/Soluciones-Alexendros/repo-standard`, no incluidas en esta skill.
 - Para hooks locales → `verificar-hooks`. Para cierre o publicación → `operar-release` (Fase 8).
 - Para auditoría de dependencias → `verificar-owasp`.
