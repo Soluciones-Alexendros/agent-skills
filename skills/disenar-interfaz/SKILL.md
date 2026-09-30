@@ -8,24 +8,27 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "1.0.0"
+  version: "1.1.0"
   dominio: disenar
+  tipo: atomic
   idioma: es
-
 ---
 
 # disenar-interfaz — Diseño Visual Intencional (Frontend Design)
 
 ## Qué hace / Propósito
+
 Guía el proceso de diseño visual para crear interfaces con **identidad propia**, no templadas. Cubre: dirección estética, sistema tipográfico, paleta de colores, layout, motion, y signature element. El objetivo: que cada decisión de diseño sea deliberada y específica al brief, no un default genérico.
 
 ## Cuándo usarme / Triggering
+
 - **Nueva UI desde cero**: "Diseña la interfaz para...", "Crea visual identity para..."
 - **Rediseño existente**: "Rediseña mi dashboard", "Moderniza mi UI", "Elimina look templado"
 - **Dirección estética**: "Define paleta y tipografía", "Crea design system base", "Signature element"
 - **NO usar cuando**: auditoría accesibilidad/UX (→ `verificar-compliance`), design system formal (→ `disenar-design-system`)
 
 ## Referencias internas
+
 - `references/design-process.md` — Proceso en 2 pasadas: brainstorm plan → review contra brief → build
 - `references/typography.md` — Sistema tipográfico: display/body/utility faces, type scale, weights, spacing
 - `references/color-palette.md` — Paleta 4-6 hex nombrados, semantic color, contrast ratios, dark mode; color moderno OKLCH/`color-mix`/color relativo
@@ -33,6 +36,7 @@ Guía el proceso de diseño visual para crear interfaces con **identidad propia*
 - `references/writing-in-design.md` — Copy como material de diseño: active voice, user-side naming, error/empty states
 
 ## Stack moderno de motion e interacción
+
 - **motion-one**: microinteracciones y reveals con API mínima (`animate`, `scroll`, `inView`).
 - **framer-motion v11**: layouts animados, gestos y transiciones en React.
 - **Scroll-driven Animations** (CSS): `animation-timeline: scroll() | view()` para parallax y progress sin JS.
@@ -41,12 +45,19 @@ Guía el proceso de diseño visual para crear interfaces con **identidad propia*
 - Todo motion respeta `prefers-reduced-motion`; ver detalle en `references/layout-motion.md`.
 
 ## Estructura de salida
+
 ALWAYS use this exact template:
+
 # [Plan de Diseño Visual]
+
 ## Brief & Sujeto concreto
+
 ## Token system (Color, Type, Layout, Signature)
+
 ## Wireframes ASCII / Layout concept
+
 ## Decisiones justificadas (por qué no defaults)
+
 ## Próximos pasos para implementación
 
 ## Fuentes fusionadas

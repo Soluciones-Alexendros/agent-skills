@@ -9,10 +9,10 @@ description: >
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "2.0.1"
+  version: "2.1.0"
   dominio: verificar
+  tipo: atomic
   idioma: es
-
 ---
 
 # verificar-compliance — Auditoría de cumplimiento web
@@ -42,13 +42,13 @@ Auditoría extremo a extremo de un website objetivo con evidencia medible, matri
 
 ## Herramientas
 
-| Script | Uso | Salida |
-|---|---|---|
-| `scripts/audit_page.py <url> [--json out.json]` | Audita una URL: HTTPS, headers, meta, headings, alt, lang, canonical, hreflang, JSON-LD, skip-link, labels, mixed content, robots/sitemap | JSON de checks automatizables |
-| `scripts/contrast.py <fg> <bg> [--large]` | Ratio de contraste WCAG y veredicto AA/AAA | JSON |
-| `scripts/score.py <results.json>` | % compliance por pilar, semáforo, dictamen, deuda en horas | JSON |
-| `scripts/report.py <results.json> [--md out.md]` | Informe de cierre en Markdown con matriz y dictamen | Markdown |
-| `scripts/selftest.py` | Suite de tests integrada (fixtures PASS/FAIL, contraste, scoring, report) | exit 0/1 |
+| Script                                           | Uso                                                                                                                                       | Salida                        |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `scripts/audit_page.py <url> [--json out.json]`  | Audita una URL: HTTPS, headers, meta, headings, alt, lang, canonical, hreflang, JSON-LD, skip-link, labels, mixed content, robots/sitemap | JSON de checks automatizables |
+| `scripts/contrast.py <fg> <bg> [--large]`        | Ratio de contraste WCAG y veredicto AA/AAA                                                                                                | JSON                          |
+| `scripts/score.py <results.json>`                | % compliance por pilar, semáforo, dictamen, deuda en horas                                                                                | JSON                          |
+| `scripts/report.py <results.json> [--md out.md]` | Informe de cierre en Markdown con matriz y dictamen                                                                                       | Markdown                      |
+| `scripts/selftest.py`                            | Suite de tests integrada (fixtures PASS/FAIL, contraste, scoring, report)                                                                 | exit 0/1                      |
 
 Scripts en stdlib de Python, sin dependencias externas.
 

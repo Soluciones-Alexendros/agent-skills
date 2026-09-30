@@ -10,10 +10,10 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "2.0.0"
+  version: "2.1.0"
   dominio: verificar
+  tipo: atomic
   idioma: es
-
 ---
 
 # verificar-repo — Auditoría integral de repositorios
@@ -103,19 +103,19 @@ Esta fase no publica nada: prepara el traspaso a `operar-release`.
 
 ## Recursos
 
-| Archivo | Cuándo |
-|---------|--------|
-| `scripts/audit-repo.sh` | Fase 0 (entrada única) |
-| `scripts/scan_repo.py` | Fase 0 (invocado por `audit-repo.sh`) |
-| `scripts/check-product-structure.sh` | Fase 0–2 (invocado por `audit-repo.sh`) |
-| `references/canon.md` | Fase 2 (resumen operativo) |
-| `references/reutilizacion.md` | Fase 2–4 |
-| `references/*` _(glob: detalle flota)_ | Detalle flota |
-| `references/higiene-community.md` | Fases 2–3 |
-| `references/convenciones-y-canon.md` | Estilo por lenguaje |
-| `references/verificacion-y-tests.md` | Fases 4–5 |
-| `references/frontend-ui-ux.md` | Fase 6 |
-| `references/plantilla-informe.md` | Fase 7 |
+| Archivo                                | Cuándo                                  |
+| -------------------------------------- | --------------------------------------- |
+| `scripts/audit-repo.sh`                | Fase 0 (entrada única)                  |
+| `scripts/scan_repo.py`                 | Fase 0 (invocado por `audit-repo.sh`)   |
+| `scripts/check-product-structure.sh`   | Fase 0–2 (invocado por `audit-repo.sh`) |
+| `references/canon.md`                  | Fase 2 (resumen operativo)              |
+| `references/reutilizacion.md`          | Fase 2–4                                |
+| `references/*` _(glob: detalle flota)_ | Detalle flota                           |
+| `references/higiene-community.md`      | Fases 2–3                               |
+| `references/convenciones-y-canon.md`   | Estilo por lenguaje                     |
+| `references/verificacion-y-tests.md`   | Fases 4–5                               |
+| `references/frontend-ui-ux.md`         | Fase 6                                  |
+| `references/plantilla-informe.md`      | Fase 7                                  |
 
 Upstream vivo: https://github.com/Soluciones-Alexendros/repo-standard. Canon local: [docs/repo-standard](../../docs/repo-standard/structure.md) (`structure.md`, `ci-cd.md`, `release.md`, `security.md`, `templates/`).
 
@@ -143,13 +143,13 @@ Usar al pedir escanear/auditar un repo, alinear con el estándar de flota o heal
 
 ## Herramientas
 
-| Script | Propósito |
-|---|---|
-| `scripts/audit-repo.sh` | Entrada única Fase 0 (escáner + estructura) |
-| `scripts/scan_repo.py` | Reconocimiento (Fase 0) |
-| `scripts/check-product-structure.sh` | Chequeo de estructura por perfil P0/P1/P2 (Fases 0–2) |
-| `scripts/test_scan_repo.py` _(tests, no tocar)_ | Tests del escáner |
-| `scripts/tests/smoke_sh.sh` _(tests, no tocar)_ | Smoke de scripts shell |
+| Script                                          | Propósito                                             |
+| ----------------------------------------------- | ----------------------------------------------------- |
+| `scripts/audit-repo.sh`                         | Entrada única Fase 0 (escáner + estructura)           |
+| `scripts/scan_repo.py`                          | Reconocimiento (Fase 0)                               |
+| `scripts/check-product-structure.sh`            | Chequeo de estructura por perfil P0/P1/P2 (Fases 0–2) |
+| `scripts/test_scan_repo.py` _(tests, no tocar)_ | Tests del escáner                                     |
+| `scripts/tests/smoke_sh.sh` _(tests, no tocar)_ | Smoke de scripts shell                                |
 
 ## Referencias
 

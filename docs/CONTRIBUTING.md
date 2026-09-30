@@ -3,8 +3,8 @@
 ## Añadir o modificar una skill
 
 1. La carpeta debe llamarse igual que el `name` del frontmatter (kebab-case).
-2. El frontmatter debe declarar `metadata.idioma: es` — toda skill se escribe en español.
-3. Cumplir [STANDARD.md](STANDARD.md): frontmatter completo, cuerpo < 500 líneas, taxonomía en [TAXONOMY.md](TAXONOMY.md).
+2. El frontmatter debe declarar `metadata.idioma: es` y `metadata.tipo: atomic|router|tecnologia` — toda skill se escribe en español.
+3. Cumplir [STANDARD.md](STANDARD.md): frontmatter completo (incluye `tipo`), cuerpo ≤ 500 líneas y ≤ 5000 tokens, taxonomía en [TAXONOMY.md](TAXONOMY.md), orden fijo de secciones.
 4. Sin trailing whitespace — la CI lo rechaza.
 5. Registrar cambios en [CHANGELOG.md](../CHANGELOG.md).
 6. Pasar la validación local en verde antes de la PR:
@@ -15,11 +15,11 @@ bash run-validation.sh
 
 ## Niveles de severidad (bump de `metadata.version`)
 
-| Tipo | Cuándo usar | Ejemplo |
-|------|-------------|---------|
+| Tipo    | Cuándo usar                                                                  | Ejemplo                                             |
+| ------- | ---------------------------------------------------------------------------- | --------------------------------------------------- |
 | `major` | Cambio incompatible: reestructura, elimina secciones o cambia comportamiento | Fusionar dos skills, cambiar formato de frontmatter |
-| `minor` | Nueva funcionalidad compatible: añade secciones, referencias o scripts | Añadir `references/nueva-guia.md` |
-| `patch` | Fix compatible: typo, enlace roto, ajuste menor | Corregir URL, formatear tabla |
+| `minor` | Nueva funcionalidad compatible: añade secciones, referencias o scripts       | Añadir `references/nueva-guia.md`                   |
+| `patch` | Fix compatible: typo, enlace roto, ajuste menor                              | Corregir URL, formatear tabla                       |
 
 En español: `--type ruptura` (major), `--type desarrollo` (minor), `--type parche` (patch).
 

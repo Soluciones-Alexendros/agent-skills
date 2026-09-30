@@ -1,0 +1,21 @@
+{
+  "name": "agent-skills",
+  "version": "2.1.0",
+  "description": "Agent skills repository - standardized and validated",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "typecheck": "python3 -m py_compile tools/validate/skill_spec.py tools/validate/skill_links.py tools/version/bump.py && echo 'typecheck: OK'",
+    "test": "bash run-validation.sh --pytest-only --smoke-only",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3"
+  },
+  "lint-staged": {
+    "*.{md,json,yaml,yml,toml}": "prettier --write"
+  }
+}

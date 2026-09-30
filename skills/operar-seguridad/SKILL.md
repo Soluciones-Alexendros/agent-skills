@@ -8,11 +8,12 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "2.0.0"
+  version: "2.1.0"
   dominio: operar
+  tipo: atomic
   idioma: es
-
 ---
+
 # Linux Seguridad — Seguridad defensiva de hosts Linux
 
 Skill de seguridad defensiva para sistemas Linux, operada por un agente IA con seguridad estructural. Parte de la familia **operar** — seguridad defensiva de hosts Linux. Hermana de `operar-mantenimiento` (higiene, actualizaciones, ordenado, optimización). Cuando una petición toca ambos mundos, la parte defensiva es de esta skill y la de higiene de la otra.
@@ -33,14 +34,14 @@ Evaluar y mejorar la postura defensiva del sistema sin alarmismo ni escrituras n
 
 ## Frontera de Alcances
 
-| **operar-seguridad** | **operar-mantenimiento** |
-|----------------------|---------------------------|
+| **operar-seguridad**                                      | **operar-mantenimiento**                       |
+| --------------------------------------------------------- | ---------------------------------------------- |
 | Postura defensiva (firewall, MAC, auditd, AV, integridad) | Actualizaciones de paquetes, cachés, huérfanos |
-| Forense ligero: journald, auditd, auth.log, denials.log | Limpieza de logs (rotación, vacuum) |
-| Vulnerabilidades y CVEs del software instalado | Aplicar las actualizaciones que los corrigen |
-| Hardening (CIS, SSH, sysctl de seguridad, AppArmor) | Optimización de arranque y recursos |
-| Escaneos: ClamAV, rkhunter, AIDE, debsums, Lynis | Health Score de higiene/recursos |
-| Ciclo de vida de perfiles AppArmor | Snapshots y mantenimiento rutinario |
+| Forense ligero: journald, auditd, auth.log, denials.log   | Limpieza de logs (rotación, vacuum)            |
+| Vulnerabilidades y CVEs del software instalado            | Aplicar las actualizaciones que los corrigen   |
+| Hardening (CIS, SSH, sysctl de seguridad, AppArmor)       | Optimización de arranque y recursos            |
+| Escaneos: ClamAV, rkhunter, AIDE, debsums, Lynis          | Health Score de higiene/recursos               |
+| Ciclo de vida de perfiles AppArmor                        | Snapshots y mantenimiento rutinario            |
 
 **Regla:** Cuando una petición toca ambos mundos, la parte defensiva es de esta skill y la de higiene de `operar-mantenimiento`.
 
@@ -55,14 +56,14 @@ Evaluar y mejorar la postura defensiva del sistema sin alarmismo ni escrituras n
 
 ## Modos de Operación
 
-| Modo | Qué hace | Permisos | Salida |
-|------|----------|----------|--------|
-| `postura` | Inventario y salud de las defensas activas | R0 | Posture Score + hallazgos P0–P4 |
-| `logs` | Forense ligero: autenticación, audit, denegaciones MAC, actividad sospechosa | R0 | Cronología + veredicto por evento |
-| `scan` | Escaneos antimalware/rootkits/integridad con validación cruzada | R0/R1 | Hallazgos validados + descartados (con motivo) |
-| `vulns` | CVEs y actualizaciones de seguridad pendientes | R0 | Lista priorizada con severidad y fix |
-| `harden` | Plan de endurecimiento CIS priorizado; ejecución solo con aprobación | R0 plan / R2 ejecución | Plan P1–P4 + diff post-ejecución |
-| `apparmor` | Ciclo de vida de perfiles: diagnóstico, genprof, complain, soak, logprof, enforce, depuración | R0 diag / R2 cambios | Estado de perfiles + acciones |
+| Modo       | Qué hace                                                                                      | Permisos               | Salida                                         |
+| ---------- | --------------------------------------------------------------------------------------------- | ---------------------- | ---------------------------------------------- |
+| `postura`  | Inventario y salud de las defensas activas                                                    | R0                     | Posture Score + hallazgos P0–P4                |
+| `logs`     | Forense ligero: autenticación, audit, denegaciones MAC, actividad sospechosa                  | R0                     | Cronología + veredicto por evento              |
+| `scan`     | Escaneos antimalware/rootkits/integridad con validación cruzada                               | R0/R1                  | Hallazgos validados + descartados (con motivo) |
+| `vulns`    | CVEs y actualizaciones de seguridad pendientes                                                | R0                     | Lista priorizada con severidad y fix           |
+| `harden`   | Plan de endurecimiento CIS priorizado; ejecución solo con aprobación                          | R0 plan / R2 ejecución | Plan P1–P4 + diff post-ejecución               |
+| `apparmor` | Ciclo de vida de perfiles: diagnóstico, genprof, complain, soak, logprof, enforce, depuración | R0 diag / R2 cambios   | Estado de perfiles + acciones                  |
 
 **Regla:** ningún modo escribe sin que el usuario lo pida explícitamente; `harden` y cambios en AppArmor (enforce, cargar perfiles) siempre muestran antes el plan exacto.
 
@@ -75,12 +76,14 @@ Evaluar y mejorar la postura defensiva del sistema sin alarmismo ni escrituras n
 ## Formato de Salida
 
 ### Security Posture Score (0–100)
+
 - **Control de acceso mandatorio (30%)**: AppArmor activo, perfiles en enforce, userns restringido, procesos sin confinar.
 - **Detección y auditoría (25%)**: auditd con reglas, journald persistente, AIDE programado, denegaciones cosechadas.
 - **Superficie de ataque (25%)**: firewall, SSH, servicios expuestos, binarios inesperados con privilegios.
 - **Higiene de parches de seguridad (20%)**: CVEs críticos sin parchear, actualizaciones de seguridad pendientes.
 
 ### Clasificación de Hallazgos
+
 Igual que en `operar-mantenimiento`: **P0** compromiso activo/inminente · **P1** vulnerabilidad o configuración insegura real · **P2** desviación de baseline · **P3** mejora de defensa · **P4** informativo.
 
 ## Referencias Internas
@@ -93,14 +96,14 @@ Igual que en `operar-mantenimiento`: **P0** compromiso activo/inminente · **P1*
 
 ## Herramientas
 
-| Script | Propósito | Modo |
-|--------|-----------|------|
-| `postura_seguridad.sh` | Fingerprint read-only de defensas activas (firewall, AppArmor, auditd, AIDE, AV, SSH, lockdown/IMA/landlock/TPM2/syft; `--json`) | postura (y pre-flight de todos) |
-| `scan_orchestrator.py` | Orquesta ClamAV/rkhunter/AIDE/debsums/Lynis con validación cruzada (solo lectura) | scan |
-| `vulns_check.py` | Chequeo apt + snap/flatpak, degradado sin red (solo lectura) | vulns |
-| `harden_plan.py` | Plan P1–P4 + diff + rollback desde el baseline canónico (solo lectura) | harden |
-| `apparmor_lifecycle.py` | Ciclo genprof→complain→soak→logprof→enforce (dry-run por defecto) | apparmor |
-| `forense_collector.py` | Recetas de forense-logs.md a cronología JSON (solo lectura) | logs |
+| Script                  | Propósito                                                                                                                        | Modo                            |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `postura_seguridad.sh`  | Fingerprint read-only de defensas activas (firewall, AppArmor, auditd, AIDE, AV, SSH, lockdown/IMA/landlock/TPM2/syft; `--json`) | postura (y pre-flight de todos) |
+| `scan_orchestrator.py`  | Orquesta ClamAV/rkhunter/AIDE/debsums/Lynis con validación cruzada (solo lectura)                                                | scan                            |
+| `vulns_check.py`        | Chequeo apt + snap/flatpak, degradado sin red (solo lectura)                                                                     | vulns                           |
+| `harden_plan.py`        | Plan P1–P4 + diff + rollback desde el baseline canónico (solo lectura)                                                           | harden                          |
+| `apparmor_lifecycle.py` | Ciclo genprof→complain→soak→logprof→enforce (dry-run por defecto)                                                                | apparmor                        |
+| `forense_collector.py`  | Recetas de forense-logs.md a cronología JSON (solo lectura)                                                                      | logs                            |
 
 ## Interacción
 
@@ -117,6 +120,7 @@ Al invocarse, el agente ejecuta el fingerprint, muestra el contexto detectado (d
 ## Trazabilidad ALIGNUX
 
 Esta skill implementa los principios de `disenar-constitucion`:
+
 - **Identidad**: Prefijo `ALIGNUX.` en mayúsculas (identidad constitucional)
 - **Coherencia**: Frontera clara con `operar-mantenimiento`, nomenclatura `familia.subdominio`
 - **Estructura habilita**: Tags `sistema.ALIGNUX.*`, progressive disclosure, validador automatizado
