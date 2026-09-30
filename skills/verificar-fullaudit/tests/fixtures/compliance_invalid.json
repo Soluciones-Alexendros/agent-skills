@@ -1,5 +1,0 @@
-[
-  {"id": "UI-01", "url": "no-es-url", "category": "Inventada", "check": "X",
-   "status": "FAIL", "severity": "Gravisima"},
-  {"url": "https://ejemplo.test/", "category": "SEO", "check": "Y", "status": "PASS", "severity": "Baja"}
-]

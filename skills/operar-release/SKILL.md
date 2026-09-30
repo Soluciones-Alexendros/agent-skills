@@ -11,10 +11,10 @@ description: >
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "2.0.0"
+  version: "2.1.0"
   dominio: operar
+  tipo: atomic
   idioma: es
-
 ---
 
 # operar-release
@@ -149,20 +149,20 @@ Resumen operativo:
 
 ## Recursos
 
-| Archivo | Cuándo |
-|---|---|
-| `assets/labels.json` | Fase A |
-| `assets/CHANGELOG.md` | Fase B |
-| `assets/workflows/` | Fases B/D, reutilizables `workflow_call` (CI, release, lint) |
-| `assets/ruleset.json` | Fase D, base de protección de `main` (aplica un humano) |
-| `actions/setup-node/` | Fase D, setup Node pineado |
-| `actions/actionlint/` | Fase D, lint de workflows |
-| `actions/secret-scan/` | Fase D, escaneo de secretos |
-| `assets/checklist-readiness.md` | Gate e informe |
-| `references/actions-security.md` | Fase D |
-| `references/ci-cd-patterns.md` | Fase D |
-| `references/dependabot-grouped.md` | Fase C |
-| `references/merge-watch.md` | Fase F (obligatoria tras remediación) |
+| Archivo                            | Cuándo                                                       |
+| ---------------------------------- | ------------------------------------------------------------ |
+| `assets/labels.json`               | Fase A                                                       |
+| `assets/CHANGELOG.md`              | Fase B                                                       |
+| `assets/workflows/`                | Fases B/D, reutilizables `workflow_call` (CI, release, lint) |
+| `assets/ruleset.json`              | Fase D, base de protección de `main` (aplica un humano)      |
+| `actions/setup-node/`              | Fase D, setup Node pineado                                   |
+| `actions/actionlint/`              | Fase D, lint de workflows                                    |
+| `actions/secret-scan/`             | Fase D, escaneo de secretos                                  |
+| `assets/checklist-readiness.md`    | Gate e informe                                               |
+| `references/actions-security.md`   | Fase D                                                       |
+| `references/ci-cd-patterns.md`     | Fase D                                                       |
+| `references/dependabot-grouped.md` | Fase C                                                       |
+| `references/merge-watch.md`        | Fase F (obligatoria tras remediación)                        |
 
 ## Uso
 
@@ -183,14 +183,14 @@ Usar ante cierre de repo, release/publicación o auditoría de CI/CD, labels, ch
 
 Sin scripts en esta skill. Herramientas externas citadas: `gh`, `git`, `actionlint`.
 
-| Activo | Propósito |
-|---|---|
-| `assets/checklist-readiness.md` | Gate e informe |
-| `assets/labels.json` | Mapeo de labels (Fase A) |
-| `assets/CHANGELOG.md` | Formato de changelog (Fase B) |
-| `assets/workflows/` | Reutilizables CI/release/lint (Fases B/D) |
-| `assets/ruleset.json` | Base de protección de `main` (Fase D) |
-| `actions/` | Composites setup-node/actionlint/secret-scan (Fase D) |
+| Activo                          | Propósito                                             |
+| ------------------------------- | ----------------------------------------------------- |
+| `assets/checklist-readiness.md` | Gate e informe                                        |
+| `assets/labels.json`            | Mapeo de labels (Fase A)                              |
+| `assets/CHANGELOG.md`           | Formato de changelog (Fase B)                         |
+| `assets/workflows/`             | Reutilizables CI/release/lint (Fases B/D)             |
+| `assets/ruleset.json`           | Base de protección de `main` (Fase D)                 |
+| `actions/`                      | Composites setup-node/actionlint/secret-scan (Fase D) |
 
 ## Referencias
 

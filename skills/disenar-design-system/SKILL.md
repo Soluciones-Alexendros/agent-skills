@@ -8,10 +8,10 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "1.0.0"
+  version: "1.1.0"
   dominio: disenar
+  tipo: atomic
   idioma: es
-
 ---
 
 # Web Design System (tokens + Tailwind + componentes)
@@ -64,12 +64,12 @@ Crear design system, librería de componentes o tokens; unificar Tailwind v4 + t
 
 Sin `scripts/` propios. Referencias versionadas:
 
-| Recurso | Propósito |
-|---|---|
-| `references/builder-source.md` | Generación de árbol, tokens y componentes |
-| `references/tailwind-source.md` | Patrones Tailwind v4 y escalado |
-| `references/tokens.md` | Pipeline de tokens DTCG ↔ Figma ↔ código |
-| `references/modern-css.md` | CSS moderno (layers, queries, anchor) |
+| Recurso                         | Propósito                                 |
+| ------------------------------- | ----------------------------------------- |
+| `references/builder-source.md`  | Generación de árbol, tokens y componentes |
+| `references/tailwind-source.md` | Patrones Tailwind v4 y escalado           |
+| `references/tokens.md`          | Pipeline de tokens DTCG ↔ Figma ↔ código  |
+| `references/modern-css.md`      | CSS moderno (layers, queries, anchor)     |
 
 ## Referencias
 

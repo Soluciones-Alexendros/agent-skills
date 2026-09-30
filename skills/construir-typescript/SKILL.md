@@ -7,11 +7,12 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "2.0.1"
+  version: "2.1.0"
   dominio: construir
+  tipo: tecnologia
   idioma: es
-
 ---
+
 # TypeScript: tipos avanzados
 
 > Nota de formato: sección `Cuándo usarme`/`When to Use` fusionada 2026-09-26 en una única sección ES (`Cuándo usarme / Triggering`, con equivalencias EN entre paréntesis); se conservan las secciones estándar `Uso`, `Estructura`, `Herramientas` y `Referencias`.
@@ -123,11 +124,11 @@ Tipado avanzado (generics, conditional types, `infer`, branded types, patrones d
 
 Sin `scripts/` propios. Recursos versionados:
 
-| Recurso | Propósito |
-|---|---|
-| `references/core-concepts.md` | Código completo de conceptos fundamentales |
-| `references/details.md` | Patrones avanzados y ejemplos trabajados |
-| `references/modern-typescript-2024-2026.md` | Modernización y tooling 2024-26 |
+| Recurso                                     | Propósito                                  |
+| ------------------------------------------- | ------------------------------------------ |
+| `references/core-concepts.md`               | Código completo de conceptos fundamentales |
+| `references/details.md`                     | Patrones avanzados y ejemplos trabajados   |
+| `references/modern-typescript-2024-2026.md` | Modernización y tooling 2024-26            |
 
 ## Referencias
 

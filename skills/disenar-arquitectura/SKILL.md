@@ -7,11 +7,12 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "1.0.0"
+  version: "1.1.0"
   dominio: disenar
+  tipo: atomic
   idioma: es
-
 ---
+
 # Mejorar la Arquitectura del Código
 
 Detecta fricción arquitectónica y propone **oportunidades de profundización** (deepening): refactors que convierten módulos someros en módulos profundos. El objetivo es la testabilidad y la navegabilidad por IA.
@@ -116,12 +117,12 @@ Análisis y refactor de arquitectura: invocar ante «revisa la arquitectura», s
 
 Sin `scripts/` propios. Las herramientas externas viven documentadas en `references/`:
 
-| Recurso | Propósito |
-|---|---|
+| Recurso                               | Propósito                                  |
+| ------------------------------------- | ------------------------------------------ |
 | `references/analisis-dependencias.md` | dependency-cruiser, madge (mapas y reglas) |
-| `references/c4-structurizr.md` | C4 + Structurizr (modelado) |
-| `references/plantilla-adr.md` | Plantilla ADR |
-| `references/monolito-modular.md` | Patrones de monolito modular |
+| `references/c4-structurizr.md`        | C4 + Structurizr (modelado)                |
+| `references/plantilla-adr.md`         | Plantilla ADR                              |
+| `references/monolito-modular.md`      | Patrones de monolito modular               |
 
 ## Referencias
 

@@ -7,10 +7,12 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "1.0.1"
+  version: "1.1.0"
   dominio: construir
+  tipo: router
   idioma: es
 ---
+
 # construir-upstash — Router con 7 modos internos
 
 Punto de entrada unificado al ecosistema Upstash. Esta skill actúa como **router
@@ -20,17 +22,17 @@ su `MODE.md`, sus `references/` propias y sus `ejemplos.md`.
 
 ## Routing automático (palabras clave → modo)
 
-| Palabras clave detectadas | Modo | Entrada |
-|---|---|---|
-| cache, session, KV, leaderboard, sorted set, Lua, pipeline, MULTI/EXEC, réplica, `start-redis`, Scratch | `redis` | `modes/redis/MODE.md` |
-| embedding, RAG, vector, similarity, kNN, namespace, dense, sparse, semantic cache | `vector` | `modes/vector/MODE.md` |
-| full-text, búsqueda, typo-tolerance, facetas, rerank, filtro SQL, paginación | `search` | `modes/search/MODE.md` |
-| queue, cola, cron, mensaje, background job, DLQ, retry, fan-out, deduplicación, firma webhook | `queue` | `modes/queue/MODE.md` |
-| workflow, durable, step, sleep, call, human-in-the-loop, agente con pasos | `queue` (workflows extiende queue) | `modes/queue/MODE.md` |
-| rate limit, throttle, 429, token bucket, ventana fija/deslizante, multi-region | `ratelimit` | `modes/ratelimit/MODE.md` |
-| S3, blob, upload, presigned URL, multipart, subida directa desde navegador | `blob` | `modes/blob/MODE.md` |
-| container, sandbox, agente IA, browser headless, snapshot, workspace remoto | `box` | `modes/box/MODE.md` |
-| CLI, terminal, backup, automatización, `upstash` command | transversal | `references/cli.md`, `references/cli-vendor.md` |
+| Palabras clave detectadas                                                                               | Modo                               | Entrada                                         |
+| ------------------------------------------------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------- |
+| cache, session, KV, leaderboard, sorted set, Lua, pipeline, MULTI/EXEC, réplica, `start-redis`, Scratch | `redis`                            | `modes/redis/MODE.md`                           |
+| embedding, RAG, vector, similarity, kNN, namespace, dense, sparse, semantic cache                       | `vector`                           | `modes/vector/MODE.md`                          |
+| full-text, búsqueda, typo-tolerance, facetas, rerank, filtro SQL, paginación                            | `search`                           | `modes/search/MODE.md`                          |
+| queue, cola, cron, mensaje, background job, DLQ, retry, fan-out, deduplicación, firma webhook           | `queue`                            | `modes/queue/MODE.md`                           |
+| workflow, durable, step, sleep, call, human-in-the-loop, agente con pasos                               | `queue` (workflows extiende queue) | `modes/queue/MODE.md`                           |
+| rate limit, throttle, 429, token bucket, ventana fija/deslizante, multi-region                          | `ratelimit`                        | `modes/ratelimit/MODE.md`                       |
+| S3, blob, upload, presigned URL, multipart, subida directa desde navegador                              | `blob`                             | `modes/blob/MODE.md`                            |
+| container, sandbox, agente IA, browser headless, snapshot, workspace remoto                             | `box`                              | `modes/box/MODE.md`                             |
+| CLI, terminal, backup, automatización, `upstash` command                                                | transversal                        | `references/cli.md`, `references/cli-vendor.md` |
 
 ## Dependencias entre modos (declarativo)
 

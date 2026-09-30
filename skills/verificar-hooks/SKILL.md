@@ -7,11 +7,12 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "3.0.0"
+  version: "3.1.0"
   dominio: verificar
+  tipo: atomic
   idioma: es
-
 ---
+
 # verificar-hooks — Configuración de hooks locales
 
 > Alcance: hooks git locales (Husky, lint-staged, Prettier). La CI de GitHub vive en `operar-release` y el canon en [docs/repo-standard](../../docs/repo-standard/structure.md). Secciones estándar `Uso`, `Estructura`, `Herramientas` y `Referencias` al final.
@@ -131,10 +132,10 @@ Configurar hooks git locales (Husky, lint-staged, typecheck, tests en pre-commit
 
 Sin `scripts/` propios. Herramientas externas invocadas:
 
-| Herramienta | Propósito |
-|---|---|
-| Husky | Hook pre-commit |
-| lint-staged + Prettier | Formateo de staged files |
+| Herramienta                          | Propósito                             |
+| ------------------------------------ | ------------------------------------- |
+| Husky                                | Hook pre-commit                       |
+| lint-staged + Prettier               | Formateo de staged files              |
 | `npm run typecheck` / `npm run test` | Verificación y tests del repo destino |
 
 ## Referencias

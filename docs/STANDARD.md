@@ -6,14 +6,16 @@ Basado en la [especificación Agent Skills](https://agentskills.io/specification
 
 ```yaml
 ---
-name: mi-skill            # = nombre de la carpeta; kebab-case, 1–64 chars, sin -- ni - extremos
-description: >-           # 1–1024 chars; qué hace + cuándo usarla + qué NO cubre (→ otra skill)
+name: mi-skill # = nombre de la carpeta; kebab-case, 1–64 chars, sin -- ni - extremos
+description:
+  >- # 1–1024 chars; qué hace + cuándo usarla + qué NO cubre (→ otra skill)
   ...
-license: MIT              # licencia global del repo
+license: MIT # licencia global del repo
 metadata:
   author: Soluciones-Alexendros
-  version: "0.1.0"        # semver de la skill
-  dominio: construir      # uno de docs/TAXONOMY.md
+  version: "0.1.0" # semver de la skill
+  dominio: construir # uno de docs/TAXONOMY.md: disenar | construir | verificar | operar
+  tipo: atomic # atomic | router | tecnologia
   idioma: es
 ---
 ```
@@ -22,10 +24,11 @@ Campos opcionales de la spec (`compatibility`, `allowed-tools`) pueden añadirse
 
 ## Cuerpo
 
-- Límite recomendado: **< 500 líneas**. Si crece, extraer a `references/*.md` y dejar un resumen con enlace.
-- Secciones sugeridas: propósito, uso, estructura, herramientas, referencias.
+- Límite obligatorio: **≤ 500 líneas** y **≤ 5000 tokens**. Si crece, extraer a `references/*.md` y dejar un resumen con enlace. El validador lo mide y falla si excede.
+- Orden fijo de secciones (canon): Purpose, When to use, Scope, Procedure, References by condition, Tools, Output format, Edge cases, Validation. Solo secciones con contenido real.
 - Enlaces relativos solo a ficheros que existen (lo verifica `tools/validate/skill_links.py`).
 - Referencias de un nivel: `references/` no debe contener subdirectorios con contenido enlazado (los `assets/` y `scripts/` son recursos, no lectura progresiva).
+- Formato de descripción (plantilla): `[Main capability]. Use when [activation contexts]. Not for [critical boundary] → [neighbor skill].` Tercera persona.
 
 ## Estructura de carpeta
 
@@ -40,16 +43,26 @@ skills/<nombre>/
 
 Prohibido en el repo: `__pycache__/`, `.pytest_cache/`, dirs `.archivado-*`, ficheros `LICENSE` por skill, `agents/`, `infrastructure/`, `languages/` sueltos (van aplanados en `references/`).
 
+## Procedimientos (scripts y lógica)
+
+Estructura obligatoria: **Precondition → Action → Expected → Error → Recovery**.
+Scripts: **INPUT → validate → execute → inspect → structured output → exit code**.
+Salida estructurada: JSON para consumo máquina, Markdown para humano. Exit codes semánticos (0=OK, 1=error, 2=invalid input, 3=deps missing, 4=permission denied).
+
+## MCP Tools
+
+Convención para docs de Claude: `ServerName:tool_name` (ej. `firecrawl:firecrawl_search`, `github:github_search_code`).
+
 ## Versiones
 
 - `metadata.version` por skill (semver). Cambios incompatibles de instrucciones → bump minor/major y nota en [CHANGELOG.md](../CHANGELOG.md).
 - Autoversionado por magnitud con `tools/version/bump.py` (sin dependencias):
 
-| Magnitud | Alias ES | Efecto | Cuándo |
-|---|---|---|---|
-| `major` | actualización, breaking, incompatible | `X.y.z` → `X+1.0.0` | instrucciones incompatibles |
-| `minor` | desarrollo menor, feature, funcionalidad | `x.Y.z` → `x.Y+1.0` | nueva capacidad compatible |
-| `patch` | parche, parcheado, fix, corrección | `x.y.Z` → `x.y.Z+1` | fix compatible, docs, typos |
+| Magnitud | Alias ES                                 | Efecto              | Cuándo                      |
+| -------- | ---------------------------------------- | ------------------- | --------------------------- |
+| `major`  | actualización, breaking, incompatible    | `X.y.z` → `X+1.0.0` | instrucciones incompatibles |
+| `minor`  | desarrollo menor, feature, funcionalidad | `x.Y.z` → `x.Y+1.0` | nueva capacidad compatible  |
+| `patch`  | parche, parcheado, fix, corrección       | `x.y.Z` → `x.y.Z+1` | fix compatible, docs, typos |
 
 ```bash
 python3 tools/version/bump.py --type minor --skills verificar-owasp

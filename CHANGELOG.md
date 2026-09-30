@@ -1,5 +1,25 @@
 # Changelog
 
+## [Unreleased]
+
+- `construir-proton-suite` 1.0.0 -> 1.1.0 (minor)
+- `construir-typescript` 2.0.1 -> 2.1.0 (minor)
+- `construir-upstash` 1.0.1 -> 1.1.0 (minor)
+- `disenar-arquitectura` 1.0.0 -> 1.1.0 (minor)
+- `disenar-constitucion` 1.0.0 -> 1.1.0 (minor)
+- `disenar-design-system` 1.0.0 -> 1.1.0 (minor)
+- `disenar-interfaz` 1.0.0 -> 1.1.0 (minor)
+- `operar-lifecycle` 1.0.0 -> 1.1.0 (minor)
+- `operar-mantenimiento` 2.0.0 -> 2.1.0 (minor)
+- `operar-release` 2.0.0 -> 2.1.0 (minor)
+- `operar-seguridad` 2.0.0 -> 2.1.0 (minor)
+- `verificar-compliance` 2.0.1 -> 2.1.0 (minor)
+- `verificar-fullaudit` 2.0.0 -> 2.1.0 (minor)
+- `verificar-hooks` 3.0.0 -> 3.1.0 (minor)
+- `verificar-owasp` 2.0.0 -> 2.1.0 (minor)
+- `verificar-performance` 3.0.0 -> 3.1.0 (minor)
+- `verificar-repo` 2.0.0 -> 2.1.0 (minor)
+
 ## [v2.0.0] — 2026-09-27
 
 - `construir-typescript` 2.0.0 -> 2.0.1 (patch)
@@ -31,18 +51,18 @@
 
 - Consolidación FASE-4 (18 skills, 7 dominios): `docs/TAXONOMY.md`, `README.md` y `tools/validate/skill_spec.py` alineados a los nombres reales; `web-seguridad` con cuerpo íntegramente en ES (tecnicismos en inglés preservados).
 - Tabla de renombros/fusiones:
-  | Antes | Ahora | Tipo |
-  |---|---|---|
-  | `web-rendimiento` | `web-performance` | renombro |
-  | `design-system` | `web-design-system` | renombro |
-  | `typescript-avanzado` | `codigo-typescript` | renombro |
-  | `repo-starting` | `repo-audit` | renombro |
-  | `repo-precommit` | `repo-hooks` | renombro |
-  | `repo-ending` | `repo-release` | renombro |
-  | — | `repo-lifecycle` | nueva (enrutador audit/hooks/release) |
-  | — | `web-fullaudit` | nueva (orquestador de auditoría web) |
-  | `web-playwright` | — | suprimida |
-  | `webapp-testing` | — | suprimida |
+  | Antes                 | Ahora               | Tipo                                  |
+  | --------------------- | ------------------- | ------------------------------------- |
+  | `web-rendimiento`     | `web-performance`   | renombro                              |
+  | `design-system`       | `web-design-system` | renombro                              |
+  | `typescript-avanzado` | `codigo-typescript` | renombro                              |
+  | `repo-starting`       | `repo-audit`        | renombro                              |
+  | `repo-precommit`      | `repo-hooks`        | renombro                              |
+  | `repo-ending`         | `repo-release`      | renombro                              |
+  | —                     | `repo-lifecycle`    | nueva (enrutador audit/hooks/release) |
+  | —                     | `web-fullaudit`     | nueva (orquestador de auditoría web)  |
+  | `web-playwright`      | —                   | suprimida                             |
+  | `webapp-testing`      | —                   | suprimida                             |
 - Canon `docs/repo-standard/` (solo lectura): `structure.md`, `ci-cd.md`, `release.md`, `security.md`, `templates/` (PR, issues, commitlint)
 - `repo-starting` → `repo-audit` 1.0.0 (major): entrada `scripts/audit-repo.sh`, Fase 8 handoff a `repo-release`, conserva health-check; refs al canon local
 - `repo-precommit` → `repo-hooks` 2.0.0 (major): cuerpo a ES; refs a `repo-release` y canon

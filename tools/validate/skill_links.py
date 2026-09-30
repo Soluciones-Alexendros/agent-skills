@@ -42,6 +42,7 @@ def main() -> int:
         if ".git" not in p.parts
         and "__pycache__" not in p.parts
         and ".archivado" not in str(p)
+        and "node_modules" not in p.parts
     )
     for md in mds:
         check_md(md)

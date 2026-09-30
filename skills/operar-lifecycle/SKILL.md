@@ -9,10 +9,10 @@ description: >-
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "1.0.0"
+  version: "1.1.0"
   dominio: operar
+  tipo: router
   idioma: es
-
 ---
 
 # operar-lifecycle — Enrutador del ciclo de vida del repo
@@ -32,12 +32,12 @@ Canon vigente: [docs/repo-standard](../../docs/repo-standard/structure.md) (`str
 
 ## Enrutado
 
-| Petición | Destino |
-|---|---|
-| Escanear, auditar, alinear con el estándar, «pon al día este proyecto», health check | `verificar-repo` |
-| Pre-commit hooks, Husky, lint-staged, Prettier local | `verificar-hooks` |
-| Cerrar el repo, preparar release, publicar versión, auditoría de CI/CD, labels, changelog, seguridad de workflows | `operar-release` |
-| Mezcla («audítalo y publícalo») | `verificar-repo` primero; su Fase 8 deriva a `operar-release` |
+| Petición                                                                                                          | Destino                                                       |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Escanear, auditar, alinear con el estándar, «pon al día este proyecto», health check                              | `verificar-repo`                                              |
+| Pre-commit hooks, Husky, lint-staged, Prettier local                                                              | `verificar-hooks`                                             |
+| Cerrar el repo, preparar release, publicar versión, auditoría de CI/CD, labels, changelog, seguridad de workflows | `operar-release`                                              |
+| Mezcla («audítalo y publícalo»)                                                                                   | `verificar-repo` primero; su Fase 8 deriva a `operar-release` |
 
 ## Uso
 

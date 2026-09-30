@@ -8,8 +8,9 @@ description: >
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "3.0.0"
+  version: "3.1.0"
   dominio: verificar
+  tipo: atomic
   idioma: es
 ---
 
@@ -30,12 +31,12 @@ de optimización priorizado.
 
 ## Herramientas externas
 
-| Herramienta | Propósito |
-|---|---|
-| Lighthouse 12 / web-vitals.js | CWV (LCP, INP, CLS), TTFB, FCP; lab + field |
-| curl / timing | TTFB, headers, compresión, caché |
-| Lectura HTML / robots.txt / sitemap.xml | SEO técnico |
-| DevTools Performance / Network | Waterfall, long tasks, third-parties |
+| Herramienta                             | Propósito                                   |
+| --------------------------------------- | ------------------------------------------- |
+| Lighthouse 12 / web-vitals.js           | CWV (LCP, INP, CLS), TTFB, FCP; lab + field |
+| curl / timing                           | TTFB, headers, compresión, caché            |
+| Lectura HTML / robots.txt / sitemap.xml | SEO técnico                                 |
+| DevTools Performance / Network          | Waterfall, long tasks, third-parties        |
 
 ## Entregables
 
