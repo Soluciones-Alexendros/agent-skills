@@ -2,7 +2,7 @@
 
 ### Propósito de este documento
 
-- **Objetivos:** Fijar versionado, changelog, publicación y provenance (SLSA/sigstore) de la flota. Solo lectura: la ceremonia de cierre la ejecuta `operar-release` (Fases B y F).
+- **Objetivos:** Fijar versionado, changelog, publicación y provenance (SLSA/sigstore) de la flota. Solo lectura: la ceremonia de publicación la ejecuta `operar-release` (Fases B y F); el cierre de trabajo al finalizar un plan es la Fase G (`references/cierre-trabajo.md`).
 - **Estructura:** Esta meta-sección → Esquema de versión → Changelog → Publicación → Provenance → Yank.
 - **Contenido a integrar según contexto:** En un producto, elegir SemVer o CalVer una vez y no mezclarlos. Las notas de release salen siempre del changelog, nunca se redactan aparte.
 

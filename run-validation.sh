@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Validación agregada del repo agent-skills.
-# Uso: bash run-validation.sh [--spec-only|--links-only|--version-only|--pytest-only|--smoke-only]
+# Uso: bash run-validation.sh [--spec-only|--links-only|--version-only|--pytest-only|--smoke-only|--coherence-only|--hygiene-only]
 # Exit: 0 todo verde, 1 algún fallo.
 set -euo pipefail
 
@@ -15,11 +15,19 @@ step() {
 }
 
 if [[ "$MODE" == "all" || "$MODE" == "--spec-only" ]]; then
-    step "spec" python3 "$ROOT/tools/validate/skill_spec.py"
+    step "spec" python3 "$ROOT/tools/validate/skill_spec.py" --root "$ROOT"
 fi
 
 if [[ "$MODE" == "all" || "$MODE" == "--links-only" ]]; then
-    step "links" python3 "$ROOT/tools/validate/skill_links.py"
+    step "links" python3 "$ROOT/tools/validate/skill_links.py" --root "$ROOT"
+fi
+
+if [[ "$MODE" == "all" || "$MODE" == "--coherence-only" ]]; then
+    step "release-coherence" python3 "$ROOT/tools/validate/release_coherence.py" --root "$ROOT"
+fi
+
+if [[ "$MODE" == "all" || "$MODE" == "--hygiene-only" ]]; then
+    step "hygiene" python3 "$ROOT/tools/validate/hygiene.py" --root "$ROOT"
 fi
 
 if [[ "$MODE" == "all" || "$MODE" == "--version-only" ]]; then
@@ -27,8 +35,6 @@ if [[ "$MODE" == "all" || "$MODE" == "--version-only" ]]; then
 fi
 
 if [[ "$MODE" == "all" || "$MODE" == "--pytest-only" ]]; then
-    # Los tests usan cwd="." y SCRIPT relativo: ejecutar pytest con cwd =
-    # scripts/ si los tests están en scripts/tests/, o la skill si están en tests/.
     declare -A SEEN=()
     while IFS= read -r t; do
         td="$(dirname "$t")"
@@ -48,7 +54,7 @@ fi
 if [[ "$MODE" == "all" || "$MODE" == "--smoke-only" ]]; then
     while IFS= read -r s; do
         step "smoke $s" bash "$ROOT/$s"
-    done < <(cd "$ROOT" && find skills -name "smoke_sh.sh" -not -path "*__pycache__*" | sort)
+    done < <(cd "$ROOT" && find skills -path "*/scripts/tests/smoke_sh.sh" | sort)
     echo "### bash -n global (*.sh)"
     while IFS= read -r f; do
         bash -n "$ROOT/$f" || { echo "SYNTAX FAIL: $f"; FAIL=1; }

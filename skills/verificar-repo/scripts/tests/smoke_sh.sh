@@ -4,6 +4,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 SH="$SCRIPT_DIR/check-product-structure.sh"
+INICIO="$SCRIPT_DIR/inicio_plan.py"
+AUDIT="$SCRIPT_DIR/audit-repo.sh"
 
 fail=0
 ok() { echo "OK: $1"; }
@@ -33,5 +35,19 @@ else
 fi
 rm -rf "$TMP"
 
-if [[ $fail -eq 0 ]]; then echo "smoke check-product-structure: VERDE"; else echo "smoke check-product-structure: ROJO" >&2; fi
+if bash -n "$AUDIT"; then ok "audit-repo.sh bash -n"; else bad "audit-repo.sh bash -n"; fi
+
+if python3 "$INICIO" --help >/tmp/smoke_inicio_help.txt 2>&1; then
+  grep -q "Tablero de partida" /tmp/smoke_inicio_help.txt && ok "inicio_plan.py --help" || bad "inicio_plan.py --help sin descripción"
+else
+  bad "inicio_plan.py --help exit $?"
+fi
+
+if python3 "$INICIO" --opcion-inexistente >/dev/null 2>&1; then
+  bad "inicio_plan.py args inválidos deberían fallar"
+else
+  ok "inicio_plan.py args inválidos fallan"
+fi
+
+if [[ $fail -eq 0 ]]; then echo "smoke verificar-repo scripts: VERDE"; else echo "smoke verificar-repo scripts: ROJO" >&2; fi
 exit "$fail"

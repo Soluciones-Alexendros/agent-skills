@@ -22,15 +22,19 @@ Sigue exigiendo sí aparte: borrar labels legacy, tags, `gh release create`, rul
 
 ## Bucle merge-watch (obligatorio tras abrir el PR)
 
+En Grok, el bucle es `/pr-babysit add --ship <n>` más ciclos `check` hasta MERGED. Sin Graphite: el mismo `--ship` sobre PRs independientes, o `gh pr checks --watch` por PR. El turno no termina con la vigilancia aplazada.
+
 1. **Estado fresco** cada pasada: `gh pr view`, `gh pr checks` (o `gh pr checks --watch` mientras corren).
 2. Prioridad de bloqueos: conflictos → comentarios no resueltos → CI en rojo.
-3. Fallos de CI **en alcance del PR**: corrige, verifica en local lo mínimo, push (sin force).
+3. Fallos de CI **en alcance del PR**: corrige, verifica en local lo mínimo, push (`--force-with-lease` si el rebase lo exige; nunca `--force`).
 4. Cuando required checks están verdes y `mergeable`:
    - `gh pr ready <n>` si sigue en draft.
-   - `gh pr merge <n> --squash` (o el método que use el repo; no inventes política).
-5. Si un check no requerido falla (p. ej. job de draft/`pr-summary`) y los required están verdes: documenta y mergea.
+   - `gh pr merge <n> --squash --delete-branch` (o el método que use el repo; no inventes política).
+5. Si un check no requerido falla (job de draft/`pr-summary`, Vercel Hobby en repo privado de org) y los required están verdes: documenta y mergea.
 6. Self-hosted en cola indefinida: solo mergea si el ruleset/branch protection **no** exige ese check; anótalo en el informe.
-7. Nunca force-push. Nunca cambies workflows solo para silenciar un fallo.
+7. Nunca force-push a `main`. Nunca cambies workflows solo para silenciar un fallo.
+
+Tras MERGED, la limpieza de ramas y worktrees del plan está en `cierre-trabajo.md` paso 6.
 
 ## Multi-repo
 
@@ -42,9 +46,10 @@ Tras mergear (o al bloquearse):
 
 ```markdown
 ## Merge-watch
-| Repo | PR | Estado | SHA / bloqueo |
-|---|---|---|---|
-| owner/repo | #N | MERGED | abc1234 |
+
+| Repo       | PR  | Estado | SHA / bloqueo |
+| ---------- | --- | ------ | ------------- |
+| owner/repo | #N  | MERGED | abc1234       |
 ```
 
 Actualiza el readiness: los `BLOCK` remediados pasan a `OK` o `WARN` justificado.

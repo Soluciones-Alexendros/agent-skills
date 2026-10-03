@@ -1,14 +1,15 @@
 ---
 name: verificar-owasp
-description: >
+description: >-
   Revisión de seguridad de código (OWASP): inyección, XSS, authn/authz, criptografía, SSRF,
-  secretos y misconfiguración. Usar ante security review, OWASP o 'busca vulnerabilidades en
-  este código'. No usar para hardening del SO (→ operar-seguridad) ni cierre de release (→
-  operar-release) ni auditoría de dependencias/SCA (→ verificar-dependencias).
+  secretos y misconfiguración. Usar cuando el operador pida security review, OWASP o
+  buscar vulnerabilidades en este código. No usar para hardening del SO (→
+  operar-seguridad) ni cierre de release (→ operar-release) ni auditoría de
+  dependencias/SCA (→ verificar-dependencias).
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "2.1.0"
+  version: "2.2.0"
   dominio: verificar
   tipo: atomic
   idioma: es
@@ -21,225 +22,37 @@ https://cheatsheetseries.owasp.org/
 
 # verificar-owasp — Revisión de seguridad de código (OWASP)
 
-Identify exploitable security vulnerabilities in code. Report only **HIGH CONFIDENCE** findings—clear vulnerable patterns with attacker-controlled input.
+## Propósito
 
-## Qué hace / Propósito
+Identificar vulnerabilidades explotables en código. Informar solo hallazgos de **alta confianza**: patrón vulnerable con entrada controlada por el atacante, tras investigar el codebase.
 
-Revisa código en busca de vulnerabilidades explotables y reporta únicamente hallazgos de alta confianza: patrones vulnerables con entrada controlada por el atacante tras investigar todo el codebase. Aporta un proceso sistemático, niveles de confianza, clasificación de severidad y un formato de informe reproducible.
+## Cuándo usar
 
-## Cuándo usarme / Triggering
+Security review, OWASP, buscar vulnerabilidades, o revisar un diff/endpoint/plantilla/configuración antes de desplegar.
 
-- Cuando se pida "security review", "find vulnerabilities", "audit security", "check for security issues" u "OWASP review".
-- Al revisar código por inyección, XSS, autenticación, autorización, criptografía, CSRF, SSRF, deserialización o exposición de secretos.
-- Al analizar un diff, endpoint, plantilla, configuración antes de desplegar.
-- **NO usar cuando**: el objetivo sea hardening, forense de logs, CVEs del sistema o AppArmor de una máquina Linux (usar `operar-seguridad`); auditoría de dependencias/SCA/CVE (usar `verificar-dependencias`); esta skill revisa código, no sistemas operativos ni dependencias.
+## Alcance
 
-## Referencias internas
+Informar sobre el fichero, diff o código que entrega el operador. Investigar en todo el codebase para ganar confianza. No informar por coincidencia de patrón.
 
-Carga solo las referencias que correspondan al tipo de código revisado (ver "Detect Context" más abajo):
+| Nivel  | Criterio                                            | Acción                      |
+| ------ | --------------------------------------------------- | --------------------------- |
+| HIGH   | Patrón vulnerable + entrada del atacante confirmada | Informar                    |
+| MEDIUM | Patrón vulnerable, origen sin aclarar               | Anotar «Needs verification» |
+| LOW    | Teórico o defensa en profundidad                    | No informar                 |
 
-- `references/injection.md` — inyección SQL, NoSQL, de comandos OS, LDAP y de plantillas.
-- `references/xss.md` — XSS reflejado, almacenado y basado en DOM.
-- `references/authorization.md` — control de acceso, IDOR y escalada de privilegios.
-- `references/authentication.md` — sesiones, credenciales y almacenamiento de contraseñas.
-- `references/cryptography.md` — algoritmos, gestión de claves y aleatoriedad.
-- `references/deserialization.md` — deserialización insegura (pickle, YAML, Java, PHP).
-- `references/file-security.md` — path traversal, subida de ficheros y XXE.
-- `references/ssrf.md` — server-side request forgery.
-- `references/csrf.md` — cross-site request forgery.
-- `references/data-protection.md` — exposición de secretos, PII y logging.
-- `references/api-security.md` — REST, GraphQL y mass assignment.
-- `references/business-logic.md` — race conditions y bypass de flujos de negocio.
-- `references/modern-threats.md` — prototype pollution, inyección en LLM y WebSocket.
-- `references/misconfiguration.md` — cabeceras, CORS, modo debug y valores por defecto.
-- `references/error-handling.md` — fail-open y divulgación de información.
-- `references/logging.md` — fallos de auditoría e inyección de logs.
-- `references/languages-python.md` — patrones de Django, Flask y FastAPI.
-- `references/languages-javascript.md` — patrones de Node, Express, React, Vue y Next.js.
-- `references/infrastructure-docker.md` — seguridad de contenedores y Dockerfile.
+No marcar: tests (salvo petición), código muerto, constantes o config de servidor, rutas que exigen auth previa (anotar el requisito). No marcar `settings.X`, `os.environ`, ficheros de config ni URLs internas de despliegue como SSRF. Frameworks que auto-escapan (Django `{{ var }}`, React `{var}`) solo se marcan con `|safe`, `dangerouslySetInnerHTML` o equivalentes. ORM parametrizado no es inyección; `.raw()` interpolado sí.
 
-## Alcance: investigación vs. informe
+## Procedimiento
 
-**DISTINCIÓN CRÍTICA:**
-
-- **Informa sobre**: solo el fichero, diff o código concreto que entrega el usuario
-- **Investiga en**: TODO el codebase para ganar confianza antes de informar
-
-Antes de marcar cualquier hallazgo, DEBES investigar el codebase para entender:
-
-- ¿De dónde viene realmente esta entrada? (traza el flujo de datos)
-- ¿Hay validación/sanitización en otro punto?
-- ¿Cómo está configurado? (revisa settings, ficheros de configuración, middleware)
-- ¿Qué protecciones aporta el framework?
-
-**NO informes de hallazgos basándote solo en coincidencia de patrones.** Investiga primero e informa solo de lo que estés seguro de que es explotable.
-
-## Niveles de confianza
-
-| Nivel      | Criterio                                                          | Acción                               |
-| ---------- | ----------------------------------------------------------------- | ------------------------------------ |
-| **HIGH**   | Patrón vulnerable + entrada controlada por el atacante confirmada | **Informar** con severidad           |
-| **MEDIUM** | Patrón vulnerable, origen de la entrada sin aclarar               | **Anotar** como «Needs verification» |
-| **LOW**    | Teórico, buena práctica, defensa en profundidad                   | **No informar**                      |
-
-## No marcar
-
-### Reglas generales
-
-- Ficheros de tests (salvo que se revise explícitamente la seguridad de los tests)
-- Código muerto, código comentado, docstrings
-- Patrones que usan **constantes** o **configuración controlada por el servidor**
-- Rutas de código que exigen autenticación previa para alcanzarse (anota el requisito de auth en su lugar)
-
-### Valores controlados por el servidor (NO controlados por el atacante)
-
-Los configuran los operadores, no los controlan los atacantes:
-
-| Origen                    | Ejemplo                                      | Por qué es seguro                        |
-| ------------------------- | -------------------------------------------- | ---------------------------------------- |
-| Django settings           | `settings.API_URL`, `settings.ALLOWED_HOSTS` | Se fijan vía config/env en el despliegue |
-| Variables de entorno      | `os.environ.get('DATABASE_URL')`             | Configuración de despliegue              |
-| Ficheros de configuración | `config.yaml`, `app.config['KEY']`           | Ficheros del lado servidor               |
-| Constantes del framework  | `django.conf.settings.*`                     | No modificables por el usuario           |
-| Valores hardcodeados      | `BASE_URL = "https://api.internal"`          | Constantes en tiempo de compilación      |
-
-**Ejemplo SSRF: NO es vulnerabilidad:**
-
-```python
-# SAFE: URL comes from Django settings (server-controlled)
-response = requests.get(f"{settings.SEER_AUTOFIX_URL}{path}")
-```
-
-**Ejemplo SSRF: SÍ es vulnerabilidad:**
-
-```python
-# VULNERABLE: URL comes from request (attacker-controlled)
-response = requests.get(request.GET.get('url'))
-```
-
-### Patrones mitigados por el framework
-
-Consulta las guías de lenguaje antes de marcar. Falsos positivos habituales:
-
-| Patrón                              | Por qué suele ser seguro                 |
-| ----------------------------------- | ---------------------------------------- |
-| Django `{{ variable }}`             | Auto-escaped por defecto                 |
-| React `{variable}`                  | Auto-escaped por defecto                 |
-| Vue `{{ variable }}`                | Auto-escaped por defecto                 |
-| `User.objects.filter(id=input)`     | El ORM parametriza las queries           |
-| `cursor.execute("...%s", (input,))` | Query parametrizada                      |
-| `innerHTML = "<b>Loading...</b>"`   | String constante, sin entrada de usuario |
-
-**Marca estos solo cuando:**
-
-- Django: `{{ var|safe }}`, `{% autoescape off %}`, `mark_safe(user_input)`
-- React: `dangerouslySetInnerHTML={{__html: userInput}}`
-- Vue: `v-html="userInput"`
-- ORM: `.raw()`, `.extra()`, `RawSQL()` con interpolación de strings
-
-## Proceso de revisión
-
-### 1. Detectar el contexto
-
-¿Qué tipo de código estoy revisando?
-
-| Tipo de código              | References a cargar                                     |
-| --------------------------- | ------------------------------------------------------- |
-| Endpoints API, rutas        | `authorization.md`, `authentication.md`, `injection.md` |
-| Frontend, plantillas        | `xss.md`, `csrf.md`                                     |
-| Manejo de ficheros, subidas | `file-security.md`                                      |
-| Cripto, secretos, tokens    | `cryptography.md`, `data-protection.md`                 |
-| Serialización de datos      | `deserialization.md`                                    |
-| Peticiones externas         | `ssrf.md`                                               |
-| Flujos de negocio           | `business-logic.md`                                     |
-| Diseño GraphQL, REST        | `api-security.md`                                       |
-| Config, cabeceras, CORS     | `misconfiguration.md`                                   |
-| Manejo de errores           | `error-handling.md`                                     |
-| Auditoría, logging          | `logging.md`                                            |
-
-### 2. Cargar la guía de lenguaje
-
-Según la extensión del fichero o los imports:
-
-| Indicadores                                           | Guía                                                                            |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `.py`, `django`, `flask`, `fastapi`                   | `references/languages-python.md`                                                |
-| `.js`, `.ts`, `express`, `react`, `vue`, `next`       | `references/languages-javascript.md`                                            |
-| `.go`, `.rs`, `.java`, `go.mod`, `Cargo.toml`, Spring | Sin guía propia en esta distribución: aplicar los references por vulnerabilidad |
-
-### 3. Cargar la guía de infraestructura (si aplica)
-
-| Tipo de fichero                                             | Guía                                                                           |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `Dockerfile`, `.dockerignore`                               | `references/infrastructure-docker.md`                                          |
-| K8s, Terraform, GitHub Actions, `.gitlab-ci.yml`, cloud/IAM | Sin guía propia en esta distribución: aplicar `references/misconfiguration.md` |
-
-### 4. Investigar antes de marcar
-
-**Ante cada posible hallazgo, investiga el codebase para ganar confianza:**
-
-- ¿De dónde viene realmente este valor? Traza el flujo de datos.
-- ¿Se configura en el despliegue (settings, env vars) o viene de la entrada del usuario?
-- ¿Hay validación, sanitización o allowlisting en otro punto?
-- ¿Qué protecciones del framework aplican?
-
-Informa solo de hallazgos con confianza HIGH tras entender el contexto general.
-
-### 5. Verificar la explotabilidad
-
-Para cada posible hallazgo, confirma:
-
-**¿La entrada está controlada por el atacante?**
-
-| Controlada por el atacante (investigar)        | Controlada por el servidor (suele ser segura) |
-| ---------------------------------------------- | --------------------------------------------- |
-| `request.GET`, `request.POST`, `request.args`  | `settings.X`, `app.config['X']`               |
-| `request.json`, `request.data`, `request.body` | `os.environ.get('X')`                         |
-| `request.headers` (la mayoría de cabeceras)    | Constantes hardcodeadas                       |
-| `request.cookies` (sin firmar)                 | URLs de servicios internos desde config       |
-| Segmentos de la URL: `/users/<id>/`            | Contenido de BD creado por admin/sistema      |
-| Subidas de ficheros (contenido y nombres)      | Datos de sesión firmados                      |
-| Contenido de BD creado por otros usuarios      | Settings del framework                        |
-| Mensajes WebSocket                             |                                               |
-
-**¿Lo mitiga el framework?**
-
-- Consulta la guía de lenguaje: auto-escaping, parametrización
-- Busca middleware/decoradores que saniticen
-
-**¿Hay validación aguas arriba?**
-
-- Validación de la entrada antes de este código
-- Librerías de sanitización (DOMPurify, bleach, etc.)
-
-### 6. Informar solo con confianza HIGH
-
-Omite los hallazgos teóricos. Informa solo de lo que hayas confirmado como explotable tras investigar.
-
----
-
-## Clasificación de severidad
-
-| Severidad    | Impacto                                                | Ejemplos                                                                        |
-| ------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------- |
-| **Critical** | Explotación directa, impacto grave, sin auth requerida | RCE, inyección SQL a datos, bypass de auth, secretos hardcodeados               |
-| **High**     | Explotable con condiciones, impacto significativo      | XSS almacenado, SSRF a metadatos, IDOR a datos sensibles                        |
-| **Medium**   | Requiere condiciones específicas, impacto moderado     | XSS reflejado, CSRF en acciones con estado, path traversal                      |
-| **Low**      | Defensa en profundidad, impacto directo mínimo         | Cabeceras ausentes, errores verbosos, algoritmos débiles en contexto no crítico |
-
----
-
-## Quick Patterns Reference
-
-Patrones de código que deben marcarse inmediatamente durante la revisión. Se organizan en: **Always Flag (Critical)** — `eval`/`exec`/`pickle`/`yaml.load`/`unserialize`/`shell=True`; **Always Flag (High)** — DOM XSS, SQL injection, command injection; **Always Flag (Secrets)** — hardcoded passwords, API keys, private keys; **Check Context First** — SSRF, path traversal, open redirect y weak crypto (depende de si la entrada es del usuario o de configuración).
-
-> Ver [references/quick-patterns.md](references/quick-patterns.md) para la lista completa de patrones con ejemplos de código y criterios FLAG/SAFE/CHECK.
-
----
+1. Detectar contexto (API, plantillas, ficheros, cripto, serialización, SSRF, negocio, GraphQL/REST, config, errores, logs) y cargar solo las referencias de esa fila.
+2. Cargar guía de lenguaje: `references/languages-python.md` o `references/languages-javascript.md`. Go/Rust/Java: aplicar references por vulnerabilidad.
+3. Infraestructura: `references/infrastructure-docker.md` para Dockerfile; resto → `references/misconfiguration.md`.
+4. Trazar el flujo de datos. Confirmar explotabilidad. Informar solo HIGH.
+5. Patrones inmediatos: `references/quick-patterns.md`. Hardening de aplicación: `references/hardening-source.md`.
 
 ## Formato de salida
 
-````markdown
+```markdown
 ## Security Review: [File/Component Name]
 
 ### Summary
@@ -254,79 +67,46 @@ Patrones de código que deben marcarse inmediatamente durante la revisión. Se o
 
 - **Location**: `file.py:123`
 - **Confidence**: High
-- **Issue**: [Qué vulnerabilidad es]
-- **Impact**: [Qué podría hacer un atacante]
-- **Evidence**:
-  ```python
-  [Vulnerable code snippet]
-  ```
-````
-
-- **Fix**: [Cómo remediarlo]
+- **Issue**: ...
+- **Impact**: ...
+- **Evidence**: (snippet)
+- **Fix**: ...
 
 ### Needs Verification
 
 #### [VERIFY-001] [Potential Issue]
 
 - **Location**: `file.py:456`
-- **Question**: [Qué hay que verificar]
-
+- **Question**: ...
 ```
 
-Si no se encuentran vulnerabilidades, indica: «No high-confidence vulnerabilities identified.» (sin hallazgos de alta confianza).
+Si no hay hallazgos HIGH: «No high-confidence vulnerabilities identified.»
 
----
-
-## Ficheros de referencia
-
-### Vulnerabilidades principales (`references/`)
-| Fichero | Cubre |
-|------|--------|
-| `injection.md` | Inyección SQL, NoSQL, de comandos OS, LDAP y de plantillas |
-| `xss.md` | XSS reflejado, almacenado y basado en DOM |
-| `authorization.md` | Autorización, IDOR, escalada de privilegios |
-| `authentication.md` | Sesiones, credenciales, almacenamiento de contraseñas |
-| `cryptography.md` | Algoritmos, gestión de claves, aleatoriedad |
-| `deserialization.md` | Deserialización Pickle, YAML, Java, PHP |
-| `file-security.md` | Path traversal, subidas, XXE |
-| `ssrf.md` | Server-side request forgery |
-| `csrf.md` | Cross-site request forgery |
-| `data-protection.md` | Exposición de secretos, PII, logging |
-| `api-security.md` | REST, GraphQL, mass assignment |
-| `business-logic.md` | Race conditions, bypass de flujos de negocio |
-| `modern-threats.md` | Prototype pollution, inyección en LLM, WebSocket |
-| `misconfiguration.md` | Cabeceras, CORS, modo debug, valores por defecto |
-| `error-handling.md` | Fail-open, divulgación de información |
-| `logging.md` | Fallos de auditoría, inyección de logs |
-
-### Guías de lenguaje (`languages/`)
-- `python.md` — patrones Django, Flask, FastAPI
-- `javascript.md` — patrones Node, Express, React, Vue, Next.js
-- Go, Rust y Java: sin guía propia en esta distribución: aplicar los references por vulnerabilidad
-
-### Infraestructura (`infrastructure/`)
-- `docker.md` — seguridad de contenedores
-- Kubernetes, Terraform, CI/CD y cloud: sin guía propia en esta distribución: aplicar `misconfiguration.md`
-
-## Hardening de aplicación (absorbido)
-
-Patrones de endurecimiento de código: `references/hardening-source.md`. Combinar con las refs OWASP de esta skill según el tipo de hallazgo.
-
-## Uso
-
-Revisión de seguridad de código: invocar ante security review, OWASP o «busca vulnerabilidades en este código». Investigar todo el codebase pero reportar solo el código entregado, únicamente hallazgos de alta confianza. No usar para auditoría de dependencias/SCA/CVE → `verificar-dependencias`.
-
-## Estructura
-
-- `SKILL.md` — proceso, niveles de confianza, severidad y formato de informe.
-- `LICENSE` — extra top-level.
-- `references/` — 17 guías OWASP por vulnerabilidad + `hardening-source.md` (fuente absorbida).
-- `languages/` — python, javascript (Go/Rust/Java sin guía propia: aplicar references por vulnerabilidad).
-- `infrastructure/` — docker (K8s/Terraform/CI sin guía propia: aplicar misconfiguration).
-- Sin `scripts/`: skill puramente de revisión.
+Severidad: Critical (RCE, SQLi a datos, bypass de auth, secretos hardcodeados) / High / Medium / Low.
 
 ## Referencias
 
-- Internas: ver «Referencias internas» y «Reference Files» más arriba.
-- `references/security-checklist.md`: checklist operativo creado en v0.1.0 (lo cita `references/hardening-source.md`).
-```
+| Fichero                               | Cubre                               |
+| ------------------------------------- | ----------------------------------- |
+| `references/injection.md`             | SQL, NoSQL, OS, LDAP, plantillas    |
+| `references/xss.md`                   | Reflejado, almacenado, DOM          |
+| `references/authorization.md`         | IDOR, escalada                      |
+| `references/authentication.md`        | Sesiones, credenciales              |
+| `references/cryptography.md`          | Algoritmos, claves                  |
+| `references/deserialization.md`       | Pickle, YAML, Java, PHP             |
+| `references/file-security.md`         | Path traversal, subidas, XXE        |
+| `references/ssrf.md`                  | SSRF                                |
+| `references/csrf.md`                  | CSRF                                |
+| `references/data-protection.md`       | Secretos, PII, logging              |
+| `references/api-security.md`          | REST, GraphQL, mass assignment      |
+| `references/business-logic.md`        | Race, bypass de flujo               |
+| `references/modern-threats.md`        | Prototype pollution, LLM, WebSocket |
+| `references/misconfiguration.md`      | Cabeceras, CORS, debug              |
+| `references/error-handling.md`        | Fail-open, info leak                |
+| `references/logging.md`               | Auditoría, inyección de logs        |
+| `references/languages-python.md`      | Django, Flask, FastAPI              |
+| `references/languages-javascript.md`  | Node, Express, React, Vue, Next     |
+| `references/infrastructure-docker.md` | Contenedores                        |
+| `references/quick-patterns.md`        | FLAG/SAFE/CHECK                     |
+| `references/hardening-source.md`      | Endurecimiento de código            |
+| `references/security-checklist.md`    | Checklist operativo                 |

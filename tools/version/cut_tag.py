@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+"""Corte de tag anotado vX.Y.Z a partir de package.json y CHANGELOG.md.
+
+Uso:
+  python3 tools/version/cut_tag.py [--root DIR] [--dry-run] [--apply] [--push]
+  python3 tools/version/cut_tag.py --extract-notes 2.2.0 --notes-file notes.md
+
+Exit 0 si no hay nada que cortar o si el tag se creó.
+Exit 1 en error de entorno o de notas.
+Exit 3 si --require-cut y no toca cortar.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+SEMVER_RE = re.compile(r"^(\d+)\.(\d+)\.(\d+)$")
+CHANGELOG_H2 = re.compile(r"^## \[([0-9]+\.[0-9]+\.[0-9]+)\] - (\d{4}-\d{2}-\d{2})(.*)$")
+RELEASE_PATHS = {
+    "CHANGELOG.md",
+    "package.json",
+    ".github/workflows/release.yml",
+    "tools/version/cut_tag.py",
+    "tools/validate/release_coherence.py",
+}
+
+
+def git(args: list[str], root: Path, check: bool = True) -> subprocess.CompletedProcess:
+    r = subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, check=False)
+    if check and r.returncode != 0:
+        raise RuntimeError(f"git {' '.join(args)}: {r.stderr.strip()}")
+    return r
+
+
+def parse_semver(ver: str) -> tuple[int, int, int]:
+    m = SEMVER_RE.match(ver)
+    if not m:
+        raise ValueError(f"no semver: {ver}")
+    return int(m.group(1)), int(m.group(2)), int(m.group(3))
+
+
+def package_version(root: Path) -> str:
+    data = json.loads((root / "package.json").read_text(encoding="utf-8"))
+    ver = str(data["version"])
+    parse_semver(ver)
+    return ver
+
+
+def latest_tag(root: Path) -> str | None:
+    r = git(["tag", "-l", "v*.*.*", "--sort=-v:refname"], root, check=False)
+    if r.returncode != 0:
+        return None
+    for line in r.stdout.splitlines():
+        tag = line.strip()
+        if tag.startswith("v") and SEMVER_RE.match(tag[1:]):
+            return tag[1:]
+    return None
+
+
+def extract_notes(changelog: str, version: str) -> str:
+    lines = changelog.splitlines()
+    notes: list[str] = []
+    capture = False
+    for line in lines:
+        found = CHANGELOG_H2.match(line)
+        if line.startswith("## ["):
+            if capture:
+                break
+            if found and found.group(1) == version:
+                if "YANKED" in found.group(3):
+                    raise ValueError(f"{version} está YANKED")
+                capture = True
+            continue
+        if capture:
+            notes.append(line)
+    text = "\n".join(notes).strip()
+    if not text:
+        raise ValueError(f"notas vacías para {version}")
+    return text + "\n"
+
+
+def should_cut(pkg: str, tagged: str | None) -> bool:
+    if tagged is None:
+        return True
+    return parse_semver(pkg) > parse_semver(tagged)
+
+
+def repo_bump_required(changed: list[str], pkg: str, tagged: str | None) -> bool:
+    hits = [p for p in changed if p in RELEASE_PATHS or p.startswith(".github/workflows/")]
+    if not hits:
+        return False
+    if tagged is None:
+        return False
+    return parse_semver(pkg) <= parse_semver(tagged)
+
+
+def cmd_extract(args: argparse.Namespace) -> int:
+    text = (args.root / "CHANGELOG.md").read_text(encoding="utf-8")
+    notes = extract_notes(text, args.extract_notes)
+    if args.notes_file:
+        Path(args.notes_file).write_text(notes, encoding="utf-8")
+    else:
+        sys.stdout.write(notes)
+    return 0
+
+
+def write_output(**kwargs: str) -> None:
+    path = os.environ.get("GITHUB_OUTPUT")
+    if not path:
+        return
+    with open(path, "a", encoding="utf-8") as handle:
+        for key, value in kwargs.items():
+            handle.write(f"{key}={value}\n")
+
+
+def cmd_check_repo(args: argparse.Namespace) -> int:
+    root = args.root
+    pkg = package_version(root)
+    tagged = latest_tag(root)
+    r = git(["diff", "--name-only", f"{args.base}...HEAD"], root, check=False)
+    changed = [line.strip() for line in r.stdout.splitlines() if line.strip()]
+    st = git(["status", "--porcelain"], root, check=False)
+    for line in st.stdout.splitlines():
+        name = line[3:].strip().strip('"')
+        if " -> " in name:
+            name = name.split(" -> ")[-1].strip()
+        if name:
+            changed.append(name)
+    if repo_bump_required(changed, pkg, tagged):
+        print(f"CHECK-REPO: package.json {pkg} no está por delante del tag {tagged}")
+        return 1
+    print(f"CHECK-REPO: OK package={pkg} latest_tag={tagged}")
+    return 0
+
+
+def cmd_cut(args: argparse.Namespace) -> int:
+    root = args.root
+    pkg = package_version(root)
+    tagged = latest_tag(root)
+    changelog = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+    try:
+        notes = extract_notes(changelog, pkg)
+    except ValueError as e:
+        print(f"CUT: no ({e})")
+        write_output(tagged="false")
+        return 1 if args.apply else 0
+    if not should_cut(pkg, tagged):
+        print(f"CUT: skip package={pkg} latest_tag={tagged}")
+        write_output(tagged="false", version=pkg)
+        return 0
+    tag = f"v{pkg}"
+    print(f"CUT: would tag {tag} (latest={tagged})")
+    if args.notes_file:
+        Path(args.notes_file).write_text(notes, encoding="utf-8")
+    if not args.apply:
+        write_output(tagged="false", version=pkg)
+        return 0
+    git(["tag", "-a", tag, "-m", tag], root)
+    if args.push:
+        git(["push", "origin", tag], root)
+    print(f"CUT: created {tag}")
+    write_output(tagged="true", version=pkg)
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(description="Cortar tag anotado del repo.")
+    p.add_argument("--root", type=Path, default=ROOT)
+    p.add_argument("--dry-run", action="store_true", help="alias de no --apply")
+    p.add_argument("--apply", action="store_true")
+    p.add_argument("--push", action="store_true")
+    p.add_argument("--extract-notes", default=None, metavar="VERSION")
+    p.add_argument("--notes-file", default=None)
+    p.add_argument("--check-repo", action="store_true")
+    p.add_argument("--base", default="origin/main")
+    return p
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    args.root = Path(args.root).resolve()
+    if args.extract_notes:
+        return cmd_extract(args)
+    if args.check_repo:
+        return cmd_check_repo(args)
+    return cmd_cut(args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

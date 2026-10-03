@@ -9,7 +9,7 @@ Las familias se alinean con las fases de ciclo de vida de ISO/IEC/IEEE 12207: di
 | `disenar`   | Estructura, identidad y experiencia antes de escribir código | disenar-arquitectura · disenar-constitucion · disenar-design-system · disenar-interfaz                                                                         |
 | `construir` | Implementación: tipado, datos, integraciones                 | construir-typescript · construir-upstash · construir-proton-suite (correo Proton Mail + secretos Proton Pass)                                                  |
 | `verificar` | Quality gates y auditorías                                   | verificar-compliance · verificar-performance · verificar-owasp · verificar-dependencias · verificar-fullaudit (orquestador) · verificar-repo · verificar-hooks |
-| `operar`    | Publicación y operación continua                             | operar-release · operar-lifecycle · operar-mantenimiento · operar-salud-sistema · operar-seguridad                                                             |
+| `operar`    | Publicación y operación continua                             | operar-release (incluye cierre de trabajo post-plan) · operar-lifecycle · operar-mantenimiento · operar-salud-sistema · operar-seguridad                       |
 
 ## Conjuntos cerrados (normativos)
 
