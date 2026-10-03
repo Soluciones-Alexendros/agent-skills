@@ -26,7 +26,7 @@ Cada `SKILL.md` es autocontenido y legible: sus `references/` amplían por nivel
 - Por familia: ver tabla en [README](../README.md) y [TAXONOMY.md](TAXONOMY.md).
 - Los `description` declaran límites explícitos (`No usar para X → otra-skill`); ante solape, seguir esa indicación.
 
-## Versionado automático
+## Versionado
 
 Cada skill declara `metadata.version` en su frontmatter. Al modificar instrucciones, bump según la magnitud:
 
@@ -44,6 +44,12 @@ La CI (`version.yml`) exige el bump en PRs con skills cambiadas. Para verificar 
 python3 tools/version/bump.py --check --auto --base origin/main
 ```
 
+La versión del repositorio vive en `package.json`. El tag anotado y la GitHub Release los corta `tools/version/cut_tag.py` desde `main` cuando hay sección de changelog con notas:
+
+```bash
+python3 tools/version/cut_tag.py --dry-run
+```
+
 ## Estructura de references/ (carga progresiva)
 
 Cada skill sigue el patrón de carga progresiva:
@@ -51,6 +57,8 @@ Cada skill sigue el patrón de carga progresiva:
 1. `SKILL.md` — arranque autocontenido con el 80% de los casos resueltos.
 2. `references/` — guías detalladas por tema, se cargan solo cuando el caso lo requiere.
 3. `scripts/` — utilidades automatizadas (no se cargan en contexto, se ejecutan).
+
+`construir-upstash` añade `core/` y `modes/<modo>/` como recursos internos del router; no son skills separadas.
 
 Esto mantiene el contexto del agente ligero: solo se lee lo necesario para la tarea.
 
@@ -62,4 +70,4 @@ Toda skill debe pasar la validación del repo en verde:
 bash run-validation.sh
 ```
 
-Ejecuta: spec (`skill_spec.py`), enlaces (`skill_links.py`), bump de versión, pytest, smoke tests y `bash -n` global. Ver [CONTRIBUTING.md](CONTRIBUTING.md) para el proceso de contribución.
+Ejecuta: spec (`skill_spec.py`), enlaces (`skill_links.py`), coherencia de release, higiene, bump de versión, pytest, smoke tests y `bash -n` global. Ver [CONTRIBUTING.md](CONTRIBUTING.md) para el proceso de contribución.

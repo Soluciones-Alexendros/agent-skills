@@ -1,17 +1,15 @@
 ---
 name: operar-release
-description: >
-  Cierra un repositorio de GitHub cuando el usuario pide cerrar el repo,
-  preparar una release, publicar una versión o dejarlo listo para producción;
-  o audita CI/CD, labels, changelog o seguridad de workflows. También ante
-  semantic versioning, Keep a Changelog, supply-chain de Actions, immutable
-  releases o SLSA en ese cierre. Tras remediación, incluye abrir PR draft,
-  monitorizar checks y mergear cuando estén verdes. No aplica a
-  implementar features de producto genéricas ni a forjas que no sean github.com.
+description: >-
+  Cierra un repositorio de GitHub: publicación de versión, auditoría de CI/CD,
+  o cierre de trabajo al finalizar un plan (repo ending, mergear el plan, ship).
+  Usar cuando el tema sea semantic versioning, Keep a Changelog, supply-chain
+  de Actions, Husky+e2e+PR+merge-watch post-plan. No usar para implementar
+  features de producto ni forjas distintas de github.com (→ verificar-repo).
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "2.1.0"
+  version: "2.2.0"
   dominio: operar
   tipo: atomic
   idioma: es
@@ -19,183 +17,47 @@ metadata:
 
 # operar-release
 
-Actúa como ingeniero de plataforma. Adapta la ceremonia al tamaño, al stack y al riesgo. Un repo pequeño no recibe un proceso enterprise. La línea mínima de seguridad no se negocia.
+## Propósito
 
-Invocación explícita: `/operar-release`. No uses esta skill para implementar código de producto ajeno al cierre, ni para forjas que no sean GitHub.
+Actuar como ingeniero de plataforma en el cierre de un repo GitHub. Adaptar la ceremonia al tamaño, al stack y al riesgo. El health check vive en `verificar-repo`: si el repo llega sin diagnóstico, derivar allí primero.
 
-El health check vive en `verificar-repo`: si el repo llega sin diagnóstico previo, deriva allí primero (Fase 8 de `verificar-repo`) en lugar de duplicarlo aquí.
+Canon vigente: [release.md](../../docs/repo-standard/release.md), [ci-cd.md](../../docs/repo-standard/ci-cd.md), [security.md](../../docs/repo-standard/security.md), [structure.md](../../docs/repo-standard/structure.md).
 
-Canon vigente: [docs/repo-standard](../../docs/repo-standard/release.md) (`release.md`), [ci-cd.md](../../docs/repo-standard/ci-cd.md), [security.md](../../docs/repo-standard/security.md), [structure.md](../../docs/repo-standard/structure.md).
+## Cuándo usar
 
-Lee solo el recurso de la fase en curso. No abras todas las referencias a la vez.
+Cerrar el repo, preparar release, publicar versión, auditar CI/CD, labels, changelog o seguridad de workflows en github.com. También: repo ending, cierre de trabajo, finalizar el plan, mergear el plan o ship del plan.
 
-## Reglas duras
+## Procedimiento
 
-- No inventes versiones, tags, SHAs, licencias ni rutas de documentación. Si no puedes verificarlo, márcalo `[PENDIENTE]` y pídelo. No publiques con `[PENDIENTE]` abierto en un ítem que bloquea.
-- Antes de citar SemVer, Conventional Commits, Keep a Changelog o una política de Actions, abre la fuente oficial listada abajo. Si la URL ya no responde, dilo y no cites de memoria.
-- Idioma del informe: el del usuario. Labels, workflows, commits y nombres de checks, en inglés técnico.
-- La auditoría es de solo lectura y sigue sola. Cualquier mutación espera un sí explícito, de una en una — **excepto** el bucle merge-watch una vez el usuario autorizó la remediación o el PR de cierre (ver Fase F).
-- Nunca hagas commit de un `uses:` sin SHA completo de 40 hex, ni del placeholder de pin, ni de `@v*`, `@main` o `@master`.
-- Los SHA de `assets/workflows/` se verificaron el 2026-09-23. Antes de copiarlos a un repo, repite el procedimiento de `references/actions-security.md`. Si no cuadra, no reutilices el pin.
+Invocación explícita: `/operar-release`. Remoto `github.com` y `gh auth status` antes de seguir. Modos: auditoría, remediación, cierre con publicación, cierre de trabajo (post-plan).
 
-Fuentes a contrastar:
+Reglas: no inventar versiones, tags, SHAs ni licencias; `[PENDIENTE]` si no se puede verificar; no publicar con `[PENDIENTE]` en un ítem que bloquea. Antes de citar SemVer, Conventional Commits, Keep a Changelog o política de Actions, abrir la fuente oficial. Idioma del informe: el del operador. Labels, workflows y nombres de checks, en inglés técnico. Mutación: un sí, una acción — excepto el bucle merge-watch una vez autorizado. Nunca commitear un `uses:` sin SHA de 40 hex.
 
-- SemVer 2.0.0: https://semver.org/spec/v2.0.0.html
-- Conventional Commits 1.0.0: https://www.conventionalcommits.org/en/v1.0.0/
-- Keep a Changelog 1.1.0: https://keepachangelog.com/en/1.1.0/
-- Actions secure use: https://docs.github.com/en/actions/reference/security/secure-use
-- Política de SHA pinning: https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/
-- Immutable releases: https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases
+Fuentes: SemVer 2.0.0, Conventional Commits 1.0.0, Keep a Changelog 1.1.0, GitHub Actions secure use, immutable releases.
 
-## Arranque
+Confirmación: GET y listados en solo lectura. Crear labels, tags o releases exige diff y sí. Un sí a remediación de pipeline autoriza commits, PR draft y Fase F; no autoriza tags. Pedir cierre de trabajo / finalizar el plan autoriza la Fase G completa (gate, revisión, PRs, merge-watch, limpieza); tags siguen aparte.
 
-1. Confirma el remoto. Solo sigue si `git remote get-url origin` apunta a `github.com`. Si es otra forja, detente y dilo. No uses `gh` contra un host que no sea GitHub.
-2. Confirma `gh auth status`. Si falla, detente. No llames a la API con un token pegado en el shell.
-3. Declara el modo: **auditoría** (informe, sin cambios), **remediación** (sí a fixes + merge-watch), o **cierre con publicación** (release/tag; añade bloqueos de versionado).
+**Gate.** Recorrer `assets/checklist-readiness.md` (`OK`/`WARN`/`BLOCK`/`N/A`). Bloquea siempre: secreto en el árbol, `uses:` de terceros sin SHA, workflow sin `permissions`, job sin `timeout-minutes`, interpolación de entrada no confiable, `pull_request_target` o `workflow_run` peligrosos. En publicación: desfase tag/changelog/manifiesto, breaking sin MAJOR, versión yanked. SLSA es aviso salvo repo crítico o petición explícita.
 
-## Confirmación antes de mutar
-
-Solo lectura, sin preguntar: `gh label list`, `gh run list`, `gh run view`, `gh api` GET, lectura de tags, workflows, manifiestos y documentación.
-
-Exigen diff y un sí, una acción cada vez: crear, renombrar o borrar labels; `git tag`; `gh release create`; editar rulesets o branch protection; rotar secretos.
-
-Un sí a **remediación de pipeline/docs de cierre** autoriza en bloque: commits en rama de remediación, push, PR draft, y **Fase F (merge-watch hasta merge)**. No autoriza tags ni borrar labels.
-
-Responde con:
-
-1. **Acción** — una frase con el comando y el objetivo.
-2. **Impacto** — qué se rompe si el cambio está mal.
-3. **Recuperación** — cómo deshacerlo, si se puede.
-4. **¿Sigo? (sí / no)**
-
-Un sí para la release no autoriza borrar labels, ni al revés.
-
-## Gate proporcional
-
-Recorre `assets/checklist-readiness.md`. Estados del informe: `OK`, `WARN`, `BLOCK`, `N/A`.
-
-**Bloquea siempre**
-
-- Secreto en el árbol o en el historial reciente que el escaneo señale.
-- `uses:` de terceros (y, en repo crítico, también `actions/*` y `github/*`) sin SHA completo verificado.
-- Workflow sin `permissions:` explícito.
-- Job sin `timeout-minutes`.
-- Entrada no confiable interpolada en `run:` o en `github-script`.
-- `pull_request_target` o `workflow_run` que haga checkout y ejecute código no confiable.
-
-**Bloquea solo si el modo es publicación**
-
-- Tag, `CHANGELOG.md` y manifiesto de versión no coinciden, o no hay manifiesto verificable.
-- Breaking change sin marcar en el changelog o sin bump MAJOR.
-- Sección de la versión marcada `[YANKED]`, o reutilización de un número ya publicado.
-
-**Aviso, no bloqueo**, salvo que el repo sea crítico (público con consumidores externos, despliega a producción, o el usuario lo declara crítico):
-
-- Taxonomía de labels, issues sin mapear, CODEOWNERS, CONTRIBUTING.
-- Tests de integración que el proyecto no tiene.
-- SLSA, cosign o attestations.
-- Estrategia de despliegue cuando el repo no despliega.
-
-Un `WARN` lleva justificación en el informe. Un `BLOCK` impide el cierre: lista de bloqueos por severidad, cada uno con remediación. Solo con la línea mínima en verde emite el informe de `assets/checklist-readiness.md`.
-
-## Fase A — Labels
-
-1. Inventaría con `gh label list`. Busca duplicados, huérfanos y solapes.
-2. Propón el mapeo con `assets/labels.json`. Adapta el eje `area` al dominio. Los labels de `preserve_unless_mapped` se quedan si no hay alias.
-3. Muestra el diff de renombres y borrados. No ejecutes `gh label` hasta el sí.
-4. El eje de release queda en `release: major|minor|patch|breaking`.
-
-## Fase B — Versión y release
-
-1. Detecta el esquema en tags y changelog. Si no hay esquema, propone SemVer 2.0.0 y espera confirmación. Si ya es CalVer, no conviertas commits `feat`/`fix` en bump SemVer: la versión es la fecha del esquema vigente y el changelog sigue siendo obligatorio.
-2. Contrasta último tag, `CHANGELOG.md` y el manifiesto real (`package.json`, `pyproject.toml`, `Cargo.toml`; en Go el tag es la versión del módulo). Un desfase en modo publicación es `BLOCK`. Si no reconoces el ecosistema, `[PENDIENTE]`: no des por buena la coherencia.
-3. Con SemVer y Conventional Commits posteriores al último tag: `fix` → PATCH, `feat` → MINOR, `BREAKING CHANGE` o `type!:` → MAJOR. Revisa además diffs de API, firmas públicas y esquemas. Un breaking no marcado bloquea la publicación.
-4. Promueve `[Unreleased]` al formato de `assets/CHANGELOG.md`. El changelog es la fuente de las notas. No redactes notas que diverjan.
-5. Tag anotado `vX.Y.Z` y `gh release create` solo tras el sí de esa acción. No reutilices un número yanked.
-6. Si la release viaja en PR: aplica **Fase F** hasta mergear ese PR antes del tag.
-
-## Fase C — Dependencias y documentación
-
-1. Lee manifiesto y lockfile. Agrupa actualizaciones según `references/dependabot-grouped.md`: patch, minor con CI verde, major solo con revisión humana. Contrasta EOL del runtime con el calendario oficial del lenguaje. No inventes la fecha de EOL.
-2. README: badges que respondan, instalación reproducible, licencia. `SECURITY.md` con un camino de divulgación es `BLOCK` si el repo es público y `WARN` si es privado y no crítico. `CODEOWNERS` con `.github/workflows/` es aviso salvo repo crítico.
-3. La documentación que cites debe hablar de la versión que se publica.
-
-## Fase D — Pipeline
-
-1. Pasa `actionlint` por `.github/workflows/`: usa la composite `actions/actionlint/` (binario de release con checksum verificado). No uses `curl | bash` contra `main`.
-2. Aplica `references/actions-security.md`. Línea mínima: `permissions` explícito con `contents: read` por defecto; SHA completo más comentario de versión; variables de entorno para entrada no confiable; secretos fuera de logs, cachés y artefactos; `timeout-minutes` en cada job.
-3. Revisa la última ejecución (`gh run list`, `gh run view --log`) de cada workflow: fallos silenciosos, `continue-on-error` que esconde el fallo, caché con clave que no incluye el lockfile.
-4. Patrones de caché, matrices, entornos y despliegue: `references/ci-cd-patterns.md`. Reutilizables en `assets/workflows/` (`workflow_call`, con `inputs` por stack): el repo destino los llama, no los copia. Son andamios: adapta el stack y vuelve a verificar cada SHA antes de usarlos. El reutilizable de CI es un ejemplo Node; no lo llames sobre Python, Rust o Go sin el `stack` correspondiente.
-5. Protección de `main`: proponer `assets/ruleset.json` como base (lo aplica un humano, nunca el agente).
-6. Tras remediación de pipeline: PR draft + **Fase F** (no dejes el PR abierto sin merge-watch).
-
-## Fase E — Producción
-
-1. Comprueba, en solo lectura, que los required checks existen y están verdes: lint, tests, build y escaneo de secretos. CodeQL, dependency review y rulesets son aviso salvo repo crítico.
-2. Si el repo no despliega, la estrategia de despliegue es `N/A`, no un bloqueo.
-3. Firma y provenance (attestations / SLSA) solo se exigen en repo crítico o si el usuario las pidió. El job que atestigua necesita `id-token: write`, `attestations: write` y `contents: read` en ese job, no en el resto del workflow.
-
-## Fase F — Remediación y merge-watch
-
-Lee `references/merge-watch.md` y ejecútalo siempre que haya PR de remediación o de cierre con publicación.
-
-Resumen operativo:
-
-1. Rama `chore/operar-release-*` → push → PR **draft** a `main`.
-2. Bucle: estado fresco → conflictos → comentarios → CI rojo → fix en alcance.
-3. Required checks verdes → `gh pr ready` → `gh pr merge --squash` (o convención del repo).
-4. Multi-repo: un PR por repo; paralelo OK; tabla final MERGED/blocked.
-5. Self-hosted en cola: solo mergea si el ruleset no exige ese check; documenta.
-
-## Recursos
-
-| Archivo                            | Cuándo                                                       |
-| ---------------------------------- | ------------------------------------------------------------ |
-| `assets/labels.json`               | Fase A                                                       |
-| `assets/CHANGELOG.md`              | Fase B                                                       |
-| `assets/workflows/`                | Fases B/D, reutilizables `workflow_call` (CI, release, lint) |
-| `assets/ruleset.json`              | Fase D, base de protección de `main` (aplica un humano)      |
-| `actions/setup-node/`              | Fase D, setup Node pineado                                   |
-| `actions/actionlint/`              | Fase D, lint de workflows                                    |
-| `actions/secret-scan/`             | Fase D, escaneo de secretos                                  |
-| `assets/checklist-readiness.md`    | Gate e informe                                               |
-| `references/actions-security.md`   | Fase D                                                       |
-| `references/ci-cd-patterns.md`     | Fase D                                                       |
-| `references/dependabot-grouped.md` | Fase C                                                       |
-| `references/merge-watch.md`        | Fase F (obligatoria tras remediación)                        |
-
-## Uso
-
-Usar ante cierre de repo, release/publicación o auditoría de CI/CD, labels, changelog o seguridad de workflows en `github.com`. El health check previo vive en `verificar-repo` (no duplicarlo). No usar para implementar features de producto ni forjas distintas de GitHub.
-
-## Estructura
-
-- `SKILL.md` — reglas, arranque, gate y Fases A–F.
-- `assets/checklist-readiness.md` — gate de cierre.
-- `assets/labels.json` — taxonomía de labels.
-- `assets/CHANGELOG.md` — plantilla Keep a Changelog.
-- `assets/workflows/` — reutilizables `workflow_call`: CI, release, lint.
-- `assets/ruleset.json` — base de ruleset de `main`.
-- `actions/` — composites `setup-node`, `actionlint`, `secret-scan`.
-- `references/actions-security.md`, `references/ci-cd-patterns.md`, `references/dependabot-grouped.md`, `references/merge-watch.md` — detalle por fase.
+- **A Labels.** `gh label list` frente a `assets/labels.json`. Eje de release: `release: major|minor|patch|breaking`.
+- **B Versión.** SemVer por defecto. Promover `[Unreleased]` al formato de `assets/CHANGELOG.md`. Tag anotado y `gh release create` solo tras sí. Si la release viaja en PR: Fase F antes del tag.
+- **C Dependencias y docs.** `references/dependabot-grouped.md`. `SECURITY.md` es BLOCK en repo público.
+- **D Pipeline.** `actionlint`, `references/actions-security.md`, `references/ci-cd-patterns.md`. Ruleset de `main`: `assets/ruleset.json` (lo aplica un humano).
+- **E Producción.** Checks required verdes. Firma y provenance solo en crítico o a petición.
+- **F Merge-watch.** `references/merge-watch.md`. Rama `chore/operar-release-*` → PR draft → squash.
+- **G Cierre de trabajo.** Tras un plan (`/execute-plan` o `task_plan.md` completo): `references/cierre-trabajo.md`. Gate Husky (`verificar-hooks` modo gate) → e2e Playwright si hay UI → revisión contra el plan → PRs a `main` → merge-watch con squash → limpieza de ramas y temporales. Tags y `gh release create` siguen en B, con sí aparte.
 
 ## Herramientas
 
-Sin scripts en esta skill. Herramientas externas citadas: `gh`, `git`, `actionlint`.
+| Script                      | Propósito                                                                 |
+| --------------------------- | ------------------------------------------------------------------------- |
+| `scripts/review-vs-plan.py` | Revisión crítica automatizada del diff contra el plan (paso 3 del modo G) |
+| `scripts/tests/smoke_sh.sh` | Smoke test de la revisión (diff vacío, cambios, secretos)                 |
 
-| Activo                          | Propósito                                             |
-| ------------------------------- | ----------------------------------------------------- |
-| `assets/checklist-readiness.md` | Gate e informe                                        |
-| `assets/labels.json`            | Mapeo de labels (Fase A)                              |
-| `assets/CHANGELOG.md`           | Formato de changelog (Fase B)                         |
-| `assets/workflows/`             | Reutilizables CI/release/lint (Fases B/D)             |
-| `assets/ruleset.json`           | Base de protección de `main` (Fase D)                 |
-| `actions/`                      | Composites setup-node/actionlint/secret-scan (Fase D) |
+Activos no ejecutables (checklist-readiness, labels, CHANGELOG, workflows, ruleset, actions): ver `## Referencias`.
 
 ## Referencias
 
 - `assets/checklist-readiness.md`, `assets/labels.json`, `assets/CHANGELOG.md`, `assets/workflows/`, `assets/ruleset.json`, `actions/`.
-- `references/actions-security.md`, `references/ci-cd-patterns.md`, `references/dependabot-grouped.md`, `references/merge-watch.md`.
-- Canon: [release.md](../../docs/repo-standard/release.md), [ci-cd.md](../../docs/repo-standard/ci-cd.md), [security.md](../../docs/repo-standard/security.md), [structure.md](../../docs/repo-standard/structure.md).
-- Fuentes oficiales externas (texto): SemVer, Conventional Commits, Keep a Changelog, docs GitHub.
-- Diagnóstico y health check → `verificar-repo`. Para hooks pre-commit → `verificar-hooks`.
+- `references/actions-security.md`, `references/ci-cd-patterns.md`, `references/dependabot-grouped.md`, `references/merge-watch.md`, `references/cierre-trabajo.md`.
+- Diagnóstico → `verificar-repo`. Hooks → `verificar-hooks`. E2E → `webapp-testing` (catálogo compartido).

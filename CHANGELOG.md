@@ -1,26 +1,48 @@
 # Changelog
 
+Todas las versiones notables de este repositorio se documentan aquí. Formato: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versionado: [SemVer 2.0.0](https://semver.org/spec/v2.0.0.html).
+
+La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de changelog). Su contenido queda absorbido en 2.2.0.
+
 ## [Unreleased]
 
-- `construir-proton-suite` 1.0.0 -> 1.1.0 (minor)
-- `construir-typescript` 2.0.1 -> 2.1.0 (minor)
-- `construir-upstash` 1.0.1 -> 1.1.0 (minor)
-- `disenar-arquitectura` 1.0.0 -> 1.1.0 (minor)
-- `disenar-constitucion` 1.0.0 -> 1.1.0 (minor)
-- `disenar-design-system` 1.0.0 -> 1.1.0 (minor)
-- `disenar-interfaz` 1.0.0 -> 1.1.0 (minor)
-- `operar-lifecycle` 1.0.0 -> 1.1.0 (minor)
-- `operar-mantenimiento` 2.0.0 -> 2.1.0 (minor)
-- `operar-release` 2.0.0 -> 2.1.0 (minor)
-- `operar-seguridad` 2.0.0 -> 2.1.0 (minor)
-- `verificar-compliance` 2.0.1 -> 2.1.0 (minor)
-- `verificar-fullaudit` 2.0.0 -> 2.1.0 (minor)
-- `verificar-hooks` 3.0.0 -> 3.1.0 (minor)
-- `verificar-owasp` 2.0.0 -> 2.1.0 (minor)
-- `verificar-performance` 3.0.0 -> 3.1.0 (minor)
-- `verificar-repo` 2.0.0 -> 2.1.0 (minor)
+### Added
 
-## [v2.0.0] — 2026-09-27
+- `operar-release` 2.2.0: modo G cierre de trabajo al finalizar un plan (`references/cierre-trabajo.md`): gate Husky, e2e Playwright, revisión contra el plan, PRs a `main`, merge-watch squash y limpieza.
+- `verificar-repo` 2.2.0: modo I inicio de plan / repo starting (`references/inicio-plan.md`) y script `inicio_plan.py` (tablero `ESTADO.md` + `ESTADO.html`: git, camino del producto, fallos).
+
+### Changed
+
+- `operar-lifecycle` 1.3.0: enruta repo starting / modo plan a `verificar-repo` I y repo ending a `operar-release` G.
+- `verificar-hooks` 3.2.0: modo gate y `pre-push` e2e cuando el repo ya tiene script Playwright.
+- `verificar-repo` Fase 8 distingue publicación (B/F) y cierre de trabajo (G).
+- `operar-release` merge-watch: `/pr-babysit --ship`, Vercel Hobby no requerido, `--delete-branch`.
+
+## [2.2.0] - 2026-09-30
+
+### Added
+
+- Skills `verificar-dependencias` 1.0.1 y `operar-salud-sistema` 1.1.0 al catálogo (19 skills).
+- Validadores `tools/validate/release_coherence.py` y `tools/validate/hygiene.py`.
+- Corte de tag y GitHub Release: `tools/version/cut_tag.py` y workflow `release.yml` (notas desde el changelog, SHA pinning, provenance).
+- `SECURITY.md`, `.github/CODEOWNERS`, `.github/dependabot.yml`, `requirements-dev.txt`.
+- Archivo de operador `docs/archives/perfil-equipo-local.md` (fuera del paquete de la skill).
+
+### Changed
+
+- Canon de formulación en español (`docs/STANDARD.md`): descripción `Usar cuando` / `No usar para`, encabezados Propósito / Cuándo usar / Referencias.
+- Puntos de entrada de las 19 skills alineados al canon. Minor: `operar-mantenimiento` 2.2.0, `disenar-constitucion` 1.2.0, `operar-salud-sistema` 1.1.0, `operar-seguridad` 2.2.0, `verificar-owasp` 2.2.0. Patch en el resto.
+- Encabezados históricos del changelog a `## [X.Y.Z] - AAAA-MM-DD`.
+- `contrast.py`: exit 1 cuando el par no cumple AA.
+
+### Fixed
+
+- Catálogo README (decía 17) alineado a 19 carpetas y a TAXONOMY.
+- `verificar-owasp`: valla del formato de informe y sección Estructura que citaba `languages/`, `infrastructure/` y LICENSE inexistentes.
+- `verificar-dependencias`: dejaba de documentar scripts que no existen.
+- `release.yml` instalaba PyYAML, extraía notas del changelog y dejaba de usar `generate_release_notes`.
+
+## [2.0.0] - 2026-09-27
 
 - `construir-typescript` 2.0.0 -> 2.0.1 (patch)
 - `construir-upstash` 1.0.0 -> 1.0.1 (patch)
@@ -47,7 +69,7 @@
 
   Reestructuración a 4 familias por fase SDLC (disenar/construir/verificar/operar); fusión email-proton+protonpass → construir-proton-suite v1.0.0; dominios alignux, datos, integraciones suprimidos
 
-## [v1.0.0] — 2026-09-27
+## [1.0.0] - 2026-09-27
 
 - Consolidación FASE-4 (18 skills, 7 dominios): `docs/TAXONOMY.md`, `README.md` y `tools/validate/skill_spec.py` alineados a los nombres reales; `web-seguridad` con cuerpo íntegramente en ES (tecnicismos en inglés preservados).
 - Tabla de renombros/fusiones:
@@ -64,69 +86,17 @@
   | `web-playwright`      | —                   | suprimida                             |
   | `webapp-testing`      | —                   | suprimida                             |
 - Canon `docs/repo-standard/` (solo lectura): `structure.md`, `ci-cd.md`, `release.md`, `security.md`, `templates/` (PR, issues, commitlint)
-- `repo-starting` → `repo-audit` 1.0.0 (major): entrada `scripts/audit-repo.sh`, Fase 8 handoff a `repo-release`, conserva health-check; refs al canon local
-- `repo-precommit` → `repo-hooks` 2.0.0 (major): cuerpo a ES; refs a `repo-release` y canon
-- `repo-ending` → `repo-release` 1.0.0 (major): sin health-check duplicado; workflows a `workflow_call`; `assets/ruleset.json`; `references/dependabot-grouped.md`; composites `actions/` (setup-node, actionlint, secret-scan)
-- Nueva `repo-lifecycle` 0.1.0: thin-router audit vs hooks vs release
-- Refs cruzadas: `web-seguridad`, `codigo-arquitectura`, `repo-audit/references/*`, README (TAXONOMY intacta, la actualiza el coordinador)
+- Autoversionado semver por magnitud: `tools/version/bump.py`.
 
-- Reestructuración de skills 2026-09-27 (21 → 18):
-  - `auditoria-360-web` → `web-compliance` 1.0.0 (major): conserva accesibilidad, legal, SEO/SEM; absorbe SEO/a11y de `web-audit`
-  - Nueva `web-rendimiento` 1.0.0: CWV, carga, caché, SEO técnico (split web + resto de `web-audit`)
-  - Suprimidas: `web-audit` (absorbida), `datos-postgres`, `planificacion-archivos`, `dependency-audit` (absorbida en `web-seguridad`)
-  - `codigo-seguridad` → `web-seguridad` 1.0.0 (major, absorbe dependencias)
-  - `playwright-e2e-audit` → `web-playwright` 1.0.0 (major)
-  - `git-hooks` → `repo-precommit` 1.0.0 (major)
-  - `alignux-seguridad` → `linux-seguridad` 1.0.0, `alignux-mantenimiento` → `linux-mantenimiento` 1.0.0 (major, nuevo dominio `linux`)
-  - `email-proton` / `protonpass` 1.0.0 (major): thin-skills con enlaces pineados a protonsuite-tools v1.4.0
-  - `upstash` 0.3.0 (minor: pierde referencia a `datos-postgres`); retoques de enlaces 0.2.x: `web-diseno`, `webapp-testing`, `design-system`, `repo-starting`, `repo-ending`, `codigo-arquitectura`, `alignux-constitucion` 0.2.1
-  - `upstash` 0.3.0 -> 0.4.0 (minor): monolito 89 ficheros → router + `core/` + 7 modos internos (`redis`, `vector`, `search`, `queue`, `ratelimit`, `blob`, `box`); vendor `upstash-*/` aplanado en `modes/*/references/`; workflows extiende queue, ratelimit requiere redis
-
-- `repo-starting` 0.2.0 -> 0.2.1 (patch)
-
-  cambios P2 sobre aplanado
-  identidad P3 sobre aplanado
-
-- `repo-starting` 0.1.0 -> 0.2.0 (minor)
-
-  aplanar references/repo-standard (regla references planas)
-
-- `alignux-constitucion` 0.1.0 -> 0.2.0 (minor)
-- `alignux-mantenimiento` 0.1.0 -> 0.2.0 (minor)
-- `alignux-seguridad` 0.1.0 -> 0.2.0 (minor)
-- `auditoria-360-web` 0.1.0 -> 0.2.0 (minor)
-- `codigo-arquitectura` 0.1.0 -> 0.2.0 (minor)
-- `codigo-seguridad` 0.1.0 -> 0.2.0 (minor)
-- `datos-postgres` 0.1.0 -> 0.2.0 (minor)
-- `dependency-audit` 0.1.0 -> 0.2.0 (minor)
-- `email-proton` 0.1.0 -> 0.2.0 (minor)
-- `planificacion-archivos` 0.1.0 -> 0.2.0 (minor)
-- `playwright-e2e-audit` 0.1.0 -> 0.2.0 (minor)
-- `protonpass` 0.1.0 -> 0.2.0 (minor)
-- `repo-ending` 0.1.0 -> 0.2.0 (minor)
-- `repo-starting` 0.1.0 -> 0.2.0 (minor)
-- `typescript-avanzado` 0.1.0 -> 0.2.0 (minor)
-- `upstash` 0.1.0 -> 0.2.0 (minor)
-- `web-audit` 0.1.0 -> 0.2.0 (minor)
-- `web-diseno` 0.1.0 -> 0.2.0 (minor)
-- `webapp-testing` 0.1.0 -> 0.2.0 (minor)
-
-  Revisión P0-P4: enlaces, validators, CI, smoke tests, expansión de skills thin, extracción de cuerpos, identidad de grupo, documentación
-
-- Autoversionado semver por magnitud: `tools/version/bump.py` (`major` = actualización incompatible, `minor` = desarrollo menor compatible, `patch` = parcheado/fix; con alias en ES), tests propios, cobertura en `run-validation.sh` y CI `version.yml` que exige el bump en PRs con skills cambiadas.
-
-Formato: entradas por release del repo. Las skills versionan además su `metadata.version` en cada `SKILL.md`.
-
-## [v0.1.0] — 2026-09-26
+## [0.1.0] - 2026-09-26
 
 Primera publicación pública del repo `Soluciones-Alexendros/agent-skills` (21 skills, licencia MIT).
 
 - Estructura `skills/<nombre>/` con frontmatter normalizado (`license: MIT`, `metadata` con autor, versión, dominio e idioma).
-- Taxonomía por dominios (`alignux`, `codigo`, `datos`, `integraciones`, `proceso`, `repo`, `web`).
-- Limpieza: eliminados `__pycache__/`, `.pytest_cache/`, archivados legacy, licencias por skill y subdirectorios no canónicos (aplanados a `references/`).
-- `planificacion-archivos`: cuerpo reducido bajo 500 líneas (extraído `references/claude-code-integration.md`).
-- `codigo-seguridad`: creado `references/security-checklist.md` (estaba citado pero ausente).
 - Validadores `tools/validate/` (spec + enlaces), CI en `.github/workflows/` y `run-validation.sh` agregado.
 
-[Unreleased]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v0.1.0...HEAD
-[v0.1.0]: https://github.com/Soluciones-Alexendros/agent-skills/releases/tag/v0.1.0
+[Unreleased]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v2.0.0...v2.2.0
+[2.0.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v1.0.0...v2.0.0
+[1.0.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v0.1.0...v1.0.0
+[0.1.0]: https://github.com/Soluciones-Alexendros/agent-skills/releases/tag/v0.1.0

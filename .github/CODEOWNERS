@@ -1,0 +1,4 @@
+# Reviewers for the release and validation surface.
+.github/workflows/ @Alexendros
+tools/validate/ @Alexendros
+tools/version/ @Alexendros

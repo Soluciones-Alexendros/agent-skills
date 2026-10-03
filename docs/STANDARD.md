@@ -7,8 +7,7 @@ Basado en la [especificación Agent Skills](https://agentskills.io/specification
 ```yaml
 ---
 name: mi-skill # = nombre de la carpeta; kebab-case, 1–64 chars, sin -- ni - extremos
-description:
-  >- # 1–1024 chars; qué hace + cuándo usarla + qué NO cubre (→ otra skill)
+description: >- # 1–1024 chars; plantilla abajo
   ...
 license: MIT # licencia global del repo
 metadata:
@@ -22,41 +21,57 @@ metadata:
 
 Campos opcionales de la spec (`compatibility`, `allowed-tools`) pueden añadirse cuando aporten valor.
 
+## Descripción (plantilla)
+
+Tercera persona, dentro de 1024 caracteres:
+
+`[Capacidad]. Usar cuando [contextos]. No usar para [límite] (→ skill-vecina).`
+
+Las frases `Usar cuando` y `No usar para` son literales (el validador las exige). La flecha `→ nombre` solo si `nombre` es una carpeta real en `skills/`.
+
 ## Cuerpo
 
-- Límite obligatorio: **≤ 500 líneas** y **≤ 5000 tokens**. Si crece, extraer a `references/*.md` y dejar un resumen con enlace. El validador lo mide y falla si excede.
-- Orden fijo de secciones (canon): Purpose, When to use, Scope, Procedure, References by condition, Tools, Output format, Edge cases, Validation. Solo secciones con contenido real.
-- Enlaces relativos solo a ficheros que existen (lo verifica `tools/validate/skill_links.py`).
-- Referencias de un nivel: `references/` no debe contener subdirectorios con contenido enlazado (los `assets/` y `scripts/` son recursos, no lectura progresiva).
-- Formato de descripción (plantilla): `[Main capability]. Use when [activation contexts]. Not for [critical boundary] → [neighbor skill].` Tercera persona.
+- Límite obligatorio: **≤ 500 líneas** y **≤ 5000 tokens**. Si crece, extraer a `references/*.md` y dejar un resumen con enlace.
+- Encabezados H2 canónicos en español. Obligatorios: **Propósito**, **Cuándo usar**, **Referencias**. Si hay ejecutables `.py` o `.sh` fuera de `tests/`: **Herramientas**.
+- Opcionales con contenido real: Alcance, Procedimiento, Formato de salida, Casos límite, Validación, más las secciones de dominio que el procedimiento necesite (Enrutado, Fases, Modos).
+- Prohibidos: `Qué hace / Propósito`, `Cuándo usarme / Triggering`, un `Uso` que repita la descripción, un `Estructura` de inventario, `Perfil de Este Equipo`, rutas `sudoers.d` y nombres de host en el arranque.
+- Enlaces relativos solo a ficheros que existen (`tools/validate/skill_links.py`).
+- `references/` es plano: sin subdirectorios. `assets/` y `scripts/` son recursos, no lectura progresiva.
 
 ## Estructura de carpeta
 
 ```text
 skills/<nombre>/
 ├── SKILL.md
-├── references/   # lectura progresiva (md)
-├── scripts/      # scripts ejecutables + tests/
+├── references/   # lectura progresiva (md plano)
+├── scripts/      # ejecutables + tests/ (smoke en scripts/tests/smoke_sh.sh)
 ├── assets/       # plantillas, esquemas, estáticos
 └── configs/      # configuraciones de ejemplo
 ```
 
-Prohibido en el repo: `__pycache__/`, `.pytest_cache/`, dirs `.archivado-*`, ficheros `LICENSE` por skill, `agents/`, `infrastructure/`, `languages/` sueltos (van aplanados en `references/`).
+Excepción: `construir-upstash` usa `core/` y `modes/<modo>/` como recursos internos del router. Cada `modes/<modo>/references/` sigue siendo plano. No son skills separadas.
+
+Prohibido en el repo: `__pycache__/`, `.pytest_cache/`, dirs `.archivado-*`, ficheros `LICENSE` por skill, `agents/`, `infrastructure/`, `languages/` sueltos (van aplanados en `references/`). El validador solo falla si esos residuos están rastreados por git.
 
 ## Procedimientos (scripts y lógica)
 
-Estructura obligatoria: **Precondition → Action → Expected → Error → Recovery**.
+Estructura: **Precondition → Action → Expected → Error → Recovery**.
 Scripts: **INPUT → validate → execute → inspect → structured output → exit code**.
-Salida estructurada: JSON para consumo máquina, Markdown para humano. Exit codes semánticos (0=OK, 1=error, 2=invalid input, 3=deps missing, 4=permission denied).
+Salida estructurada: JSON para consumo máquina, Markdown para humano.
+Códigos de salida: `0` OK, `1` error o veredicto negativo, `2` input inválido, `3` dependencia ausente, `4` permiso denegado.
+
+Smoke: `skills/<nombre>/scripts/tests/smoke_sh.sh` es obligatorio si y solo si hay ejecutables `.py` o `.sh` fuera de `tests/` y de `test_*.py`.
 
 ## MCP Tools
 
-Convención para docs de Claude: `ServerName:tool_name` (ej. `firecrawl:firecrawl_search`, `github:github_search_code`).
+Convención: `ServerName:tool_name` (ej. `firecrawl:firecrawl_search`, `github:github_search_code`).
 
-## Versiones
+## Versiones (dos ejes)
 
-- `metadata.version` por skill (semver). Cambios incompatibles de instrucciones → bump minor/major y nota en [CHANGELOG.md](../CHANGELOG.md).
-- Autoversionado por magnitud con `tools/version/bump.py` (sin dependencias):
+1. **Skill** — `metadata.version` en cada `SKILL.md`. La CI (`version.yml`) exige bump en PRs que toquen esa skill.
+2. **Repo** — `package.json` `version` + tag anotado `vX.Y.Z` + sección del [CHANGELOG.md](../CHANGELOG.md). El workflow de release corta el tag y publica la GitHub Release cuando el manifiesto está por delante del último tag y el changelog tiene notas.
+
+Autoversionado de skills con `tools/version/bump.py`:
 
 | Magnitud | Alias ES                                 | Efecto              | Cuándo                      |
 | -------- | ---------------------------------------- | ------------------- | --------------------------- |
@@ -67,10 +82,8 @@ Convención para docs de Claude: `ServerName:tool_name` (ej. `firecrawl:firecraw
 ```bash
 python3 tools/version/bump.py --type minor --skills verificar-owasp
 python3 tools/version/bump.py --type parche --all --dry-run
-python3 tools/version/bump.py --type fix --auto --base origin/main
-python3 tools/version/bump.py --check --auto --base origin/main  # lo que exige la CI
+python3 tools/version/bump.py --check --auto --base origin/main
+python3 tools/version/cut_tag.py --dry-run
 ```
 
-- El bumper actualiza `SKILL.md`, añade la entrada a `## [Unreleased]` del CHANGELOG y sugiere el tag de repo (`--tag` lo crea: `vX.Y.Z`).
-- La CI (`version.yml`) falla en la PR si una skill cambiada no trae su bump.
-- Release del repo: tag `vX.Y.Z` + GitHub Release (workflow `release.yml`).
+Corte de tag del repo: `tools/version/cut_tag.py` (el workflow de `main` lo aplica; no etiquetar a mano en el árbol de trabajo).

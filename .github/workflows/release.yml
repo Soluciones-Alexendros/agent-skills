@@ -1,23 +1,83 @@
 name: release
 on:
   push:
-    tags: ["v*"]
+    branches: [main]
+    tags: ["v*.*.*"]
 permissions:
-  contents: write
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
-  github-release:
+  publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    outputs:
+      tagged: ${{ steps.cut.outputs.tagged }}
+      version: ${{ steps.cut.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: "3.12"
-      - run: python3 tools/validate/skill_spec.py
-      - run: python3 tools/validate/skill_links.py
-      - name: Validación pre-release
+      - run: pip install -r requirements-dev.txt
+      - name: Validate
         run: |
           python3 tools/validate/skill_spec.py
           python3 tools/validate/skill_links.py
-      - uses: softprops/action-gh-release@v2
+          python3 tools/validate/release_coherence.py
+      - name: Publish from tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          python3 tools/validate/release_coherence.py --release-gate
+          python3 tools/version/cut_tag.py --extract-notes "$VERSION" --notes-file notes.md
+          gh release create "${GITHUB_REF_NAME}" --notes-file notes.md --verify-tag
+      - name: Cut annotated tag on main
+        id: cut
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python3 tools/version/cut_tag.py --apply --notes-file notes.md
+      - name: Push tag and create GitHub Release
+        if: github.ref == 'refs/heads/main' && steps.cut.outputs.tagged == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.cut.outputs.version }}"
+          git push origin "v${VERSION}"
+          gh release create "v${VERSION}" --notes-file notes.md --verify-tag
+
+  provenance:
+    name: Attest source archive
+    needs: publish
+    if: ${{ (github.ref == 'refs/heads/main' && needs.publish.outputs.tagged == 'true') || startsWith(github.ref, 'refs/tags/v') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
-          generate_release_notes: true
+          persist-credentials: false
+      - name: Archive source
+        run: |
+          set -euo pipefail
+          VERSION="${{ needs.publish.outputs.version }}"
+          if [ -z "$VERSION" ]; then VERSION="${GITHUB_REF_NAME#v}"; fi
+          git archive --format=tar.gz --prefix="agent-skills-${VERSION}/" -o "agent-skills-${VERSION}.tar.gz" HEAD
+          echo "ARCHIVE=agent-skills-${VERSION}.tar.gz" >> "$GITHUB_ENV"
+      - uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
+        with:
+          subject-path: ${{ env.ARCHIVE }}

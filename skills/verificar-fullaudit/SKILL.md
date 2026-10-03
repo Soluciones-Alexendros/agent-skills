@@ -1,14 +1,16 @@
 ---
 name: verificar-fullaudit
-description: >
-  Router de auditoría web holística: deriva a verificar-compliance (compliance SEO/a11y/legal),
-  verificar-performance (CWV/rendering), verificar-repo (health check repo) o disenar-interfaz
-  (dirección visual). Usar cuando el usuario pida "auditoría completa", "auditoría holística",
-  "revisa todo" o "full audit" sin especificar foco. No ejecuta auditorías: solo enruta.
+description: >-
+  Router de auditoría web holística: deriva a verificar-compliance (compliance
+  SEO/a11y/legal), verificar-performance (CWV/rendering), verificar-repo (health
+  check repo) o disenar-interfaz (dirección visual). Usar cuando el operador pida
+  auditoría completa, auditoría holística, «revisa todo» o full audit sin foco.
+  No usar para ejecutar las auditorías: solo enruta (→ verificar-compliance,
+  verificar-performance, verificar-repo).
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "2.1.0"
+  version: "2.1.1"
   dominio: verificar
   tipo: router
   idioma: es
@@ -18,8 +20,11 @@ metadata:
 
 ## Propósito
 
-Thin-router: ante una petición de auditoría web completa/holística sin foco específico,
-decide qué skill(es) atienden y deriva. No ejecuta auditorías ni scoring: delega.
+Thin-router: ante una petición de auditoría web completa u holística sin foco específico, decide qué skill atiende y deriva. No ejecuta auditorías ni scoring.
+
+## Cuándo usar
+
+Cuando el operador pida «auditoría completa», «auditoría holística», «revisa todo» o «full audit» sin especificar compliance, performance, e2e o repo.
 
 ## Enrutado
 
@@ -38,15 +43,6 @@ decide qué skill(es) atienden y deriva. No ejecuta auditorías ni scoring: dele
 2. **No duplicar lógica**: el procedimiento vive en la skill destino; aquí solo el criterio de enrutado.
 3. **Derivar con contexto**: pasar objetivo, alcance y restricciones conocidas a la skill destino.
 4. **No absorber scoring ni reporting**: viven en `verificar-compliance` y `verificar-performance`.
-
-## Uso
-
-Usar cuando el usuario pida "auditoría completa", "auditoría holística", "revisa todo", "full audit"
-sin especificar foco (compliance, performance, e2e, repo). Ver frontmatter `description`.
-
-## Estructura
-
-- `SKILL.md` — criterio de enrutado (este fichero). Sin `core/`, `modes/`, `tests/` propios.
 
 ## Referencias
 

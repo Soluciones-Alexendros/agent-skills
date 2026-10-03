@@ -48,6 +48,10 @@ def test_contrast_color_invalido_exit_2(capsys):
     assert contrast.main(["#000", "#fff"]) == 0
 
 
+def test_contrast_fail_exit_1(capsys):
+    assert contrast.main(["#777777", "#FFFFFF"]) == 1
+
+
 def test_audit_fichero_inexistente_exit_2(capsys):
     assert audit_page.main(["--file", "/no/existe-xyz.html"]) == 2
 

@@ -5,8 +5,9 @@ Uso:
     python3 contrast.py "#1a1a1a" "#ffffff" [--large]
     python3 contrast.py --selftest
 
-Salida JSON con ratio y veredicto por nivel. Código de salida 0 siempre que los
-colores sean válidos; 2 en error de formato.
+Salida JSON con ratio y veredicto por nivel. Código de salida: 0 si el par
+cumple AA (o AA large con --large), 1 si el veredicto es FAIL, 2 si el input
+es inválido.
 """
 import argparse
 import json
@@ -98,12 +99,13 @@ def main(argv=None) -> int:
     if not args.fg or not args.bg:
         ap.error("Indica fg y bg, o usa --selftest")
     try:
-        print(json.dumps(check(args.fg, args.bg, args.large), ensure_ascii=False, indent=2))
+        result = check(args.fg, args.bg, args.large)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
     except ValueError as e:
         logger.error("color inválido: %s", e)
         print(json.dumps({"error": str(e)}, ensure_ascii=False))
         return 2
-    return 0
+    return 0 if result["veredicto"] != "FAIL" else 1
 
 
 if __name__ == "__main__":

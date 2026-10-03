@@ -4,34 +4,21 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+permissions:
+  contents: read
 jobs:
   hygiene:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - name: Sin residuos ni finales de línea con espacios
-        run: |
-          FAIL=0
-          # residuos prohibidos: caches, bytecode, temporales, backups, logs
-          if find . -path './.git' -prune -o \( \
-            -name '__pycache__' -o -name '*.pyc' -o -name '.pytest_cache' -o \
-            -name '.archivado*' -o -name '*.tmp' -o -name '*.bak' -o -name '*.log' \
-            \) -print | grep -q .; then
-            echo "RESIDUOS ENCONTRADOS"; FAIL=1
-          fi
-          # secretos prohibidos en repo
-          if find . -path './.git' -prune -o \( \
-            -name '.env' -o -name '.env.*' -o -name '*.pem' -o -name '*.key' \
-            \) -print | grep -q .; then
-            echo "SECRETOS ENCONTRADOS"; FAIL=1
-          fi
-          # trailing whitespace en md/py/sh/yml/yaml/json/toml
-          if grep -rn ' $' --include='*.md' --include='*.py' --include='*.sh' \
-            --include='*.yml' --include='*.yaml' --include='*.json' --include='*.toml' \
-            skills tools docs .github run-validation.sh | grep -q .; then
-            echo "TRAILING WHITESPACE"; FAIL=1
-          fi
-          exit $FAIL
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Hygiene
+        run: python3 tools/validate/hygiene.py
       - name: bash -n global
         run: |
           find skills tools -name '*.sh' -print0 | xargs -0 -n1 bash -n
