@@ -3,7 +3,7 @@ name: operate-monitoring
 description: >
   System and application monitoring orchestration. Use when setting up monitoring,
   alerting, and observability for infrastructure and applications. Use when the
-  operator requests monitoring configuration, alert setup, or observability tooling.
+  operator requests monitoring configuration, alert setup, or observability tooling. Not for debugging incidents (→ operate-seguridad) nor system cleanup (→ operate-mantenimiento).
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"

@@ -1,9 +1,10 @@
 ---
 name: build-interface
 description: >
-  Direct visual design for interfaces with own identity: aesthetic direction,
-  typographic system, palette, layout, motion and signature element. Each
-  decision is deliberate with respect to the brief.
+  Direction for visual design and interaction of interfaces: aesthetics, typography,
+  palette, motion and microinteractions. Use when designing or redesigning interfaces,
+  visual identity or interaction polish. Not for formal design systems or tokens
+  (→ build-design-system) nor a11y/SEO audits (→ verify-compliance).
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
@@ -12,9 +13,10 @@ metadata:
   type: atomic
   language: en
 ---
+
 # build-interface — Intentional Visual Design
 
-## Purpose
+## Overview
 
 Guide visual design for interfaces with own identity: aesthetic direction, typographic system, palette, layout, motion and signature element. Each decision is deliberate with respect to the brief.
 

@@ -1,136 +1,105 @@
 # agent-skills
 
-27 skills de ingeniería para agentes de código, mantenidas por Soluciones-Alexendros bajo licencia MIT.
+25 engineering skills for coding agents, maintained by Soluciones-Alexendros under the MIT license. Skill names, domains, and content are in English; chats and outputs stay in Spanish.
 
-## Inicio rápido
+## Quick start
 
 ```bash
 git clone https://github.com/Soluciones-Alexendros/agent-skills.git
-cp -r agent-skills/skills/<dominio>-<nombre> ~/.claude/skills/
+cp -r agent-skills/skills/<skill-name> ~/.claude/skills/
 ```
 
-## Habilidades por dominio
+## Skills by domain
 
-Las 27 skills están organizadas en 5 dominios:
+25 skills across 4 active domains (`build`, `operate`, `planning`, `verify`). The `design` domain is reserved for future architecture skills and is currently empty.
 
-### planning (4) — Planificación y descomposición de trabajo
+### planning (4) — Planning and task breakdown
 
-| Skill                                  | Descripción                                                                                                                                                                 |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `planning-source-driven-development`   | Desarrollo guiado por fuentes oficiales: cada decisión de implementación se verifica contra la documentación oficial del framework antes de codificar.                      |
-| `planning-test-driven-development`     | Ciclo TDD red-green-refactor: escribe test fallido, hazlo pasar, refactoriza. Para bugs, reproduce primero con test (Patrón Demuéstralo).                                   |
-| `planning-spec-driven-development`     | Especificación estructurada antes de codificar: objetivo, comandos, estructura, estilo, testing y límites (Siempre/Pregunta/Nunca). Gated: Spec → Plan → Tasks → Implement. |
-| `planning-planning-and-task-breakdown` | Descompone trabajo en tareas pequeñas y verificables con criterios de aceptación explícitos. Slicing vertical, orden por dependencias, checkpoints cada 2-3 tareas.         |
+| Skill                                | Description                                                                                                                                                                                                              |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `planning-source-driven-development` | Source-driven development: verify every implementation decision against the official framework docs before coding. Use when starting unfamiliar work. Not for routine edits in known code.                               |
+| `planning-test-driven-development`   | Red-green-refactor TDD cycle: failing test first, make it pass, refactor. For bugs, reproduce with a test first. Use when fixing bugs or adding behavior. Not for exploratory spikes.                                    |
+| `planning-spec-driven-development`   | Structured spec before code: goal, commands, structure, style, testing, and limits. Gated flow: Spec → Plan → Tasks → Implement. Use when scoping multi-step work. Not for trivial one-line fixes.                       |
+| `planning-task-breakdown`            | Break work into small verifiable tasks with explicit acceptance criteria. Vertical slicing ordered by dependencies, checkpoints every 2-3 tasks. Use when planning an implementation. Not for executing the work itself. |
 
-### build (6) — Construcción, automatización y ecosistemas
+### build (6) — Building, automation, and ecosystems
 
-| Skill                 | Descripción                                                                                                                                                                                   |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `build-automation`    | Automatización de pipelines CI/CD: build, test, deploy. Matriz de SO, cache de dependencias, artifacts, stages y jobs.                                                                        |
-| `build-design-system` | Construye design systems: tokens DTCG (Style Dictionary, Figma Tokens), Tailwind v4 (`@theme`), componente library (Button, Input, Card, Dialog).                                             |
-| `build-interface`     | Dirección visual intencional para UI: sistema tipográfico, paleta, layout, motion, signature element. Output: plan de diseño visual con decisiones justificadas.                              |
-| `build-proton-suite`  | Proton Mail (Bridge IMAP/SMTP local, MCP Mail) y Proton Pass (pass-cli v2.3+ JSON, MCP Pass). Leer/buscar/clasificar correo, obtener secrets, enviar emails.                                  |
-| `build-typescript`    | Tipado avanzado TypeScript: generics, conditional types, infer, branded types, patrones de API tipada. No para security review ni arquitectura general.                                       |
-| `build-upstash`       | Router ecosistema Upstash (7 modos): Redis (cache/sessions/KV), Vector (embeddings/RAG), Search (full-text), QStash (colas/cron/workflows), Ratelimit, Blob (S3), Box (sandboxed containers). |
+| Skill                 | Description                                                                                                                                                                                                                              |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `build-automation`    | CI/CD pipeline automation: build, test, deploy. OS matrix, dependency caching, artifacts, stages, and jobs. Use when setting up pipelines. Not for release publishing (see `operate-release`).                                           |
+| `build-design-system` | Build design systems: DTCG tokens (Style Dictionary, Figma Tokens), Tailwind v4, reusable component library. Use when creating tokens or UI kits. Not for one-screen visual direction (see `build-interface`).                           |
+| `build-interface`     | Intentional visual direction for UI: type system, palette, layout, motion, signature element. Output is a justified visual design plan. Use when designing or restyling interfaces. Not for token pipelines (see `build-design-system`). |
+| `build-proton-suite`  | Proton Mail (Bridge IMAP/SMTP local, MCP Mail) and Proton Pass (pass-cli JSON, MCP Pass). Read, search, and classify mail; fetch secrets; send email. Use when working with Proton. Not for other mail providers.                        |
+| `build-typescript`    | Advanced TypeScript typing: generics, conditional types, infer, branded types, typed API patterns. Use for complex type logic. Not for security review (see `verify-owasp`) or architecture mapping (see `verify-architecture`).         |
+| `build-upstash`       | Upstash ecosystem router (7 modes): Redis (cache, sessions, KV), Vector (embeddings, RAG), Search (full-text), QStash (queues, cron, workflows), Ratelimit, Blob, Box. Use when wiring Upstash services. Not for relational databases.   |
 
-### verify (9) — Auditoría, calidad y seguridad de código
+### verify (9) — Code audit, quality, and security
 
-| Skill                 | Descripción                                                                                                                                                                                                                                                      |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `verify-compliance`   | Auditoría compliance web: accesibilidad (WCAG 2.2 AA / EN 301 549), legal (RGPD, Consent Mode v2, aviso legal, cookies), SEO on-page/off-page/SEM/analítica. Matriz PASS/FAIL/N/A, scoring ponderado, dictamen POSITIVO/PARCIAL/NEGATIVO, plan remediación RICE. |
-| `verify-dependencias` | Auditoría dependencias (SCA/CVE): pipeline multi-lenguaje (npm/pip/cargo/go/maven/gradle/composer/gem) detecta vulnerabilidades, malware, typosquatting, dependencias no usadas y outdated. Genera SBOM.                                                         |
-| `verify-fullaudit`    | Router auditoría web holística: deriva a verify-compliance (compliance SEO/a11y/legal), verify-performance (CWV/rendering), verify-repo (health check repo) o build-interface (dirección visual). Para auditoría completa sin foco.                              |
-| `verify-hooks`        | Configura y ejecuta hooks git locales: Husky, lint-staged, Prettier, typecheck, tests en pre-commit; e2e en pre-push si existe. Gate local de cierre de trabajo.                                                                                                 |
-| `verify-owasp`        | Revisión seguridad código (OWASP): inyección, XSS, authn/authz, criptografía, SSRF, secretos, misconfiguración. Security review, busca vulnerabilidades en código.                                                                                               |
-| `verify-performance`  | Auditoría performance web: Core Web Vitals (LCP, INP, CLS), Lighthouse 12, TTFB/FCP, rendering (SSR/SSG/ISR/islands), caching HTTP/CDN, optimización carga, diagnóstico técnico frontend.                                                                        |
-| `verify-repo`         | Auditoría integral repositorio e inicio canónico de plan (repo starting): sincroniza clon, tablero estado/roadmap/fallos, contrasta con repo-standard (P0/P1/P2, CI quality→test→smoke, Renovate), corrige tras sí.                                              |
-| `verify-architecture` | Verificación arquitectura código: análisis estructura, dependencias, drift arquitectónico, oportunidades refactor. Mapeo dependencias (madge), métricas cuantitativas, detección cambios no intencionados.                                                       |
-| `verify-testing`      | Verificación testing y quality assurance: planificación estrategia test, review calidad tests, análisis cobertura, definición métricas testing. Test pyramid, shift-left/shift-right, mantenimiento suite.                                                       |
+| Skill                 | Description                                                                                                                                                                                                                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `verify-architecture` | Code architecture verification: structure analysis, dependency mapping, drift detection, refactor opportunities. Use when reviewing architecture. Not for security review (see `verify-owasp`).                                                                                    |
+| `verify-compliance`   | Web compliance audit: accessibility (WCAG 2.2 AA), legal (GDPR, consent, cookies), on-page and off-page SEO. PASS/FAIL matrix, weighted scoring, RICE remediation plan. Use when auditing compliance. Not for performance (see `verify-performance`).                              |
+| `verify-dependencias` | Dependency audit (SCA/CVE): multi-language pipeline (npm, pip, cargo, go, maven, gradle, composer, gem) for vulnerabilities, malware, typosquatting, unused and outdated deps. Produces SBOM. Use when scanning supply chain. Not for first-party code flaws (see `verify-owasp`). |
+| `verify-fullaudit`    | Holistic web audit router: dispatches to `verify-compliance`, `verify-performance`, `verify-repo`, or `build-interface`. Use when asked for a full review without a focus. Not for executing the audits itself.                                                                    |
+| `verify-hooks`        | Local git hooks: Husky, lint-staged, Prettier, typecheck, tests on commit; e2e on push when present. Use when gating commits locally. Not for remote CI (see `operate-release`).                                                                                                   |
+| `verify-owasp`        | Code security review (OWASP): injection, XSS, authn/authz, crypto, SSRF, secrets, misconfiguration. Use when hunting vulnerabilities in code. Not for host hardening (see `operate-seguridad`).                                                                                    |
+| `verify-performance`  | Web performance audit: Core Web Vitals, Lighthouse, TTFB/FCP, rendering modes, HTTP and CDN caching, load optimization. Use when diagnosing slowness. Not for compliance (see `verify-compliance`).                                                                                |
+| `verify-repo`         | Full repo audit and canonical plan start (repo starting): sync clone, status and roadmap board, contrast with repo standard, fix forward. Use when opening a plan. Not for closing releases (see `operate-release`).                                                               |
+| `verify-testing`      | Testing verification and QA: test strategy, test quality review, coverage analysis, testing metrics. Use when assessing a suite. Not for writing the tests themselves.                                                                                                             |
 
-### operate (6) — Operación, mantenimiento y seguridad de sistemas Linux
+### operate (6) — Linux operation, maintenance, and security
 
-| Skill                   | Descripción                                                                                                                                                                                                                                                                                                                  |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `operate-lifecycle`     | Orquesta ciclo de vida del trabajo: init-work (inicio plan, repo starting), verify-hooks (Husky) u operate-release (cierre, publicación, post-plan). Enruta: no ejecuta auditorías/hooks/publicaciones.                                                                                                                      |
-| `operate-mantenimiento` | Mantenimiento sistematizado Linux: higiene, actualizaciones, ordenado, optimización, sugerencias. Modos graduados (auditoría rápida/completa, rutina, optimización, limpieza) read-only por defecto, validación determinista por riesgo, snapshots reversibles, KPIs salud. Seguridad defensiva NO (→ operate-seguridad).    |
-| `operate-release`       | Cierre repositorio GitHub: publicación versión, auditoría CI/CD, cierre trabajo fin de plan (repo ending, merge, ship). Semantic versioning, Keep a Changelog, supply-chain Actions, Husky+e2e+PR+merge-watch post-plan.                                                                                                     |
-| `operate-salud-sistema` | Diagnóstico y auditoría salud Linux: health-check, auditoría rápida/completa, fingerprint sistema, scoring salud (0–100), hallazgos P0–P4, diff temporal. CIS/Lynis compliance, onboarding servidores. No ejecución limpieza (→ operate-mantenimiento) ni hardening/forense (→ operate-seguridad).                           |
-| `operate-seguridad`     | Seguridad defensiva hosts Linux: postura, forense ligero registros (journald/auditd/auth.log), CVEs, hardening sysctl/SSH, AppArmor/SELinux, auditd, fail2ban. Auditoría seguridad sistema, hardening host, revisión logs auth. No vulnerabilidades código app (→ verify-owasp) ni limpieza disco (→ operate-mantenimiento). |
-| `operate-monitoring`    | Orquestación monitoring y observabilidad: configuración métricas (Prometheus/Grafana), tracing (OpenTelemetry/Jaeger), logs (ELK/Loki), alerting (Alertmanager/PagerDuty). Setup alertas, visión salud sistema.                                                                                                              |
+| Skill                   | Description                                                                                                                                                                                                                                           |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `operate-lifecycle`     | Work lifecycle router: plan start, hook gating via `verify-hooks`, or release closing via `operate-release`. Use when routing between phases. Not for executing audits, hooks, or releases.                                                           |
+| `operate-mantenimiento` | Systematized Linux maintenance: hygiene, updates, cleanup, optimization. Graduated modes, read-only by default, risk-gated execution, reversible snapshots. Use when cleaning or tuning a host. Not for defensive security (see `operate-seguridad`). |
+| `operate-monitoring`    | Monitoring and observability setup: metrics, tracing, logs, alerting. Use when wiring dashboards and alerts. Not for incident forensics (see `operate-seguridad`).                                                                                    |
+| `operate-release`       | GitHub repo closing: version publishing, CI/CD audit, post-plan close-out. Semantic versioning, changelog, Actions supply chain. Use when shipping. Not for plan start (see `verify-repo`).                                                           |
+| `operate-salud-sistema` | Linux health diagnosis: health checks, quick and full audits, system fingerprint, 0–100 health score. Use when assessing a machine. Not for cleanup execution (see `operate-mantenimiento`) or hardening (see `operate-seguridad`).                   |
+| `operate-seguridad`     | Defensive Linux host security: posture, lightweight log forensics, CVEs, sysctl and SSH hardening, AppArmor/SELinux, auditd, fail2ban. Use when auditing or hardening a host. Not for app code flaws (see `verify-owasp`).                            |
 
-### design (2) — Arquitectura y constitución del sistema
+## Naming and frontmatter
 
-| Skill                 | Descripción                                                                                                                                                                                                                          |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `design-architecture` | Análisis arquitectura codebase: capas, acoplamiento, puntos de profundidad, oportunidades modularización. Mapa módulos, detección dónde acopla código. No security audit (→ verify-owasp) ni diseño general (→ build-design-system). |
-| `design-constitution` | Constitución ALIGNUX: marco pasivo identidad, coherencia operativa, límites agente en sistemas Linux. Principios ALIGNUX, alinear respuesta con identidad sistema, validar decisión contra marco constitucional.                     |
+- Flat layout: `skills/<skill-name>/SKILL.md`.
+- The `name` field is identical to the directory name: `<domain>-<slug>` in kebab-case. The prefix is the domain (normative, not advisory).
+- Frontmatter carries `name`, `description` (scope plus limits), `license: MIT`, and `metadata` with `author`, `version` (semver), `domain`, `type`, and `language: en`.
+- Closed type set: `atomic` (single capability) · `orchestrator` (multi-step workflow) · `router` (dispatches to other skills) · `audit` (read-only assessment with a report).
 
-## Alias de migración
+## Adding a new skill
 
-Nombres antiguos → Nuevos nombres (compatibilidad hacia atrás):
-
-```text
-construir-typescript       → build-typescript
-construir-upstash          → build-upstash
-construir-proton-suite     → build-proton-suite
-disenar-arquitectura       → design-architecture
-disenar-constitucion       → design-constitution
-disenar-design-system      → build-design-system
-disenar-interfaz           → build-interface
-verificar-*                → verify-* (7 skills)
-operar-*                   → operate-* (5 skills)
-```
-
-## Skills reclasificadas
-
-Estas skills cambiaron de dominio durante la reorganización:
-
-| Nombre antiguo          | Nombre nuevo          | Nuevo dominio |
-| ----------------------- | --------------------- | ------------- |
-| `disenar-design-system` | `build-design-system` | build         |
-| `disenar-interfaz`      | `build-interface`     | build         |
-| `disenar-arquitectura`  | `design-architecture` | design        |
-| `disenar-constitucion`  | `design-constitution` | design        |
-
-## Esquema de versiones
-
-- **2.0.0**: Skills reclasificadas (cambio de dominio)
-- **1.0.0**: Skills nuevas (addyosmani adaptado)
-- **2.3.0**: Skills existentes traducidas (español → inglés, bump versión)
-
-## Añadir nuevas skills
-
-Para añadir una skill, crea directorio bajo el dominio correspondiente:
+Create a top-level directory (flat layout, no nesting):
 
 ```bash
-mkdir -p skills/<dominio>/<dominio>-<nombre-skill>
+mkdir -p skills/<skill-name>
 ```
 
-Incluye `SKILL.md` con frontmatter estándar:
+Ship `SKILL.md` with standard frontmatter:
 
 ```yaml
 ---
-name: <dominio>-<nombre-skill>
-description: >
-  Descripción en inglés.
+name: <skill-name>
+description: >-
+  What it does. Use when the operator asks for it. Not for other families.
 license: MIT
 metadata:
-  author: "addyosmani (adapted)"
-  version: "1.0.0"
-  domain: <dominio>
+  author: Soluciones-Alexendros
+  version: 1.0.0
+  domain: build
   type: atomic
   language: en
 ---
 ```
 
+Body must include `## Overview` and `## When to Use`. Skills bundling executable scripts also include `## Tools` and `scripts/tests/smoke_sh.sh`.
+
 ## Cross-references
 
-Todas las rutas `../../references/` deben resolver. Cada skill tiene directorio `references/` con documentación específica.
+Arrows (`→ other-skill`) in descriptions must resolve to an existing skill in this catalog.
 
-## Validación
+## Validation
 
 ```bash
-node scripts/validate-skills.js
+bash run-validation.sh
 ```
 
-Verifica: frontmatter schema, resolución referencias, corrección router, esquema versiones, language="en", domain correcto.
+Checks: frontmatter schema, description scope clauses, heading canon, catalog parity between folders, README and TAXONOMY, reference resolution, and smoke tests.

@@ -4,7 +4,7 @@ description: >-
   Web compliance audit: accessibility (WCAG 2.2 AA / EN 301 549), legal (GDPR, Consent Mode v2,
   privacy policy, cookies), SEO on-page/off-page/SEM/analytics. PASS/FAIL/N/A matrix, weighted
   scoring, web compliance verdict POSITIVE/NEGATIVE/PARTIAL and remediation plan RICE. Use when
-  auditing web compliance, dictating web compliance or remediation plan for SEO/accessibility/legal.
+  auditing web compliance, dictating web compliance or remediation plan for SEO/accessibility/legal. Not for performance audits (→ verify-performance) nor dependency scanning (→ verify-dependencias).
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
@@ -13,6 +13,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Verify Compliance
 
 ## Overview
@@ -71,3 +72,11 @@ auditing web compliance, dictating web compliance or remediation plan for SEO/ac
 - **Impact**: How much impact does non-compliance have?
 - **Confidence**: How confident are you in the fix?
 - **Effort**: How much effort does the remedy require?
+
+## Tools
+
+- `scripts/audit_page.py` — audit a page against the checks.
+- `scripts/contrast.py` — WCAG contrast verification.
+- `scripts/score.py` — weighted scoring.
+- `scripts/report.py` — report rendering.
+- `scripts/selftest.py` — toolchain self-test.

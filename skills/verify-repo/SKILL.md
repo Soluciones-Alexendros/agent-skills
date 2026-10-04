@@ -13,6 +13,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Verify Repo
 
 ## Overview
@@ -44,3 +45,10 @@ plan start or plan mode. Not for release close or publication (→ operate-relea
    - Automatic Renovate
 4. Apply necessary corrections
 5. Evolution plan identified
+
+## Tools
+
+- `scripts/scan_repo.py` — repository scan.
+- `scripts/audit-repo.sh` — repo audit.
+- `scripts/check-product-structure.sh` — product structure check.
+- `scripts/inicio_plan.py` — plan initialization.

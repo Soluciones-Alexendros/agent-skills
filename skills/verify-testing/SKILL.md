@@ -3,7 +3,7 @@ name: verify-testing
 description: >
   Testing verification and quality assurance. Use when planning, implementing, or verifying
   test strategies, test quality metrics, and test coverage goals. Use when the operator
-  requests test planning, test quality review, or test coverage analysis.
+  requests test planning, test quality review, or test coverage analysis. Not for production debugging (→ operate-salud-sistema) nor single test-case authorship (→ planning-test-driven-development).
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"

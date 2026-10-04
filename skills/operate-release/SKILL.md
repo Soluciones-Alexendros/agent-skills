@@ -13,6 +13,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Operate Release
 
 ## Overview
@@ -47,3 +48,7 @@ CI/CD audit
        ▼
 Husky+e2e+PR+merge-watch
 ```
+
+## Tools
+
+- `scripts/review-vs-plan.py` — contrast plan vs execution when closing work.

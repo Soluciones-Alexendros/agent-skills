@@ -3,7 +3,7 @@ name: build-typescript
 description: >-
   Advanced TypeScript typing: generics, conditional types, infer, branded types and typed API
   patterns. Use when there are complex types, difficult inference errors or typed API design.
-  Do not use for security review (→ verify-owasp) nor general architecture (→ design-architecture).
+  Do not use for security review (→ verify-owasp) nor general architecture (→ verify-architecture).
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
@@ -12,6 +12,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Build TypeScript
 
 ## Overview
@@ -29,7 +30,7 @@ nor general architecture.
 ## Not for:
 
 - Security review (→ verify-owasp)
-- General architecture (→ design-architecture)
+- General architecture (→ verify-architecture)
 
 ## Advanced Types
 

@@ -3,7 +3,7 @@ name: verify-owasp
 description: >-
   Code security review (OWASP): injection, XSS, authn/authz, cryptography, SSRF, secrets and
   misconfiguration. Use when performing security review, OWASP or searching for vulnerabilities
-  in this code.
+  in this code. Not for dependency CVEs (→ verify-dependencias) nor web compliance (→ verify-compliance).
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
@@ -12,6 +12,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Verify OWASP
 
 ## Overview

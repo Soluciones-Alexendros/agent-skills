@@ -3,7 +3,7 @@ name: verify-hooks
 description: >-
   Configure and run local git hooks (Husky, lint-staged, Prettier, typecheck, tests in pre-commit;
   e2e in pre-push if they exist). Use when the operator wants pre-commit hooks, husky, lint-staged
-  or the local gate of a work close.
+  or the local gate of a work close. Not for CI pipelines (→ operate-release) nor e2e test authorship.
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
@@ -12,6 +12,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Verify Hooks
 
 ## Overview
@@ -56,3 +57,7 @@ Work closure
 
 - If e2e config exists in pre-push, it runs
 - Useful for critical validations before merge
+
+## Tools
+
+- `scripts/gate-husky.sh` — local pre-commit/pre-push gate (Husky + lint-staged).

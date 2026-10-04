@@ -13,6 +13,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Operate Security
 
 ## Overview
@@ -35,12 +36,21 @@ security audit, host hardening or auth log review. Not for application code vuln
 
 ## Components
 
-| Component | Description |
-|-----------|-------------|
-| Posture | Security posture assessment |
-| CVEs | Vulnerability tracking |
-| sysctl | System parameter hardening |
-| SSH | SSH server hardening |
-| AppArmor/SELinux | Mandatory access control |
-| auditd | Audit daemon configuration |
-| fail2ban | Brute force protection |
+| Component        | Description                 |
+| ---------------- | --------------------------- |
+| Posture          | Security posture assessment |
+| CVEs             | Vulnerability tracking      |
+| sysctl           | System parameter hardening  |
+| SSH              | SSH server hardening        |
+| AppArmor/SELinux | Mandatory access control    |
+| auditd           | Audit daemon configuration  |
+| fail2ban         | Brute force protection      |
+
+## Tools
+
+- `scripts/postura_seguridad.sh` — defensive posture snapshot.
+- `scripts/forense_collector.py` — log forensics collection.
+- `scripts/vulns_check.py` — vulnerability check.
+- `scripts/harden_plan.py` — hardening plan.
+- `scripts/scan_orchestrator.py` — malware/rootkit scan orchestration.
+- `scripts/apparmor_lifecycle.py` — AppArmor profile lifecycle.

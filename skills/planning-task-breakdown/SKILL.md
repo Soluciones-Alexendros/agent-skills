@@ -1,10 +1,10 @@
 ---
-name: planning-planning-and-task-breakdown
+name: planning-task-breakdown
 description: >
   Decompose work into small, verifiable tasks with explicit acceptance criteria.
   Good task breakdown is the difference between an agent that completes work reliably
   and one that produces a tangled mess. Every task should be small enough to implement,
-  test, and verify in a single focused session.
+  test, and verify in a single focused session. Use when you have a spec to break into implementable units or when work must be parallelized. Not for single-file changes with obvious scope.
 license: MIT
 metadata:
   author: "addyosmani (adapted)"

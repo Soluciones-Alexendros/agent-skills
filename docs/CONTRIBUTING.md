@@ -1,34 +1,34 @@
-# Contribuir
+# Contributing
 
-## Añadir o modificar una skill
+## Adding or changing a skill
 
-1. La carpeta debe llamarse igual que el `name` del frontmatter (kebab-case).
-2. El frontmatter debe declarar `metadata.idioma: es` y `metadata.tipo: atomic|router|tecnologia` — toda skill se escribe en español.
-3. Cumplir [STANDARD.md](STANDARD.md): frontmatter completo (incluye `tipo`), cuerpo ≤ 500 líneas y ≤ 5000 tokens, taxonomía en [TAXONOMY.md](TAXONOMY.md), encabezados canónicos.
-4. Sin trailing whitespace — la CI lo rechaza.
-5. Registrar cambios en [CHANGELOG.md](../CHANGELOG.md).
-6. Pasar la validación local en verde antes de la PR:
+1. The directory must match the frontmatter `name` (kebab-case).
+2. Frontmatter must declare `metadata.language: en` and `metadata.type: atomic|orchestrator|router|audit` — every skill is written in English.
+3. Follow [STANDARD.md](STANDARD.md): complete frontmatter (including `type`), body ≤ 500 lines and ≤ 5000 tokens, taxonomy in [TAXONOMY.md](TAXONOMY.md), canonical headings.
+4. No trailing whitespace — CI rejects it.
+5. Record changes in [CHANGELOG.md](../CHANGELOG.md).
+6. Pass local validation green before the PR:
 
 ```bash
 pip install -r requirements-dev.txt
 bash run-validation.sh
 ```
 
-## Niveles de severidad (bump de `metadata.version`)
+## Severity levels (`metadata.version` bump)
 
-| Tipo    | Cuándo usar                                                                  | Ejemplo                                             |
-| ------- | ---------------------------------------------------------------------------- | --------------------------------------------------- |
-| `major` | Cambio incompatible: reestructura, elimina secciones o cambia comportamiento | Fusionar dos skills, cambiar formato de frontmatter |
-| `minor` | Nueva funcionalidad compatible: añade secciones, referencias o scripts       | Añadir `references/nueva-guia.md`                   |
-| `patch` | Fix compatible: typo, enlace roto, ajuste menor                              | Corregir URL, formatear tabla                       |
+| Type    | When to use                                                              | Example                                             |
+| ------- | ------------------------------------------------------------------------ | --------------------------------------------------- |
+| `major` | Incompatible change: restructures, removes sections, or changes behavior | Merging two skills, changing the frontmatter format |
+| `minor` | Compatible new functionality: adds sections, references, or scripts      | Adding `references/new-guide.md`                    |
+| `patch` | Compatible fix: typo, broken link, minor tweak                           | Fixing a URL, formatting a table                    |
 
-En español: `--type ruptura` (major), `--type desarrollo` (minor), `--type parche` (patch).
+Canonical: `--type major|minor|patch` (`bump.py` also accepts Spanish aliases).
 
-La versión del **repo** (`package.json`) se sube al publicar. Un cambio en `CHANGELOG.md` de sección publicada, en `.github/workflows/release.yml` o en `tools/version/cut_tag.py` exige que `package.json` quede por delante del último tag.
+The **repo** version (`package.json`) goes up on publish. A change to a released CHANGELOG.md section, `.github/workflows/release.yml`, or `tools/version/cut_tag.py` requires `package.json` to stay ahead of the last tag.
 
 ## Smoke tests
 
-Cada skill con ejecutables `.py` o `.sh` fuera de `tests/` incluye `scripts/tests/smoke_sh.sh`. Ese script ejecuta las herramientas con datos sintéticos y comprueba la salida. La CI lo lanza sola.
+Every skill with `.py` or `.sh` executables outside `tests/` ships `scripts/tests/smoke_sh.sh`. It runs the tools on synthetic data and checks the output. CI runs it alone.
 
 ```bash
 bash skills/<skill>/scripts/tests/smoke_sh.sh
@@ -36,15 +36,15 @@ bash skills/<skill>/scripts/tests/smoke_sh.sh
 
 ## PRs
 
-- Describir qué skill cambia y por qué; bump de `metadata.version` si cambian instrucciones (`python3 tools/version/bump.py --auto --type <major|minor|patch>`; la CI lo exige en `version.yml`).
-- La CI ejecuta `validate.yml` (spec, enlaces, coherencia, tests), `version.yml` (bump exigido) y `quality.yml` (higiene). Todos deben estar en verde.
-- No commitear residuos (`__pycache__/`, `.pytest_cache/`, `.log`, `.tmp`): están en `.gitignore` y la CI los rechaza si git los rastrea.
-- Usar la plantilla de PR: [`.github/pull_request_template.md`](../.github/pull_request_template.md).
+- Describe which skill changes and why; bump `metadata.version` when instructions change (`python3 tools/version/bump.py --auto --type <major|minor|patch>`; CI enforces it in `version.yml`).
+- CI runs `validate.yml` (spec, links, coherence, tests), `version.yml` (required bump), and `quality.yml` (hygiene). All must be green.
+- Do not commit residues (`__pycache__/`, `.pytest_cache/`, `.log`, `.tmp`): they are in `.gitignore` and CI rejects them when tracked by git.
+- Use the PR template: [`.github/pull_request_template.md`](../.github/pull_request_template.md).
 
 ## Issues
 
-Usar las plantillas de `.github/ISSUE_TEMPLATE/` (bug o propuesta de skill/mejora).
+Use the `.github/ISSUE_TEMPLATE/` templates (bug or skill proposal/improvement).
 
-## Planificación de tareas
+## Task planning
 
-Para proyectos multi-paso o tareas de investigación, mantener `task_plan.md`, `findings.md` y `progress.md` en disco.
+For multi-step projects or research tasks, keep `task_plan.md`, `findings.md`, and `progress.md` on disk.

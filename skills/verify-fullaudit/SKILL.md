@@ -4,7 +4,7 @@ description: >-
   Holistic web audit router: derives to verify-compliance (web compliance SEO/a11y/legal),
   verify-performance (CWV/rendering), verify-repo (health check repo) or build-interface
   (visual direction). Use when the operator requests a complete audit, holistic audit, 'review
-  everything' or full audit without focus.
+  everything' or full audit without focus. Not for executing the specialized audits themselves; it only routes to them.
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
@@ -13,6 +13,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Verify Fullaudit
 
 ## Overview

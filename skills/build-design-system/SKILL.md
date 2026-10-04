@@ -13,9 +13,10 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Web Design System (tokens + Tailwind + components)
 
-## Purpose
+## Overview
 
 Build or evolve a reusable design system: `DESIGN.md` as schema, DTCG tokens, Tailwind v4 configuration and component library.
 

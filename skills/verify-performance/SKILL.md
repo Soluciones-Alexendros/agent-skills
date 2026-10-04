@@ -4,7 +4,7 @@ description: >-
   Web performance audit: Core Web Vitals (LCP, INP, CLS), Lighthouse 12, TTFB/FCP, rendering
   (SSR/SSG/ISR/islands), caching HTTP/CDN, load optimization and technical frontend diagnosis.
   Use when performing performance audit, Lighthouse/CWV, load optimization, stability visual,
-  caching or technical frontend diagnosis.
+  caching or technical frontend diagnosis. Not for compliance audits (→ verify-compliance) nor backend load testing.
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
@@ -13,6 +13,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Verify Performance
 
 ## Overview
@@ -37,11 +38,11 @@ visual, caching or technical frontend diagnosis.
 
 ## Core Web Vitals
 
-| Metric | Meaning | Good Threshold |
-|--------|---------|--------------|
-| LCP | Largest Contentful Paint | < 2.5s |
-| INP | Interaction to Next Paint | < 200ms |
-| CLS | Cumulative Layout Shift | < 0.1 |
+| Metric | Meaning                   | Good Threshold |
+| ------ | ------------------------- | -------------- |
+| LCP    | Largest Contentful Paint  | < 2.5s         |
+| INP    | Interaction to Next Paint | < 200ms        |
+| CLS    | Cumulative Layout Shift   | < 0.1          |
 
 ## Lighthouse 12
 

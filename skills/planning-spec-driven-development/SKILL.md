@@ -1,7 +1,7 @@
 ---
 name: planning-spec-driven-development
 description: >
-  Write a structured specification before writing any code. The spec is the shared source of truth between you and the human engineer — it defines what we're building, why, and how we'll know it's done. Code without a spec is guessing.
+  Write a structured specification before writing any code. The spec is the shared source of truth between you and the human engineer — it defines what we're building, why, and how we'll know it's done. Code without a spec is guessing. Use when starting a new project or feature, when requirements are ambiguous, or when the change touches multiple modules. Not for single-line fixes or typo corrections.
 license: MIT
 metadata:
   author: "addyosmani (adapted)"

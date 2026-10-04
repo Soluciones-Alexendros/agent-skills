@@ -13,6 +13,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Build Proton Suite
 
 ## Overview
@@ -52,3 +53,7 @@ Obtain secrets
        ▼
 Send email
 ```
+
+## Tools
+
+- `scripts/proton_bridge.py` — Proton Mail Bridge IMAP/SMTP client.

@@ -3,7 +3,7 @@ name: planning-source-driven-development
 description: >
   Every implementation decision must be backed by official documentation.
   Use when you want to verify an approach against the official docs before implementing it,
-  or when you want authoritative, source-cited code free from outdated patterns.
+  or when you want authoritative, source-cited code free from outdated patterns. Not for trivial changes where correctness does not depend on a version (renaming variables, fixing typos).
   Use when building with any framework or library where correctness matters.
 license: MIT
 metadata:

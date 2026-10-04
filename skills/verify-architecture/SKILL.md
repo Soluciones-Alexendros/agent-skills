@@ -3,7 +3,7 @@ name: verify-architecture
 description: >
   Code architecture verification and analysis. Use when analyzing code structure,
   dependencies, architectural drift, or refactoring opportunities. Use when the
-  operator requests architectural analysis, dependency mapping, or code health assessment.
+  operator requests architectural analysis, dependency mapping, or code health assessment. Not for security code review (→ verify-owasp) nor minor implementation changes (→ verify-dependencias).
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"

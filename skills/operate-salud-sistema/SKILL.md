@@ -14,6 +14,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Operate System Health
 
 ## Overview
@@ -38,9 +39,19 @@ server onboarding. Not for execution cleanup (→ operate-mantenimiento) nor har
 
 ## Health Scoring
 
-| Score | Classification |
-|-------|---------------|
-| 90-100 | Excellent |
-| 70-89 | Good |
-| 50-69 | Fair |
-| 0-49 | Critical |
+| Score  | Classification |
+| ------ | -------------- |
+| 90-100 | Excellent      |
+| 70-89  | Good           |
+| 50-69  | Fair           |
+| 0-49   | Critical       |
+
+## Tools
+
+- `scripts/probe_system.py` — system probing.
+- `scripts/audit_quick.py` — quick audit.
+- `scripts/audit_full.py` — complete audit.
+- `scripts/check_deps.py` — dependency check.
+- `scripts/report_render.py` — report rendering.
+- `scripts/session_logger.py` — session logging.
+- `scripts/common.py` — shared helpers.

@@ -3,7 +3,7 @@ name: verify-dependencias
 description: >-
   Dependency audit (SCA/CVE): multi-language pipeline (npm/pip/cargo/go/maven/gradle/composer/gem)
   to detect vulnerabilities, malware, typosquatting, unused dependencies and outdated. Use when
-  performing dependency audit, SCA, CVE scanning, supply chain security or SBOM generation.
+  performing dependency audit, SCA, CVE scanning, supply chain security or SBOM generation. Not for code security review (→ verify-owasp) nor web compliance audits (→ verify-compliance).
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
@@ -12,6 +12,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Verify Dependencies
 
 ## Overview
@@ -36,8 +37,8 @@ performing dependency audit, SCA, CVE scanning, supply chain security or SBOM ge
 
 ## Supported Pipeline
 
-| Language | Dependency File |
-|----------|-----------------|
+| Language                                   | Dependency File                              |
+| ------------------------------------------ | -------------------------------------------- |
 | npm/pip/cargo/go/maven/gradle/composer/gem | package.json, requirements.txt, go.mod, etc. |
 
 ## What It Detects

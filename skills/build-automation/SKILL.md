@@ -4,7 +4,7 @@ description: >-
   Automation of build, test, and deployment pipelines. Use when setting up CI/CD,
   automating repetitive tasks, or configuring pipeline as code. Use when the operator
   requests pipeline creation, automation of release processes, or configuration of
-  build workflows across multiple environments.
+  build workflows across multiple environments. Not for visual design (→ build-interface) nor security review (→ verify-owasp).
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
@@ -13,6 +13,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Build Automation
 
 ## Overview
@@ -37,12 +38,12 @@ build workflows across multiple environments.
 
 ## Pipeline Types
 
-| Pipeline Type | Description |
-|---------------|-------------|
-| CI | Continuous integration: build, test on every commit |
-| CD | Continuous deployment: deploy to staging/production |
-| Multi-stage | Pipelines with multiple stages and environments |
-| Monorepo | Pipelines for monorepos with affected |
+| Pipeline Type | Description                                         |
+| ------------- | --------------------------------------------------- |
+| CI            | Continuous integration: build, test on every commit |
+| CD            | Continuous deployment: deploy to staging/production |
+| Multi-stage   | Pipelines with multiple stages and environments     |
+| Monorepo      | Pipelines for monorepos with affected               |
 
 ## Key Components
 

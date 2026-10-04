@@ -9,7 +9,7 @@ description: >-
   auditing a Linux system, routine review, cleaning packages/caches/logs, orphan pacman/AUR,
   boot or resource optimization, OS health-check, or periodic maintenance of Arch/EndeavourOS/
   CachyOS/Debian/RHEL. Includes guided interaction to select objective, mode and depth according
-  to context.
+  to context. Not for defensive security hardening or forensics (→ operate-seguridad).
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
@@ -18,6 +18,7 @@ metadata:
   type: atomic
   language: en
 ---
+
 # Operate Maintenance
 
 ## Overview
@@ -49,10 +50,20 @@ to context.
 
 ## Graduated Modes
 
-| Mode | Description |
-|------|-------------|
-| Quick audit | Quick system health check |
-| Complete audit | Full health check with all checks |
-| Routine | Scheduled routine maintenance |
-| Optimization | Resource and boot optimization |
-| Cleanup | Clean caches, logs and orphan packages |
+| Mode           | Description                            |
+| -------------- | -------------------------------------- |
+| Quick audit    | Quick system health check              |
+| Complete audit | Full health check with all checks      |
+| Routine        | Scheduled routine maintenance          |
+| Optimization   | Resource and boot optimization         |
+| Cleanup        | Clean caches, logs and orphan packages |
+
+## Tools
+
+- `scripts/check_deps.py` — dependency check.
+- `scripts/snapshot_state.py` — reversible state snapshot.
+- `scripts/risk_gate.py` — deterministic risk validation.
+- `scripts/clean_routine.py` — cleanup routine.
+- `scripts/report_render.py` — report rendering.
+- `scripts/session_logger.py` — session logging.
+- `scripts/common.py` — shared helpers.
