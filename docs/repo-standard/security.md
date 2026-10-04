@@ -43,7 +43,7 @@ Procedimiento completo en `operar-release/references/actions-security.md`; antes
 4. Si es tag anotado, resolver `git/tags/OBJECT_SHA` hasta el commit.
 5. Confirmar `gh api repos/OWNER/REPO/commits/COMMIT_SHA --jq .sha`.
 6. Escribir `uses: owner/repo@COMMIT # vX.Y.Z`.
-7. Mantener con Renovate (`github-actions`) o Dependabot `github-actions` en PRs revisables.
+7. Mantener con Renovate (`github-actions`) en PRs revisables.
 
 Los SHA de `operar-release/assets/` se verificaron el 2026-09-23: repetir el procedimiento antes de copiarlos. Si un paso falla, `[PENDIENTE]` y no reutilizar el pin.
 

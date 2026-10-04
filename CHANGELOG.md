@@ -6,6 +6,10 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [Unreleased]
 
+- `operate-release` 2.0.0 -> 2.0.1 (patch)
+
+  Sustituir Dependabot por Renovate
+
 ### Added
 
 - `operar-release` 2.2.0: modo G cierre de trabajo al finalizar un plan (`references/cierre-trabajo.md`): gate Husky, e2e Playwright, revisión contra el plan, PRs a `main`, merge-watch squash y limpieza.

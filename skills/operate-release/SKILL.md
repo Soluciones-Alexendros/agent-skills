@@ -8,7 +8,7 @@ description: >-
 license: MIT
 metadata:
   author: "Soluciones-Alexendros (adapted)"
-  version: "2.0.0"
+  version: "2.0.1"
   domain: operate
   type: atomic
   language: en

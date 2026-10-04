@@ -24,19 +24,19 @@ Todo job lleva `timeout-minutes` (partida: lint 10, unit 15, integración 30) y 
 
 Los repos de producto no duplican lógica de CI: llaman a los workflows reutilizables versionados en `operar-release/assets/workflows/reusable/`:
 
-| Reutilizable | Propósito | Entradas principales |
-|---|---|---|
-| `reusable-quality.yml` | `actionlint` + lint del stack | `stack: node\|python\|rust\|go`, `node-version` / `python-version` |
-| `reusable-test.yml` | tests unitarios con caché por lockfile | `stack`, `lockfile-hash` implícito en la clave de caché |
-| `reusable-smoke.yml` | health post-build | `smoke-command`, `artifact-name` |
-| `reusable-release.yml` | verificar tag+changelog+manifiesto y crear la Release | `tag`, notas extraídas solo de `CHANGELOG.md` |
+| Reutilizable           | Propósito                                             | Entradas principales                                               |
+| ---------------------- | ----------------------------------------------------- | ------------------------------------------------------------------ |
+| `reusable-quality.yml` | `actionlint` + lint del stack                         | `stack: node\|python\|rust\|go`, `node-version` / `python-version` |
+| `reusable-test.yml`    | tests unitarios con caché por lockfile                | `stack`, `lockfile-hash` implícito en la clave de caché            |
+| `reusable-smoke.yml`   | health post-build                                     | `smoke-command`, `artifact-name`                                   |
+| `reusable-release.yml` | verificar tag+changelog+manifiesto y crear la Release | `tag`, notas extraídas solo de `CHANGELOG.md`                      |
 
 Ejemplo de llamada (producto Node):
 
 ```yaml
 jobs:
   quality:
-    uses: <org>/repo-standard/.github/workflows/reusable-quality.yml@vX.Y.Z  # pin a SHA antes de commitear
+    uses: <org>/repo-standard/.github/workflows/reusable-quality.yml@vX.Y.Z # pin a SHA antes de commitear
     with:
       stack: node
   test:
@@ -54,10 +54,10 @@ Reglas:
 
 ## Composite actions (`operar-release/actions/`)
 
-| Action | Qué hace |
-|---|---|
-| `setup-node/` (`action.yml`) | `actions/setup-node` pineado + caché npm + lectura de `.nvmrc` |
-| `actionlint/` (`action.yml`) | Descarga el binario de la release fijada, verifica SHA-256 y ejecuta `actionlint -color` |
+| Action                        | Qué hace                                                                                     |
+| ----------------------------- | -------------------------------------------------------------------------------------------- |
+| `setup-node/` (`action.yml`)  | `actions/setup-node` pineado + caché npm + lectura de `.nvmrc`                               |
+| `actionlint/` (`action.yml`)  | Descarga el binario de la release fijada, verifica SHA-256 y ejecuta `actionlint -color`     |
 | `secret-scan/` (`action.yml`) | Ejecuta `gitleaks` con `fetch-depth: 0`, comentarios solo en `pull_request`, sin subir SARIF |
 
 Toda action compuesta fija sus `uses:` internos con SHA completo + comentario de versión, y se consume también pineada a SHA.
@@ -77,16 +77,16 @@ El agente no cambia rulesets ni protección de `main`: informa y deja el paso ma
 - Dependabot `version-updates` prohibido (eliminar el bloque en el mismo PR que añade Renovate). Dependabot Alerts de seguridad pueden quedar ON.
 - Base en `operar-release/references/dependabot-grouped.md`: schedule de madrugada `Europe/Madrid`, automerge `patch`+`minor`, minors agrupados con label `dependencies`, majors solo con revisión humana.
 - Prerrequisito humano: la GitHub App Renovate instalada en la org o habilitada en el repo; sin ella el JSON no genera PRs.
-- Pins de Actions (`package-ecosystem: github-actions` o Renovate `github-actions`) se actualizan en PRs revisables, manteniendo SHA completo + comentario de versión.
+- Pins de Actions (Renovate `github-actions`) se actualizan en PRs revisables, manteniendo SHA completo + comentario de versión.
 
 ## Stacks (los jobs se llaman igual; los comandos no)
 
-| Stack | Setup | Comprobación mínima |
-|---|---|---|
-| Node | `actions/setup-node` con `.nvmrc` o `node-version`, `cache: npm` | `npm ci` + scripts declarados (`lint`, `test`, `build`) |
-| Python | `actions/setup-python` | Instalar desde el lockfile (`uv.lock`, `poetry.lock`, `requirements.txt` pineado) |
-| Rust | toolchain fijada (`rust-toolchain.toml` o acción pineada) | `cargo test --locked` |
-| Go | `actions/setup-go` | `go test ./...` con `go.sum` presente |
+| Stack  | Setup                                                            | Comprobación mínima                                                               |
+| ------ | ---------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Node   | `actions/setup-node` con `.nvmrc` o `node-version`, `cache: npm` | `npm ci` + scripts declarados (`lint`, `test`, `build`)                           |
+| Python | `actions/setup-python`                                           | Instalar desde el lockfile (`uv.lock`, `poetry.lock`, `requirements.txt` pineado) |
+| Rust   | toolchain fijada (`rust-toolchain.toml` o acción pineada)        | `cargo test --locked`                                                             |
+| Go     | `actions/setup-go`                                               | `go test ./...` con `go.sum` presente                                             |
 
 Preferir la caché integrada del setup oficial a `actions/cache` manual. Si hace falta caché manual, la clave incluye el hash del lockfile. No cachear `~/.aws`, `~/.ssh` ni tokens.
 

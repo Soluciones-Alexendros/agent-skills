@@ -23,7 +23,7 @@ Hazlo para cada `uses:` de un tercero, y también para `actions/*` y `github/*` 
 
 Los workflows de `assets/workflows/` llevan SHA comprobados el 2026-09-23. Repite este procedimiento antes de copiarlos. Si un paso falla, marca `[PENDIENTE]` y no inventes el SHA.
 
-Mantén los pins con Dependabot (`package-ecosystem: github-actions`) o Renovate, en pull requests revisables. La política del repo o de la org puede exigir `sha_pinning_required`.
+Mantén los pins con Renovate (`github-actions`), en pull requests revisables. La política del repo o de la org puede exigir `sha_pinning_required`.
 
 Immutable releases evitan mover el tag y los assets de una release ya publicada. El pin a commit sigue siendo la referencia que el workflow debe usar. No hay, en la política nativa, un interruptor que obligue a consumir solo immutable releases; el control que sí existe es el de SHA completo.
 
