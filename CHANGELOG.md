@@ -22,6 +22,12 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 - `verificar-repo` Fase 8 distingue publicación (B/F) y cierre de trabajo (G).
 - `operar-release` merge-watch: `/pr-babysit --ship`, Vercel Hobby no requerido, `--delete-branch`.
 
+## [3.0.2] - 2026-10-05
+
+### Changed
+
+- Bump del grupo de GitHub Actions (Dependabot #7): actualización de los SHA fijados en `.github/workflows/*`.
+
 ## [3.0.1] - 2026-10-05
 
 ### Changed
@@ -119,7 +125,8 @@ Primera publicación pública del repo `Soluciones-Alexendros/agent-skills` (21 
 - Estructura `skills/<nombre>/` con frontmatter normalizado (`license: MIT`, `metadata` con autor, versión, dominio e idioma).
 - Validadores `tools/validate/` (spec + enlaces), CI en `.github/workflows/` y `run-validation.sh` agregado.
 
-[Unreleased]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v3.0.1...HEAD
+[Unreleased]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v3.0.2...HEAD
+[3.0.2]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v2.2.0...v3.0.0
 [2.2.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v2.0.0...v2.2.0
