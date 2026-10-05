@@ -3,14 +3,8 @@
   "instructions": ["AGENTS.md", "docs/opencode-setup.md", "docs/routing.md"],
   "skillDirectories": ["./skills", "./.opencode/skills", "./.agents/skills"],
   "tools": {
-    "skill": {
-      "enabled": true
-    },
-    "bash": {
-      "enabled": true
-    },
-    "read": {
-      "enabled": true
-    }
+    "skill": true,
+    "bash": true,
+    "read": true
   }
 }
