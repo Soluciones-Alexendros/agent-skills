@@ -22,18 +22,18 @@ SKILLS = ROOT / "skills"
 
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
-SKILL_TOKEN_RE = re.compile(r"\b((?:disenar|construir|verificar|operar)-[a-z0-9-]+)\b")
-ARROW_RE = re.compile(r"→\s*`?((?:disenar|construir|verificar|operar)-[a-z0-9-]+)`?")
+SKILL_TOKEN_RE = re.compile(r"\b((?:build|design|operate|planning|verify)-[a-z0-9-]+)\b")
+ARROW_RE = re.compile(r"→\s*`?((?:build|design|operate|planning|verify)-[a-z0-9-]+)`?")
 H2_RE = re.compile(r"^## (.+?)\s*$", re.M)
 PROHIBITED_DIRS = {"agents", "infrastructure", "languages"}
-DOMINIOS = {"disenar", "construir", "verificar", "operar"}
-TIPOS = {"atomic", "router", "tecnologia"}
-REQUIRED_H2 = ("Propósito", "Cuándo usar", "Referencias")
+DOMINIOS = {"build", "design", "operate", "planning", "verify"}
+TIPOS = {"atomic", "orchestrator", "router", "audit"}
+REQUIRED_H2 = ("Overview", "When to Use")
 FORBIDDEN_H2 = {
-    "Qué hace / Propósito",
-    "Cuándo usarme / Triggering",
-    "Uso",
-    "Estructura",
+    "What it does / Purpose",
+    "When to use me / Triggering",
+    "Usage",
+    "Structure",
 }
 MAX_BODY_LINES = 500
 MAX_BODY_TOKENS = 5000
@@ -142,10 +142,10 @@ def check_catalog(root: Path, names: set[str]) -> None:
 def check_description(skill: str, desc: str, names: set[str]) -> None:
     if not (1 <= len(desc) <= 1024):
         err(skill, f"description len={len(desc)} (1-1024)")
-    if "Usar cuando" not in desc:
-        err(skill, "description sin 'Usar cuando'")
-    if "No usar para" not in desc:
-        err(skill, "description sin 'No usar para'")
+    if "Use when" not in desc:
+        err(skill, "description without 'Use when'")
+    if "Not for" not in desc and "Do not use" not in desc:
+        err(skill, "description without exclusion clause ('Not for'/'Do not use')")
     for target in ARROW_RE.findall(desc):
         if target not in names:
             err(skill, f"description apunta a skill inexistente: {target}")
@@ -156,8 +156,8 @@ def check_headings(skill: str, body: str, needs_tools: bool) -> None:
     for required in REQUIRED_H2:
         if required not in headings:
             err(skill, f"falta H2 '{required}'")
-    if needs_tools and "Herramientas" not in headings:
-        err(skill, "falta H2 'Herramientas' (hay ejecutables)")
+    if needs_tools and "Tools" not in headings:
+        err(skill, "missing H2 'Tools' (has executables)")
     for heading in headings:
         if heading in FORBIDDEN_H2 or heading.startswith("Perfil de Este Equipo"):
             err(skill, f"H2 prohibido: {heading}")
@@ -247,29 +247,29 @@ def check_skill(root: Path, sdir: Path, names: set[str]) -> None:
         return
 
     required_meta = {
-        "author": "Soluciones-Alexendros",
+        "author": None,
         "version": None,
-        "dominio": None,
-        "tipo": None,
-        "idioma": "es",
+        "domain": None,
+        "type": None,
+        "language": "en",
     }
     for key, expected in required_meta.items():
         if key not in meta:
             err(skill, f"metadata sin '{key}'")
         elif expected is not None and meta[key] != expected:
-            err(skill, f"metadata.{key}='{meta[key]}' esperado '{expected}'")
+            err(skill, f"metadata.{key}='{meta[key]}' expected '{expected}'")
 
     ver = meta.get("version", "")
     if ver and not SEMVER_RE.match(str(ver)):
         err(skill, f"version no semver X.Y.Z: '{ver}'")
 
-    dom = meta.get("dominio", "")
+    dom = meta.get("domain", "")
     if dom and dom not in DOMINIOS:
-        err(skill, f"dominio desconocido: {dom}")
+        err(skill, f"unknown domain: {dom}")
 
-    tipo = meta.get("tipo", "")
+    tipo = meta.get("type", "")
     if tipo and tipo not in TIPOS:
-        err(skill, f"tipo desconocido: {tipo} (debe ser uno de: {', '.join(sorted(TIPOS))})")
+        err(skill, f"unknown type: {tipo} (must be one of: {', '.join(sorted(TIPOS))})")
 
     body = text.split("\n---", 1)[-1]
     body_lines = len(body.splitlines())

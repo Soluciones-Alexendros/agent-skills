@@ -1,73 +1,73 @@
-# Uso de las skills
+# Using the skills
 
-## Claude Code
+## Generic harness (vendor-neutral)
 
-Copiar o enlazar la carpeta de la skill al directorio de skills del usuario o del proyecto:
+Copy or link the skill folder into the user or project skills directory:
 
 ```bash
-# global
-cp -r skills/verificar-owasp ~/.claude/skills/
-# o por proyecto
-cp -r skills/verificar-owasp /ruta/proyecto/.claude/skills/
+# global (example)
+cp -r skills/verify-owasp ~/.agents/skills/
+# or per project
+cp -r skills/verify-owasp /path/project/.agents/skills/
 ```
 
-Claude Code descubre el `SKILL.md` por su frontmatter (`name` + `description`).
+Compatible harnesses discover `SKILL.md` through its frontmatter (`name` + `description`).
 
-## OpenAI Codex / agentes compatibles
+## OpenAI Codex / compatible agents
 
-Copiar la carpeta a la ubicación que el agente use para skills (consultar su documentación; el formato `SKILL.md` + frontmatter es el estándar abierto de [agentskills.io](https://agentskills.io)).
+Copy the folder to wherever the agent reads skills from (check its docs; `SKILL.md` + frontmatter is the open standard from [agentskills.io](https://agentskills.io)).
 
-## Uso manual
+## Manual use
 
-Cada `SKILL.md` es autocontenido y legible: sus `references/` amplían por niveles y sus `scripts/` automatizan lo repetible (ver sección de herramientas de cada skill).
+Each `SKILL.md` is self-contained and readable: its `references/` expand by levels and its `scripts/` automate the repeatable parts (see each skill's tools section).
 
-## Elegir skill
+## Choosing a skill
 
-- Por familia: ver tabla en [README](../README.md) y [TAXONOMY.md](TAXONOMY.md).
-- Los `description` declaran límites explícitos (`No usar para X → otra-skill`); ante solape, seguir esa indicación.
+- By family: see the table in [README](../README.md) and [TAXONOMY.md](TAXONOMY.md).
+- `description` fields declare explicit limits (`Not for X → other-skill`); on overlap, follow that pointer.
 
-## Versionado
+## Versioning
 
-Cada skill declara `metadata.version` en su frontmatter. Al modificar instrucciones, bump según la magnitud:
+Each skill declares `metadata.version` in its frontmatter. When changing instructions, bump by magnitude:
 
 ```bash
 python3 tools/version/bump.py --auto --type <major|minor|patch>
 ```
 
-- `major`: actualización incompatible (breaking)
-- `minor`: desarrollo menor, nueva funcionalidad compatible
-- `patch`: parcheado, fix compatible
+- `major`: incompatible update (breaking)
+- `minor`: compatible new functionality
+- `patch`: compatible fix
 
-La CI (`version.yml`) exige el bump en PRs con skills cambiadas. Para verificar localmente:
+CI (`version.yml`) requires the bump on PRs with changed skills. To check locally:
 
 ```bash
 python3 tools/version/bump.py --check --auto --base origin/main
 ```
 
-La versión del repositorio vive en `package.json`. El tag anotado y la GitHub Release los corta `tools/version/cut_tag.py` desde `main` cuando hay sección de changelog con notas:
+The repo version lives in `package.json`. The annotated tag and GitHub Release are cut by `tools/version/cut_tag.py` from `main` when a changelog section has notes:
 
 ```bash
 python3 tools/version/cut_tag.py --dry-run
 ```
 
-## Estructura de references/ (carga progresiva)
+## references/ structure (progressive loading)
 
-Cada skill sigue el patrón de carga progresiva:
+Each skill follows the progressive loading pattern:
 
-1. `SKILL.md` — arranque autocontenido con el 80% de los casos resueltos.
-2. `references/` — guías detalladas por tema, se cargan solo cuando el caso lo requiere.
-3. `scripts/` — utilidades automatizadas (no se cargan en contexto, se ejecutan).
+1. `SKILL.md` — self-contained start covering 80% of cases.
+2. `references/` — detailed guides per topic, loaded only when the case needs them.
+3. `scripts/` — automation utilities (never loaded into context, executed instead).
 
-`construir-upstash` añade `core/` y `modes/<modo>/` como recursos internos del router; no son skills separadas.
+`build-upstash` adds `core/` and `modes/<mode>/` as internal router resources; they are not separate skills.
 
-Esto mantiene el contexto del agente ligero: solo se lee lo necesario para la tarea.
+This keeps agent context light: only what the task needs gets read.
 
-## Validación
+## Validation
 
-Toda skill debe pasar la validación del repo en verde:
+Every skill must pass repo validation green:
 
 ```bash
 bash run-validation.sh
 ```
 
-Ejecuta: spec (`skill_spec.py`), enlaces (`skill_links.py`), coherencia de release, higiene, bump de versión, pytest, smoke tests y `bash -n` global. Ver [CONTRIBUTING.md](CONTRIBUTING.md) para el proceso de contribución.
+Runs: spec (`skill_spec.py`), links (`skill_links.py`), release coherence, hygiene, version bump, pytest, smoke tests, and global `bash -n`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution process.

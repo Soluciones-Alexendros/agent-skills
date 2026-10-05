@@ -1,0 +1,81 @@
+# Intent map for deterministic routing — OpenCode harness
+# Used by route.py and .opencode/agents/skill-router.md
+intents:
+  mantenimiento:
+    skills: [operate-maintenance, operate-health]
+    patterns:
+      [
+        "mantenimiento",
+        "limpia",
+        "limpiar",
+        "limpieza",
+        "sistema arch",
+        "optimiza",
+        "paccache",
+        "journal vacuum",
+        "huérfanos",
+        "cribar filesystem",
+      ]
+  salud_sistema:
+    skills: [operate-health]
+    patterns:
+      ["salud del sistema", "health check sistema", "fingerprint", "audit-full"]
+  seguridad_host:
+    skills: [operate-security]
+    patterns:
+      [
+        "hardening",
+        "firewall",
+        "apparmor",
+        "auditd",
+        "seguridad host",
+        "forense",
+      ]
+  ciclo_vida:
+    skills: [operate-lifecycle]
+    patterns:
+      [
+        "por donde empiezo",
+        "ciclo de vida",
+        "qué hago con este repo",
+        "audítalo y publícalo",
+      ]
+  release:
+    skills: [operate-release]
+    patterns:
+      [
+        "prepara release",
+        "publica version",
+        "changelog",
+        "semver",
+        "cierra repo",
+      ]
+  arquitectura:
+    skills: [verify-architecture, verify-repo]
+    patterns:
+      [
+        "revisa la arquitectura",
+        "acoplamiento",
+        "deepening",
+        "mapa de módulos",
+        "C4",
+      ]
+  compliance:
+    skills: [verify-compliance]
+    patterns: ["wcag", "gdpr", "seo", "accesibilidad", "compliance"]
+  performance:
+    skills: [verify-performance]
+    patterns: ["lighthouse", "core web vitals", "ttfb", "performance"]
+  owasp:
+    skills: [verify-owasp]
+    patterns: ["owasp", "xss", "sqli", "inyección", "vulnerabilidad código"]
+  repo_audit:
+    skills: [verify-repo]
+    patterns:
+      ["audita repo", "repo standard", "pon al día proyecto", "estructura repo"]
+  hooks:
+    skills: [verify-hooks]
+    patterns: ["husky", "lint-staged", "pre-commit", "hooks locales"]
+  upstash:
+    skills: [build-upstash]
+    patterns: ["upstash", "redis", "qstash", "vector", "ratelimit"]

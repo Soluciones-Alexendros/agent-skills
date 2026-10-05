@@ -1,4 +1,4 @@
-"""Tests de tools/validate/skill_spec.py."""
+"""Tests for tools/validate/skill_spec.py."""
 import importlib.util
 from pathlib import Path
 
@@ -17,8 +17,8 @@ def write_skill(root: Path, name: str, body: str, desc: str | None = None) -> No
     skill = root / "skills" / name
     skill.mkdir(parents=True)
     description = desc or (
-        f"Capacidad de {name}. Usar cuando el operador lo pida. "
-        "No usar para otra familia."
+        f"{name} capability. Use when the operator asks for it. "
+        "Not for other families."
     )
     (skill / "SKILL.md").write_text(
         f"""---
@@ -29,9 +29,9 @@ license: MIT
 metadata:
   author: Soluciones-Alexendros
   version: "1.0.0"
-  dominio: {name.split("-", 1)[0]}
-  tipo: atomic
-  idioma: es
+  domain: {name.split("-", 1)[0]}
+  type: atomic
+  language: en
 ---
 
 # {name}
@@ -43,7 +43,7 @@ metadata:
 
 
 def seed_catalog(root: Path, names: list[str]) -> None:
-    rows = "\n".join(f"| `disenar` | {n} | x |" for n in names)
+    rows = "\n".join(f"| `build` | {n} | x |" for n in names)
     (root / "README.md").write_text(
         f"| Familia | Skill | Qué hace |\n| --- | --- | --- |\n{rows}\n",
         encoding="utf-8",
@@ -71,23 +71,23 @@ def run_root(root: Path) -> list[str]:
 def test_description_without_boundary(tmp_path):
     write_skill(
         tmp_path,
-        "disenar-demo",
-        "## Propósito\n\nX.\n\n## Cuándo usar\n\nY.\n\n## Referencias\n\nZ.\n",
-        desc="Hace algo. Usar cuando pidas diseño.",
+        "build-demo",
+        "## Overview\n\nX.\n\n## When to Use\n\nY.\n\n## References\n\nZ.\n",
+        desc="Does something. Use when you ask for design.",
     )
-    seed_catalog(tmp_path, ["disenar-demo"])
+    seed_catalog(tmp_path, ["build-demo"])
     errors = run_root(tmp_path)
-    assert any("No usar para" in e for e in errors)
+    assert any("exclusion" in e for e in errors)
 
 
 def test_arrow_to_missing_skill(tmp_path):
     write_skill(
         tmp_path,
-        "disenar-demo",
-        "## Propósito\n\nX.\n\n## Cuándo usar\n\nY.\n\n## Referencias\n\nZ.\n",
-        desc="Hace algo. Usar cuando pidas diseño. No usar para seguridad (→ verificar-owasp).",
+        "build-demo",
+        "## Overview\n\nX.\n\n## When to Use\n\nY.\n\n## References\n\nZ.\n",
+        desc="Does something. Use when you ask for design. Not for security (→ verify-owasp).",
     )
-    seed_catalog(tmp_path, ["disenar-demo"])
+    seed_catalog(tmp_path, ["build-demo"])
     errors = run_root(tmp_path)
     assert any("inexistente" in e for e in errors)
 
@@ -95,11 +95,11 @@ def test_arrow_to_missing_skill(tmp_path):
 def test_host_profile_heading(tmp_path):
     write_skill(
         tmp_path,
-        "operar-demo",
-        "## Propósito\n\nX.\n\n## Cuándo usar\n\nY.\n\n"
-        "## Perfil de Este Equipo\n\nhost.\n\n## Referencias\n\nZ.\n",
+        "operate-demo",
+        "## Overview\n\nX.\n\n## When to Use\n\nY.\n\n"
+        "## Perfil de Este Equipo\n\nhost.\n\n## References\n\nZ.\n",
     )
-    seed_catalog(tmp_path, ["operar-demo"])
+    seed_catalog(tmp_path, ["operate-demo"])
     errors = run_root(tmp_path)
     assert any("H2 prohibido" in e for e in errors)
 
@@ -107,10 +107,10 @@ def test_host_profile_heading(tmp_path):
 def test_catalog_mismatch(tmp_path):
     write_skill(
         tmp_path,
-        "disenar-demo",
-        "## Propósito\n\nX.\n\n## Cuándo usar\n\nY.\n\n## Referencias\n\nZ.\n",
+        "build-demo",
+        "## Overview\n\nX.\n\n## When to Use\n\nY.\n\n## References\n\nZ.\n",
     )
-    seed_catalog(tmp_path, ["disenar-demo", "verificar-ghost"])
+    seed_catalog(tmp_path, ["build-demo", "verify-ghost"])
     errors = run_root(tmp_path)
     assert any("README vs carpetas" in e or "TAXONOMY vs carpetas" in e for e in errors)
 
@@ -118,12 +118,12 @@ def test_catalog_mismatch(tmp_path):
 def test_smoke_required_when_scripts(tmp_path):
     write_skill(
         tmp_path,
-        "operar-demo",
-        "## Propósito\n\nX.\n\n## Cuándo usar\n\nY.\n\n## Herramientas\n\ncli.\n\n## Referencias\n\nZ.\n",
+        "operate-demo",
+        "## Overview\n\nX.\n\n## When to Use\n\nY.\n\n## Tools\n\ncli.\n\n## References\n\nZ.\n",
     )
-    scripts = tmp_path / "skills" / "operar-demo" / "scripts"
+    scripts = tmp_path / "skills" / "operate-demo" / "scripts"
     scripts.mkdir()
     (scripts / "run.py").write_text("print(1)\n", encoding="utf-8")
-    seed_catalog(tmp_path, ["operar-demo"])
+    seed_catalog(tmp_path, ["operate-demo"])
     errors = run_root(tmp_path)
     assert any("smoke_sh.sh" in e for e in errors)

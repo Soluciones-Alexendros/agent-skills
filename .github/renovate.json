@@ -1,0 +1,22 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Europe/Madrid",
+  "schedule": ["before 4am on monday"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchManagers": ["npm", "github-actions"],
+      "groupName": "minor + patch (CI verde)",
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "groupName": "major (revisión humana)",
+      "automerge": false
+    }
+  ],
+  "lockFileMaintenance": { "enabled": true },
+  "github-actions": { "pinDigests": true }
+}
