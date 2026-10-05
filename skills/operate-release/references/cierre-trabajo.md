@@ -24,15 +24,15 @@ Sigue exigiendo sí aparte: tag anotado, `gh release create`, borrar el reposito
 - Plan localizable: design doc de `/execute-plan`, o `task_plan.md` / `.planning/<id>/task_plan.md` con fases `complete`.
 - Árbol de trabajo: commits del plan en ramas de feature, no en `main`.
 
-Si falta health check y el repo es desconocido: derivar a `verificar-repo` Fase 8 y volver.
+Si falta health check y el repo es desconocido: derivar a `verify-repo` Fase 8 y volver.
 
 ## Secuencia
 
 Ejecutar en orden. Un paso en rojo detiene el siguiente hasta corregir.
 
-### 1. Gate Husky (`verificar-hooks`)
+### 1. Gate Husky (`verify-hooks`)
 
-Cargar `verificar-hooks`. Si no hay `.husky/pre-commit`, configurarlo (modo instalar). Luego **modo gate**: correr el hook sobre el o los heads del plan, no solo dejarlo instalado.
+Cargar `verify-hooks`. Si no hay `.husky/pre-commit`, configurarlo (modo instalar). Luego **modo gate**: correr el hook sobre el o los heads del plan, no solo dejarlo instalado.
 
 Esperado: lint-staged, typecheck y tests unitarios en verde. Error: corregir en la rama del PR, repetir el gate. Recovery: si `package.json` no declara `typecheck` o `test`, omitir esa línea y anotarlo.
 
@@ -42,7 +42,7 @@ Si el repo tiene UI o scripts `e2e` / `test:e2e` / `playwright`: cargar `webapp-
 
 Precondition: servidor de desarrollo o preview del propio repo. Action: Chromium headless, aserciones del flujo, fallo con mensaje claro. Expected: 0 fallos. Error: última tanda de correcciones (paso 3) y repetir. Recovery: sin UI y sin script e2e → `N/A` y seguir.
 
-El e2e del cierre vive aquí. El pre-commit de Husky sigue siendo rápido (lint + tipos + unit). Si existe script e2e, `verificar-hooks` puede dejarlo en `pre-push`.
+El e2e del cierre vive aquí. El pre-commit de Husky sigue siendo rápido (lint + tipos + unit). Si existe script e2e, `verify-hooks` puede dejarlo en `pre-push`.
 
 ### 3. Revisión crítica contra el plan
 

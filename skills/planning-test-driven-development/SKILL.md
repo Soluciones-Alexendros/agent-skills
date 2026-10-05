@@ -1,17 +1,19 @@
 ---
 name: planning-test-driven-development
-description: >
-  Drive development with tests using the red-green-refactor loop.
-  Use when implementing any logic, fixing any bug, or changing any behavior.
-  Use when you need to prove that code works, when a bug report arrives,
-  or when you're about to modify existing functionality. Not for pure configuration changes, documentation updates, or static content.
+description:
+  "Drive development with tests using the red-green-refactor loop. Use when implementing any logic, fixing any bug, or changing any behavior. Use when you need to prove that code works, when a bug report arrives, or when you're about to modify existing functionality. Not for pure configuration changes, documentation updates, or static content.
+
+  "
 license: MIT
 metadata:
-  author: "addyosmani (adapted)"
-  version: "1.0.0"
+  author: addyosmani (adapted)
+  version: 3.0.0
   domain: planning
   type: atomic
   language: en
+  keywords: planning-test-driven-development
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Test-Driven Development
@@ -25,359 +27,93 @@ Tests are proof — "seems right" is not done.
 ## When to Use
 
 - Implementing any new logic or behavior
-- Fixing any bug (the Prove-It Pattern)
-- Modifying existing functionality
-- Adding edge case handling
+- Fixing any bug (the Prove-It pattern)
+- Modifying existing functionality or adding edge case handling
 - Any change that could break existing behavior
 
-**When NOT to use:** Pure configuration changes, documentation updates, or static content changes.
+When NOT to use: pure configuration changes, documentation updates, or
+static content changes.
 
-## Discover the Stack First
+## Process
 
-The TDD cycle is universal; the commands are not. Before writing the first test, discover how _this_ repository tests:
+### 1. Discover the stack
 
-- Language and build system — `package.json`, `pom.xml`/`build.gradle`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `Gemfile`, a `Makefile`
-- **Checked-in wrappers** — prefer `./gradlew`, `./mvnw`, `make test`, or a repo script over globally installed tools
-- **Test framework and configuration** — and how it runs a single focused test vs the full suite
-- **Existing conventions** — where tests live, how files are named, what patterns neighboring tests follow
-- **Documented commands** — README, CONTRIBUTING, and CI workflows show the commands that actually gate merges
+The TDD cycle is universal; the commands are not. Before the first test,
+learn how this repository tests: the language and build file (`package.json`,
+`pom.xml`/`build.gradle`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `Gemfile`,
+`Makefile`), checked-in wrappers (`./gradlew`, `./mvnw`, `make test`), the test
+framework and its focused-test vs full-suite commands, test locations and
+naming conventions, and documented commands in README, CONTRIBUTING, and CI
+workflows. Never assume a default like `npm test`.
 
-Run the repository's focused-test command during the loop and its full-suite command before completion. Never assume a default like `npm test` — a Gradle, Cargo, or pytest project has its own equivalent.
+### 2. RED — write a failing test
 
-## The TDD Cycle
+Write the test first. It must fail. A test that passes immediately proves
+nothing — run it and confirm the failure.
+
+### 3. GREEN — make it pass
+
+Write the minimum code to make the test pass. Do not over-engineer.
+
+### 4. REFACTOR — clean up
+
+With tests green, improve naming, extract shared logic, and remove duplication
+without changing behavior. Run tests after every refactor step.
+
+### 5. Prove-It pattern for bug fixes
+
+Do not start by fixing. Write a reproduction test first, confirm it fails
+(bug confirmed), implement the fix, confirm it passes, then run the full
+suite to check for regressions.
+
+## Tools
+
+- Run the focused-test command during the loop; run the full-suite command
+  before finishing.
+- For code that runs in a browser, add runtime verification with Chrome
+  DevTools MCP: DOM inspection, console logs, network requests, performance
+  traces, and screenshots.
+- For complex bugs, spawn a subagent to write the reproduction test without
+  knowledge of the fix, then verify it fails before implementing the fix.
+
+## References
+
+- skills/planning-test-driven-development/references/test-pyramid-and-sizes.md — pyramid, test sizes, decision guide.
+- skills/planning-test-driven-development/references/writing-good-tests.md — state-based tests, DAMP, doubles, AAA, naming, anti-patterns.
+- skills/planning-test-driven-development/references/rationalizations-and-flags.md — rationalizations, red flags, verification checklist.
+- For JavaScript/TypeScript patterns (Jest, React Testing Library, Supertest, Playwright), see references. The principles transfer; the syntax there is JS/TS-specific.
+
+## Examples
+
+TDD cycle:
 
 ```text
-    RED                GREEN              REFACTOR
- Write a test    Write minimal code    Clean up the
- that fails  ──→  to make it pass  ──→  implementation  ──→  (repeat)
-       │                  │                    │
-       ▼                  ▼                    ▼
-   Test FAILS        Test PASSES         Tests still PASS
-```
+// RED: fails because createTask does not exist yet
+const task = await taskService.createTask({ title: 'Buy groceries' });
+expect(task.status).toBe('pending');
 
-### Step 1: RED — Write a Failing Test
-
-Write the test first. It must fail. A test that passes immediately proves nothing.
-
-```text
-// RED: This test fails because createTask doesn't exist yet
-describe('TaskService', () => {
-  it('creates a task with title and default status', async () => {
-    const task = await taskService.createTask({ title: 'Buy groceries' });
-
-    expect(task.id).toBeDefined();
-    expect(task.title).toBe('Buy groceries');
-    expect(task.status).toBe('pending');
-    expect(task.createdAt).toBeInstanceOf(Date);
-  });
-});
-```
-
-### Step 2: GREEN — Make It Pass
-
-Write the minimum code to make the test pass. Don't over-engineer:
-
-```text
-// GREEN: Minimal implementation
-export async function createTask(input: { title: string }): Promise<Task> {
+// GREEN: minimal implementation
+export async function createTask(input) {
   const task = {
     id: generateId(),
     title: input.title,
-    status: 'pending' as const,
+    status: 'pending',
     createdAt: new Date(),
   };
   await db.tasks.insert(task);
   return task;
 }
+// REFACTOR: clean up with tests green; re-run after each step.
 ```
 
-### Step 3: REFACTOR — Clean Up
-
-With tests green, improve the code without changing behavior:
-
-- Extract shared logic
-- Improve naming
-- Remove duplication
-- Optimize if necessary
-
-Run tests after every refactor step to confirm nothing broke.
-
-## The Prove-It Pattern (Bug Fixes)
-
-When a bug is reported, **do not start by trying to fix it.** Start by writing a test that reproduces it.
+Bug fix (Prove-It):
 
 ```text
-Bug report arrives
-       │
-       ▼
-  Write a test that demonstrates the bug
-       │
-       ▼
-  Test FAILS (confirming the bug exists)
-       │
-       ▼
-  Implement the fix
-       │
-       ▼
-  Test PASSES (proving the fix works)
-       │
-       ▼
-  Run full test suite (no regressions)
-```
-
-**Example:**
-
-```text
-// Bug: "Completing a task doesn't update the completedAt timestamp"
-
-// Step 1: Write the reproduction test (it should FAIL)
+// 1. Reproduction test — must FAIL before the fix
 it('sets completedAt when task is completed', async () => {
   const task = await taskService.createTask({ title: 'Test' });
   const completed = await taskService.completeTask(task.id);
-
-  expect(completed.status).toBe('completed');
-  expect(completed.completedAt).toBeInstanceOf(Date);  // This fails → bug confirmed
+  expect(completed.completedAt).toBeInstanceOf(Date);
 });
-
-// Step 2: Fix the bug
-export async function completeTask(id: string): Promise<Task> {
-  return db.tasks.update(id, {
-    status: 'completed',
-    completedAt: new Date(),  // This was missing
-  });
-}
-
-// Step 3: Test passes → bug fixed, regression guarded
+// 2. Fix: set completedAt in completeTask. Test passes; run full suite.
 ```
-
-## The Test Pyramid
-
-```text
-        ╱╲
-       ╱  ╲         E2E Tests (~5%)
-      ╱    ╲        Full user flows, real browser
-     ╱──────╲
-    ╱        ╲      Integration Tests (~15%)
-   ╱          ╲     Component interactions, API boundaries
-  ╱────────────╲
- ╱              ╲   Unit Tests (~80%)
-╱                ╲  Pure logic, isolated, milliseconds each
-╱──────────────────╲
-```
-
-**The Beyonce Rule:** If you liked it, you should have put a test on it.
-
-### Test Sizes (Resource Model)
-
-| Size       | Constraints                                            | Speed        | Example                                                |
-| ---------- | ------------------------------------------------------ | ------------ | ------------------------------------------------------ |
-| **Small**  | Single process, no I/O, no network, no database        | Milliseconds | Pure function tests, data transforms                   |
-| **Medium** | Multi-process OK, localhost only, no external services | Seconds      | API tests with test DB, component tests                |
-| **Large**  | Multi-machine OK, external services allowed            | Minutes      | E2E tests, performance benchmarks, staging integration |
-
-Small tests should make up the vast majority of your suite.
-
-### Decision Guide
-
-```text
-Is it pure logic with no side effects?
-  → Unit test (small)
-
-Does it cross a boundary (API, database, file system)?
-  → Integration test (medium)
-
-Is it a critical user flow that must work end-to-end?
-  → E2E test (large) — limit these to critical paths
-```
-
-### Writing Good Tests
-
-**Test State, Not Interactions**
-
-Assert on the _outcome_ of an operation, not on which methods were called internally.
-
-```text
-// Good: Tests what the function does (state-based)
-it('returns tasks sorted by creation date, newest first', async () => {
-  const tasks = await listTasks({ sortBy: 'createdAt', sortOrder: 'desc' });
-  expect(tasks[0].createdAt.getTime())
-    .toBeGreaterThan(tasks[1].createdAt.getTime());
-});
-
-// Bad: Tests how the function works internally (interaction-based)
-it('calls db.query with ORDER BY created_at DESC', async () => {
-  await listTasks({ sortBy: 'createdAt', sortOrder: 'desc' });
-  expect(db.query).toHaveBeenCalledWith(
-    expect.stringContaining('ORDER BY created_at DESC')
-  );
-});
-```
-
-**DAMP Over DRY in Tests**
-
-In production code, DRY is usually right. In tests, **DAMP (Descriptive And Meaningful Phrases)** is better.
-
-```text
-// DAMP: Each test is self-contained and readable
-it('rejects tasks with empty titles', () => {
-  const input = { title: '', assignee: 'user-1' };
-  expect(() => createTask(input)).toThrow('Title is required');
-});
-
-it('trims whitespace from titles', () => {
-  const input = { title: '  Buy groceries  ', assignee: 'user-1' };
-  const task = createTask(input);
-  expect(task.title).toBe('Buy groceries');
-});
-
-// Over-DRY: Shared setup obscures what each test actually verifies
-// (Don't do this just to avoid repeating the input shape)
-```
-
-Duplication in tests is acceptable when it makes each test independently understandable.
-
-**Prefer Real Implementations Over Mocks**
-
-Use the simplest test double that gets the job done.
-
-```text
-Preference order (most to least preferred):
-1. Real implementation  → Highest confidence
-2. Fake               → In-memory version of a dependency
-3. Stub               → Returns canned data, no behavior
-4. Mock (interaction) → Verifies method calls — use sparingly
-```
-
-**Use mocks only when:** the real implementation is too slow, non-deterministic, or has side effects you can't control.
-
-**Use the Arrange-Act-Assert Pattern**
-
-```text
-it('marks overdue tasks when deadline has passed', () => {
-  // Arrange: Set up the test scenario
-  const task = createTask({
-    title: 'Test',
-    deadline: new Date('2025-01-01'),
-  });
-
-  // Act: Perform the action being tested
-  const result = checkOverdue(task, new Date('2025-01-02'));
-
-  // Assert: Verify the outcome
-  expect(result.isOverdue).toBe(true);
-});
-```
-
-**One Assertion Per Concept**
-
-```text
-// Good: Each test verifies one behavior
-it('rejects empty titles', () => { ... });
-it('trims whitespace from titles', () => { ... });
-it('enforces maximum title length', () => { ... });
-
-// Bad: Everything in one test
-it('validates titles correctly', () => {
-  expect(() => createTask({ title: '' })).toThrow();
-  expect(createTask({ title: '  hello  ' }).title).toBe('hello');
-  expect(() => createTask({ title: 'a'.repeat(256) })).toThrow();
-});
-```
-
-**Name Tests Descriptively**
-
-```text
-// Good: Reads like a specification
-describe('TaskService.completeTask', () => {
-  it('sets status to completed and records timestamp', ...);
-  it('throws NotFoundError for non-existent task', ...);
-  it('is idempotent — completing an already-completed task is a no-op', ...);
-  it('sends notification to task assignee', ...);
-});
-
-// Bad: Vague names
-describe('TaskService', () => {
-  it('works', ...);
-  it('handles errors', ...);
-  it('test 3', ...);
-});
-```
-
-### Test Anti-Patterns to Avoid
-
-| Anti-Pattern                          | Problem                                                    | Fix                                                                          |
-| ------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Testing implementation details        | Tests break when refactoring even if behavior is unchanged | Test inputs and outputs, not internal structure                              |
-| Flaky tests (timing, order-dependent) | Erode trust in the test suite                              | Use deterministic assertions, isolate test state                             |
-| Testing framework code                | Wastes time testing third-party behavior                   | Only test YOUR code                                                          |
-| Snapshot abuse                        | Large snapshots nobody reviews, break on any change        | Use snapshots sparingly and review every change                              |
-| No test isolation                     | Tests pass individually but fail together                  | Each test sets up and tears down its own state                               |
-| Mocking everything                    | Tests pass but production breaks                           | Prefer real implementations > fakes > stubs > mocks. Mock only at boundaries |
-
-### Browser Testing with DevTools
-
-For anything that runs in a browser, unit tests alone aren't enough — you need runtime verification. Use Chrome DevTools MCP to give your agent eyes into the browser: DOM inspection, console logs, network requests, performance traces, and screenshots.
-
-### When to Use Subagents for Testing
-
-For complex bug fixes, spawn a subagent to write the reproduction test:
-
-```text
-Main agent: "Spawn a subagent to write a test that reproduces this bug:
-[bug description]. The test should fail with the current code."
-
-Subagent: Writes the reproduction test
-
-Main agent: Verifies the test fails, then implements the fix,
-then verifies the test passes.
-```
-
-This separation ensures the test is written without knowledge of the fix, making it more robust.
-
-## Common Rationalizations
-
-| Rationalization                         | Reality                                                                               |
-| --------------------------------------- | ------------------------------------------------------------------------------------- |
-| "I'll write tests after the code works" | You won't. And tests written after the fact test implementation, not behavior.        |
-| "This is too simple to test"            | Simple code gets complicated. The test documents the expected behavior.               |
-| "Tests slow me down"                    | Tests slow you down now. They speed you up every time you change the code later.      |
-| "I tested it manually"                  | Manual testing doesn't persist. Tomorrow's change might break it with no way to know. |
-| "The code is self-explanatory"          | Tests ARE the specification. They document what the code should do, not what it does. |
-| "It's just a prototype"                 | Prototypes become production code. Tests from day one prevent the "test debt" crisis. |
-
-### Common Rationalizations (continued)
-
-| Rationalization                                                      | Reality                                                                                            |
-| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| "Let me run the tests again just to be extra sure"                   | After a clean test run, repeating the same command adds nothing unless the code has changed since. |
-| "All tests pass" but no tests were actually run                      | You must actually run the test command.                                                            |
-| "Run each test command after a change that could affect the result." | After a clean run, don't repeat the same command unless the code has changed since.                |
-
-## Red Flags
-
-- Writing code without any corresponding tests
-- Reaching for a default test command (`npm test`) without checking what this repository actually uses
-- Tests that pass on the first run (they may not be testing what you think)
-- "All tests pass" but no tests were actually run
-- Bug fixes without reproduction tests
-- Tests that test framework behavior instead of application behavior
-- Test names that don't describe the expected behavior
-- Skipping tests to make the suite pass
-- Running the same test command twice in a row without any intervening code change
-
-## Verification
-
-After completing any implementation:
-
-- Every new behavior has a corresponding test
-- The full suite passes, run with the repository's own test command
-- Bug fixes include a reproduction test that failed before the fix
-- Test names describe the behavior being verified
-- No tests were skipped or disabled
-- Coverage hasn't decreased (if tracked)
-
-**Note:** Run each test command after a change that could affect the result. After a clean run, don't repeat the same command unless the code has changed since — re-running on unchanged code adds no confidence.
-
-## See Also
-
-For JavaScript/TypeScript testing patterns illustrating these principles — Jest, React Testing Library, Supertest, Playwright — see references. The principles transfer to any ecosystem; the syntax and tools there are JS/TS-specific.

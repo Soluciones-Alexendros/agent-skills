@@ -1,6 +1,6 @@
 # Errores compartidos Upstash (ES)
 
-> Recurso interno de la skill `construir-upstash`. Estrategia común de reintentos y fallos para los 7 modos.
+> Recurso interno de la skill `build-upstash`. Estrategia común de reintentos y fallos para los 7 modos.
 
 ## Reglas generales
 
@@ -14,7 +14,10 @@
 ## Backoff recomendado
 
 ```typescript
-async function conReintentos<T>(fn: () => Promise<T>, intentos = 3): Promise<T> {
+async function conReintentos<T>(
+  fn: () => Promise<T>,
+  intentos = 3
+): Promise<T> {
   let espera = 250;
   for (let i = 1; ; i++) {
     try {
@@ -30,16 +33,16 @@ async function conReintentos<T>(fn: () => Promise<T>, intentos = 3): Promise<T> 
 
 ## Por servicio
 
-| Servicio | Error típico | Respuesta |
-|---|---|---|
-| Redis | `429` / timeout REST | backoff + pipeline (`../modes/redis/references/pipeline-optimization.md`) |
-| Redis réplicas | lectura obsoleta | solo lecturas tolerantes a eventualidad (`../modes/redis/references/redis-replicas.md`) |
-| QStash | firma inválida | verificar con `Receiver` (`../modes/queue/references/receiver.md`), no reintentar |
-| QStash | reintentos agotados | DLQ (`../modes/queue/references/dlq.md`), callbacks (`../modes/queue/references/callbacks.md`) |
-| Workflows | paso fallido | `context.run()` reanuda desde el último checkpoint (`../modes/queue/references/workflow-overview.md`) |
-| Ratelimit | `success=false` | responder `429` con `Retry-After`; listas de denegación (`../modes/ratelimit/references/traffic-protection.md`) |
-| Blob | subida interrumpida | multipart resume (`../modes/blob/references/blob.md`) |
-| Box | contenedor caído | snapshots y recreación (`../modes/box/references/box.md`) |
+| Servicio       | Error típico         | Respuesta                                                                                                       |
+| -------------- | -------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Redis          | `429` / timeout REST | backoff + pipeline (`../modes/redis/references/pipeline-optimization.md`)                                       |
+| Redis réplicas | lectura obsoleta     | solo lecturas tolerantes a eventualidad (`../modes/redis/references/redis-replicas.md`)                         |
+| QStash         | firma inválida       | verificar con `Receiver` (`../modes/queue/references/receiver.md`), no reintentar                               |
+| QStash         | reintentos agotados  | DLQ (`../modes/queue/references/dlq.md`), callbacks (`../modes/queue/references/callbacks.md`)                  |
+| Workflows      | paso fallido         | `context.run()` reanuda desde el último checkpoint (`../modes/queue/references/workflow-overview.md`)           |
+| Ratelimit      | `success=false`      | responder `429` con `Retry-After`; listas de denegación (`../modes/ratelimit/references/traffic-protection.md`) |
+| Blob           | subida interrumpida  | multipart resume (`../modes/blob/references/blob.md`)                                                           |
+| Box            | contenedor caído     | snapshots y recreación (`../modes/box/references/box.md`)                                                       |
 
 ## Límites y coste (ratelimit)
 

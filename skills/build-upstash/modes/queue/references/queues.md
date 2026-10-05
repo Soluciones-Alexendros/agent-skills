@@ -1,6 +1,6 @@
 # QStash — Message Queue, Cron & Scheduling
 
-> **Submódulo de `construir-upstash`** — Modo interno de `construir-upstash` (`modes/queue/MODE.md`)
+> **Submódulo de `build-upstash`** — Modo interno de `build-upstash` (`modes/queue/MODE.md`)
 
 ---
 

@@ -1,18 +1,18 @@
 ---
 name: operate-lifecycle
-description: >-
-  Orchestrates the work lifecycle: init-work (start of plan, repo starting), verify-hooks
-  (Husky) or operate-release (close, publication and close of work post-plan). Use when the
-  operator asks where to start, starts plan mode, or mixes audit, hooks, release or repo close.
-  Do not use for executing audits, hooks or publications (→ verify-repo, verify-hooks, operate-release).
+description: "Orchestrates the work lifecycle: init-work (start of plan, repo starting), verify-hooks (Husky) or operate-release (close, publication and close of work post-plan). Use when the operator asks where to start, starts plan mode, or mixes audit, hooks, release or repo close. Do not use for executing audits, hooks or publications (→ verify-repo, verify-hooks, operate-release)."
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.0.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: operate
   type: atomic
   language: en
+  keywords: operate-lifecycle
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
+
 # Operate Lifecycle
 
 ## Overview

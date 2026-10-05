@@ -75,9 +75,14 @@ function printHeader(text: string): void {
 }
 
 function printCheck(result: CheckResult): void {
-  const icon = result.status === "success" ? "✓" : result.status === "warning" ? "⚠" : "✗";
+  const icon =
+    result.status === "success" ? "✓" : result.status === "warning" ? "⚠" : "✗";
   const color =
-    result.status === "success" ? "green" : result.status === "warning" ? "yellow" : "red";
+    result.status === "success"
+      ? "green"
+      : result.status === "warning"
+        ? "yellow"
+        : "red";
   console.log(`${colorize(color, icon)} ${result.message}`);
 }
 
@@ -102,7 +107,8 @@ function checkEnvironmentVariable(name: string, required = false): CheckResult {
     };
   }
 
-  const maskedValue = value.length > 10 ? `${value.slice(0, 4)}...${value.slice(-4)}` : "***";
+  const maskedValue =
+    value.length > 10 ? `${value.slice(0, 4)}...${value.slice(-4)}` : "***";
   return {
     status: "success",
     message: `${name} = ${maskedValue}`,
@@ -122,10 +128,17 @@ function verifySetup(): VerificationResult {
 
   // Check mode
   if (mode === "multi-region" && primaryRegion) {
-    console.log(colorize("bright", `\nMode: `) + colorize("green", "Multi-Region"));
-    console.log(colorize("bright", `Primary Region: `) + colorize("green", primaryRegion));
+    console.log(
+      colorize("bright", `\nMode: `) + colorize("green", "Multi-Region")
+    );
+    console.log(
+      colorize("bright", `Primary Region: `) + colorize("green", primaryRegion)
+    );
   } else {
-    console.log(colorize("bright", `\nMode: `) + colorize("blue", "Single-Region (Default)"));
+    console.log(
+      colorize("bright", `\nMode: `) +
+        colorize("blue", "Single-Region (Default)")
+    );
     if (qstashRegion && !normalizedRegion) {
       checks.push({
         status: "error",
@@ -164,10 +177,14 @@ function verifySetup(): VerificationResult {
       });
 
       if (!regionUrl) {
-        checks.push(checkEnvironmentVariable(`${primaryRegion}_QSTASH_URL`, true));
+        checks.push(
+          checkEnvironmentVariable(`${primaryRegion}_QSTASH_URL`, true)
+        );
       }
       if (!regionToken) {
-        checks.push(checkEnvironmentVariable(`${primaryRegion}_QSTASH_TOKEN`, true));
+        checks.push(
+          checkEnvironmentVariable(`${primaryRegion}_QSTASH_TOKEN`, true)
+        );
       }
 
       // Still set fallback values for summary display
@@ -209,7 +226,10 @@ function verifySetup(): VerificationResult {
         },
         checkEnvironmentVariable("US_EAST_1_QSTASH_CURRENT_SIGNING_KEY", false),
         checkEnvironmentVariable("US_EAST_1_QSTASH_NEXT_SIGNING_KEY", false),
-        checkEnvironmentVariable("EU_CENTRAL_1_QSTASH_CURRENT_SIGNING_KEY", false),
+        checkEnvironmentVariable(
+          "EU_CENTRAL_1_QSTASH_CURRENT_SIGNING_KEY",
+          false
+        ),
         checkEnvironmentVariable("EU_CENTRAL_1_QSTASH_NEXT_SIGNING_KEY", false)
       );
 
@@ -226,7 +246,8 @@ function verifySetup(): VerificationResult {
         checkEnvironmentVariable("US_EAST_1_QSTASH_NEXT_SIGNING_KEY", false),
         {
           status: "warning",
-          message: "EU signing keys not configured - EU messages will attempt to use keys",
+          message:
+            "EU signing keys not configured - EU messages will attempt to use keys",
         }
       );
 
@@ -239,11 +260,15 @@ function verifySetup(): VerificationResult {
           status: "warning",
           message: "Only EU region signing keys configured",
         },
-        checkEnvironmentVariable("EU_CENTRAL_1_QSTASH_CURRENT_SIGNING_KEY", false),
+        checkEnvironmentVariable(
+          "EU_CENTRAL_1_QSTASH_CURRENT_SIGNING_KEY",
+          false
+        ),
         checkEnvironmentVariable("EU_CENTRAL_1_QSTASH_NEXT_SIGNING_KEY", false),
         {
           status: "warning",
-          message: "US signing keys not configured - US messages will attempt to use default keys",
+          message:
+            "US signing keys not configured - US messages will attempt to use default keys",
         }
       );
 
@@ -305,12 +330,18 @@ function verifySetup(): VerificationResult {
 function printSummary(result: VerificationResult): void {
   console.log(colorize("bright", "\nOutgoing Messages:"));
   console.log(`  URL: ${result.outgoingConfig.url ?? "not set"}`);
-  console.log(`  Token: ${result.outgoingConfig.token ? "✓ configured" : "✗ not set"}`);
+  console.log(
+    `  Token: ${result.outgoingConfig.token ? "✓ configured" : "✗ not set"}`
+  );
   console.log(`  Source: ${result.outgoingConfig.source}`);
 
   console.log(colorize("bright", "\nIncoming Messages:"));
-  console.log(`  Current Key: ${result.incomingConfig.currentKey ? "✓ configured" : "✗ not set"}`);
-  console.log(`  Next Key: ${result.incomingConfig.nextKey ? "✓ configured" : "✗ not set"}`);
+  console.log(
+    `  Current Key: ${result.incomingConfig.currentKey ? "✓ configured" : "✗ not set"}`
+  );
+  console.log(
+    `  Next Key: ${result.incomingConfig.nextKey ? "✓ configured" : "✗ not set"}`
+  );
   console.log(`  Source: ${result.incomingConfig.source}`);
 
   printHeader("Verification Results");
@@ -329,12 +360,18 @@ function printSummary(result: VerificationResult): void {
 
   if (errors.length > 0) {
     console.log(
-      colorize("red", "\n✗ Configuration has errors. Please fix them before using QStash.")
+      colorize(
+        "red",
+        "\n✗ Configuration has errors. Please fix them before using QStash."
+      )
     );
     process.exit(1);
   } else if (warnings.length > 0) {
     console.log(
-      colorize("yellow", "\n⚠ Configuration has warnings. Review them to ensure proper setup.")
+      colorize(
+        "yellow",
+        "\n⚠ Configuration has warnings. Review them to ensure proper setup."
+      )
     );
   } else {
     console.log(colorize("green", "\n✓ Configuration looks good!"));
@@ -346,7 +383,9 @@ function printSummary(result: VerificationResult): void {
 
     console.log("For optimal multi-region operation:");
     console.log("1. Configure region-specific signing keys for both US and EU");
-    console.log("2. Always pass the 'upstashRegion' parameter in receiver.verify()");
+    console.log(
+      "2. Always pass the 'upstashRegion' parameter in receiver.verify()"
+    );
     console.log("3. Monitor SDK warnings in your application logs");
     console.log("4. Test message delivery from both regions");
 
@@ -362,7 +401,9 @@ function printSummary(result: VerificationResult): void {
     printHeader("Recommendations");
 
     if (!result.incomingConfig.currentKey || !result.incomingConfig.nextKey) {
-      console.log("Consider adding signing keys for incoming message verification:");
+      console.log(
+        "Consider adding signing keys for incoming message verification:"
+      );
       console.log("  QSTASH_CURRENT_SIGNING_KEY=your_current_key");
       console.log("  QSTASH_NEXT_SIGNING_KEY=your_next_key");
       console.log("\nGet keys from: https://console.upstash.com/qstash");

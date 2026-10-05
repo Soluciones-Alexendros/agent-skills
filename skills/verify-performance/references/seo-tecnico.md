@@ -2,7 +2,7 @@
 
 Fuente migrada de `web-audit` (Etapa 3 + plantilla de estado). Cubre la parte técnica
 del SEO necesaria en una auditoría de rendimiento; el SEO on-page/off-page, SEM y
-posicionamiento profundo viven en `verificar-compliance`.
+posicionamiento profundo viven en `verify-compliance`.
 
 ## Herramientas
 

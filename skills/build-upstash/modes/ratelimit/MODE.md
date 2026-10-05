@@ -1,6 +1,6 @@
 # Modo Ratelimit (ES)
 
-> Modo interno de la skill `construir-upstash` (no es skill separada). Router: `construir-upstash` → este modo
+> Modo interno de la skill `build-upstash` (no es skill separada). Router: `build-upstash` → este modo
 > ante rate limit, throttle, 429, token bucket o ventanas fija/deslizante.
 
 ## Cubre
@@ -18,15 +18,15 @@ multi-region, listas de denegación, analytics, métodos de inicio y precios.
 
 Guía principal (ES): `references/ratelimit.md`.
 
-| Fichero | Contenido |
-|---|---|
-| `references/ratelimit.md` | guía principal ES |
-| `references/overview.md` | inicio rápido del SDK |
-| `references/algorithms.md` | algoritmos (fixed/sliding/token bucket) |
-| `references/features.md` | capacidades |
-| `references/methods-getting-started.md` | métodos y puesta en marcha |
-| `references/traffic-protection.md` | protección de tráfico, deny lists, analytics |
-| `references/pricing-cost.md` | precios y coste |
+| Fichero                                 | Contenido                                    |
+| --------------------------------------- | -------------------------------------------- |
+| `references/ratelimit.md`               | guía principal ES                            |
+| `references/overview.md`                | inicio rápido del SDK                        |
+| `references/algorithms.md`              | algoritmos (fixed/sliding/token bucket)      |
+| `references/features.md`                | capacidades                                  |
+| `references/methods-getting-started.md` | métodos y puesta en marcha                   |
+| `references/traffic-protection.md`      | protección de tráfico, deny lists, analytics |
+| `references/pricing-cost.md`            | precios y coste                              |
 
 ## Ejemplos
 

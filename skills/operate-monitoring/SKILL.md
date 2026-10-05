@@ -1,16 +1,19 @@
 ---
 name: operate-monitoring
-description: >
-  System and application monitoring orchestration. Use when setting up monitoring,
-  alerting, and observability for infrastructure and applications. Use when the
-  operator requests monitoring configuration, alert setup, or observability tooling. Not for debugging incidents (→ operate-seguridad) nor system cleanup (→ operate-mantenimiento).
+description:
+  "System and application monitoring orchestration. Use when setting up monitoring, alerting, and observability for infrastructure and applications. Use when the operator requests monitoring configuration, alert setup, or observability tooling. Not for debugging incidents (→ operate-security) nor system cleanup (→ operate-maintenance).
+
+  "
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "1.0.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: operate
   type: atomic
   language: en
+  keywords: operate-monitoring
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Operate Monitoring
@@ -30,8 +33,8 @@ operator requests monitoring configuration, alert setup, or observability toolin
 
 ## Not for
 
-- Debugging ongoing incidents (use operate-seguridad)
-- System cleanup (use operate-mantenimiento)
+- Debugging ongoing incidents (use operate-security)
+- System cleanup (use operate-maintenance)
 
 ## Monitoring Tools
 

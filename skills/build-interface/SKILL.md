@@ -1,17 +1,19 @@
 ---
 name: build-interface
-description: >
-  Direction for visual design and interaction of interfaces: aesthetics, typography,
-  palette, motion and microinteractions. Use when designing or redesigning interfaces,
-  visual identity or interaction polish. Not for formal design systems or tokens
-  (→ build-design-system) nor a11y/SEO audits (→ verify-compliance).
+description:
+  "Direction for visual design and interaction of interfaces: aesthetics, typography, palette, motion and microinteractions. Use when designing or redesigning interfaces, visual identity or interaction polish. Not for formal design systems or tokens (→ build-design-system) nor a11y/SEO audits (→ verify-compliance).
+
+  "
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.0.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: build
   type: atomic
   language: en
+  keywords: build-interface
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # build-interface — Intentional Visual Design

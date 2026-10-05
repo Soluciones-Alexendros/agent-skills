@@ -1,17 +1,16 @@
 ---
 name: verify-performance
-description: >-
-  Web performance audit: Core Web Vitals (LCP, INP, CLS), Lighthouse 12, TTFB/FCP, rendering
-  (SSR/SSG/ISR/islands), caching HTTP/CDN, load optimization and technical frontend diagnosis.
-  Use when performing performance audit, Lighthouse/CWV, load optimization, stability visual,
-  caching or technical frontend diagnosis. Not for compliance audits (→ verify-compliance) nor backend load testing.
+description: "Web performance audit: Core Web Vitals (LCP, INP, CLS), Lighthouse 12, TTFB/FCP, rendering (SSR/SSG/ISR/islands), caching HTTP/CDN, load optimization and technical frontend diagnosis. Use when performing performance audit, Lighthouse/CWV, load optimization, stability visual, caching or technical frontend diagnosis. Not for compliance audits (→ verify-compliance) nor backend load testing."
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.3.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: verify
   type: atomic
   language: en
+  keywords: verify-performance
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Verify Performance

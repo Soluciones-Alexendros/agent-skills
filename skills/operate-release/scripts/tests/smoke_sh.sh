@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# smoke_sh.sh — Smoke test de operar-release/scripts.
+# smoke_sh.sh — Smoke test de operate-release/scripts.
 # Verifica review-vs-plan.py: (a) bloquea diff vacio, (b) OK con cambios,
 # (c) bloquea posibles secretos en el diff.
 set -euo pipefail
@@ -43,4 +43,4 @@ if python3 "$ROOT/scripts/review-vs-plan.py" .planning/active/task_plan.md feat/
   echo "FAIL: secreto no bloqueo" >&2; exit 1
 fi
 
-echo "smoke operar-release: OK"
+echo "smoke operate-release: OK"

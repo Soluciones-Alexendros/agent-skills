@@ -1,17 +1,16 @@
 ---
 name: verify-compliance
-description: >-
-  Web compliance audit: accessibility (WCAG 2.2 AA / EN 301 549), legal (GDPR, Consent Mode v2,
-  privacy policy, cookies), SEO on-page/off-page/SEM/analytics. PASS/FAIL/N/A matrix, weighted
-  scoring, web compliance verdict POSITIVE/NEGATIVE/PARTIAL and remediation plan RICE. Use when
-  auditing web compliance, dictating web compliance or remediation plan for SEO/accessibility/legal. Not for performance audits (→ verify-performance) nor dependency scanning (→ verify-dependencias).
+description: "Web compliance audit: accessibility (WCAG 2.2 AA / EN 301 549), legal (GDPR, Consent Mode v2, privacy policy, cookies), SEO on-page/off-page/SEM/analytics. PASS/FAIL/N/A matrix, weighted scoring, web compliance verdict POSITIVE/NEGATIVE/PARTIAL and remediation plan RICE. Use when auditing web compliance, dictating web compliance or remediation plan for SEO/accessibility/legal. Not for performance audits (→ verify-performance) nor dependency scanning (→ verify-dependencies)."
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.3.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: verify
   type: atomic
   language: en
+  keywords: verify-compliance
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Verify Compliance

@@ -1,6 +1,6 @@
 # Blob Storage S3-Compatible (Upstash Blob) — Referencia Completa
 
-> **Submódulo de `construir-upstash`** — Modo interno de `construir-upstash` (`modes/blob/MODE.md`)
+> **Submódulo de `build-upstash`** — Modo interno de `build-upstash` (`modes/blob/MODE.md`)
 
 ---
 

@@ -18,7 +18,11 @@ const res = await index.query({ vector: [0.1, 0.2, 0.3], topK: 3 });
 
 ```typescript
 const pregunta = [0.1, 0.2, 0.3]; // embedding de la pregunta
-const ctx = await index.query({ vector: pregunta, topK: 5, includeMetadata: true });
+const ctx = await index.query({
+  vector: pregunta,
+  topK: 5,
+  includeMetadata: true,
+});
 const contexto = ctx.map((r) => JSON.stringify(r.metadata)).join("\n");
 // const respuesta = await llm(`Responde usando:\n${contexto}`);
 ```

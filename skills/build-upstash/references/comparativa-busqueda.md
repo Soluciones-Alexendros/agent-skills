@@ -1,6 +1,6 @@
 # Redis Search vs Search SDK vs Vector Hybrid (ES)
 
-> Recurso de la skill `construir-upstash`. Cuándo usar cada motor de búsqueda.
+> Recurso de la skill `build-upstash`. Cuándo usar cada motor de búsqueda.
 
 ## Regla rápida
 

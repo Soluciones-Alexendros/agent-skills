@@ -1,6 +1,6 @@
 # Upstash CLI — Terminal, CI & Scripting
 
-> **Submódulo de `construir-upstash`** — Router: `construir-upstash` → `references/cli.md`.
+> **Submódulo de `build-upstash`** — Router: `build-upstash` → `references/cli.md`.
 
 ---
 

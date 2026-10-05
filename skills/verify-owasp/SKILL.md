@@ -1,16 +1,16 @@
 ---
 name: verify-owasp
-description: >-
-  Code security review (OWASP): injection, XSS, authn/authz, cryptography, SSRF, secrets and
-  misconfiguration. Use when performing security review, OWASP or searching for vulnerabilities
-  in this code. Not for dependency CVEs (→ verify-dependencias) nor web compliance (→ verify-compliance).
+description: "Code security review (OWASP): injection, XSS, authn/authz, cryptography, SSRF, secrets and misconfiguration. Use when performing security review, OWASP or searching for vulnerabilities in this code. Not for dependency CVEs (→ verify-dependencies) nor web compliance (→ verify-compliance)."
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.3.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: verify
   type: atomic
   language: en
+  keywords: verify-owasp
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Verify OWASP
@@ -29,9 +29,9 @@ in this code.
 
 ## Not for:
 
-- OS hardening (→ operate-seguridad)
+- OS hardening (→ operate-security)
 - Release closure (→ operate-release)
-- Dependency audit/SCA (→ verify-dependencias)
+- Dependency audit/SCA (→ verify-dependencies)
 
 ## OWASP Categories
 

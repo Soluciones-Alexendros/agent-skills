@@ -1,16 +1,19 @@
 ---
 name: verify-testing
-description: >
-  Testing verification and quality assurance. Use when planning, implementing, or verifying
-  test strategies, test quality metrics, and test coverage goals. Use when the operator
-  requests test planning, test quality review, or test coverage analysis. Not for production debugging (→ operate-salud-sistema) nor single test-case authorship (→ planning-test-driven-development).
+description:
+  "Testing verification and quality assurance. Use when planning, implementing, or verifying test strategies, test quality metrics, and test coverage goals. Use when the operator requests test planning, test quality review, or test coverage analysis. Not for production debugging (→ operate-health) nor single test-case authorship (→ planning-test-driven-development).
+
+  "
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "1.0.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: verify
   type: atomic
   language: en
+  keywords: verify-testing
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Verify Testing
@@ -31,7 +34,7 @@ requests test planning, test quality review, or test coverage analysis.
 ## Not for
 
 - Specific test case writing (use planning-test-driven-development)
-- Debug errors in production (use operate-salud-sistema)
+- Debug errors in production (use operate-health)
 
 ## Testing Strategies
 

@@ -24,7 +24,10 @@ await redis.expire(`sesion:${sid}`, 1800);
 
 ```typescript
 await redis.zadd("ranking", { score: 1500, member: "jugador:7" });
-const top = await redis.zrange("ranking", 0, 9, { rev: true, withScores: true });
+const top = await redis.zrange("ranking", 0, 9, {
+  rev: true,
+  withScores: true,
+});
 ```
 
 ## Lock distribuido

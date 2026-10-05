@@ -5,9 +5,9 @@
 | Domain     | Scope                                                     | Skills                                                                                                                                                             |
 | ---------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `build`    | Building: typing, automation, data, integrations          | build-automation · build-design-system · build-interface · build-proton-suite · build-typescript · build-upstash                                                   |
-| `operate`  | Publishing and continuous operation                       | operate-lifecycle · operate-mantenimiento · operate-monitoring · operate-release · operate-salud-sistema · operate-seguridad                                       |
+| `operate`  | Publishing and continuous operation                       | operate-lifecycle · operate-maintenance · operate-monitoring · operate-release · operate-health · operate-security                                                 |
 | `planning` | Work planning and decomposition                           | planning-source-driven-development · planning-spec-driven-development · planning-task-breakdown · planning-test-driven-development                                 |
-| `verify`   | Quality gates and audits                                  | verify-architecture · verify-compliance · verify-dependencias · verify-fullaudit · verify-hooks · verify-owasp · verify-performance · verify-repo · verify-testing |
+| `verify`   | Quality gates and audits                                  | verify-architecture · verify-compliance · verify-dependencies · verify-fullaudit · verify-hooks · verify-owasp · verify-performance · verify-repo · verify-testing |
 | `design`   | Reserved for future architecture skills (currently empty) | —                                                                                                                                                                  |
 
 ## Closed sets (normative)

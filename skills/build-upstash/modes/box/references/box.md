@@ -1,6 +1,6 @@
 # Box (Upstash) — Sandboxed Containers con Agentes IA
 
-> **Submódulo de `construir-upstash`** — Modo interno de `construir-upstash` (`modes/box/MODE.md`).
+> **Submódulo de `build-upstash`** — Modo interno de `build-upstash` (`modes/box/MODE.md`).
 
 ---
 

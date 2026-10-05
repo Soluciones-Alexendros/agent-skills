@@ -1,17 +1,16 @@
 ---
 name: build-automation
-description: >-
-  Automation of build, test, and deployment pipelines. Use when setting up CI/CD,
-  automating repetitive tasks, or configuring pipeline as code. Use when the operator
-  requests pipeline creation, automation of release processes, or configuration of
-  build workflows across multiple environments. Not for visual design (→ build-interface) nor security review (→ verify-owasp).
+description: Automation of build, test, and deployment pipelines. Use when setting up CI/CD, automating repetitive tasks, or configuring pipeline as code. Use when the operator requests pipeline creation, automation of release processes, or configuration of build workflows across multiple environments. Not for visual design (→ build-interface) nor security review (→ verify-owasp).
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.0.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: build
   type: atomic
   language: en
+  keywords: build-automation
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Build Automation
