@@ -1,6 +1,6 @@
 # Vector Database (Upstash) — Referencia Completa
 
-> **Modo interno de `construir-upstash`** (`modes/vector/MODE.md`) — referencia completa de nivel standalone; incluye búsqueda (`references/search.md`).
+> **Modo interno de `build-upstash`** (`modes/vector/MODE.md`) — referencia completa de nivel standalone; incluye búsqueda (`references/search.md`).
 
 ---
 

@@ -8,7 +8,11 @@ module.exports = {
       "always",
       ["feat", "fix", "docs", "chore", "refactor", "test", "ci", "revert"],
     ],
-    "subject-case": [2, "never", ["sentence-case", "start-case", "pascal-case", "upper-case"]],
+    "subject-case": [
+      2,
+      "never",
+      ["sentence-case", "start-case", "pascal-case", "upper-case"],
+    ],
     "header-max-length": [2, "always", 100],
   },
 };

@@ -14,9 +14,9 @@ Create engaging, intuitive interactions through motion, feedback, and thoughtful
 
 ## Contrato Fuerte (Fase 1)
 
-**REQUIRES tokens from `disenar-design-system`.** Before generating ANY code:
+**REQUIRES tokens from `build-design-system`.** Before generating ANY code:
 
-1. **Read `tokens.json`** (DTCG format) from the design system. If not found → ERROR: design system must be installed first via `disenar-design-system` skill.
+1. **Read `tokens.json`** (DTCG format) from the design system. If not found → ERROR: design system must be installed first via `build-design-system` skill.
 2. **Consume semantic tokens** — All animation durations, easings, colors MUST come from `tokens.json`. Never invent new values.
 3. **Emit `Pattern.stories.tsx`** — Every microinteraction pattern MUST include a CSF 3.0 story file with play functions + visual baseline. Use `contracts/csf-template.stories.tsx` as base.
 4. **ARIA compliance** — Every interactive pattern MUST include the role, attributes, and states documented in `contracts/aria-component-map.json`. Especially: `aria-live` for dynamic content, `aria-checked` for toggles, `role="switch"` for switches.
@@ -106,7 +106,7 @@ animate={{ x: '100%' }}
 | `contracts/wcag22-checklist.json`    | WCAG 2.2 A+AA success criteria                   |
 | `contracts/csf-template.stories.tsx` | CSF 3.0 template for story generation            |
 
-## References (disenar-design-system)
+## References (build-design-system)
 
 | File                                 | Description                                                  |
 | ------------------------------------ | ------------------------------------------------------------ |

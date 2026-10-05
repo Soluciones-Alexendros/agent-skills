@@ -1,17 +1,16 @@
 ---
 name: operate-release
-description: >-
-  Closes a GitHub repository: version publication, CI/CD audit, or close of work at the end of
-  a plan (repo ending, merge the plan, ship). Use when the topic is semantic versioning, Keep a
-  Changelog, supply-chain of Actions, Husky+e2e+PR+merge-watch post-plan. Not for implementing
-  product features or forges distinct from github.com.
+description: "Closes a GitHub repository: version publication, CI/CD audit, or close of work at the end of a plan (repo ending, merge the plan, ship). Use when the topic is semantic versioning, Keep a Changelog, supply-chain of Actions, Husky+e2e+PR+merge-watch post-plan. Not for implementing product features or forges distinct from github.com."
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.0.1"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: operate
   type: atomic
   language: en
+  keywords: operate-release
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Operate Release

@@ -1,17 +1,16 @@
 ---
 name: build-proton-suite
-description: >-
-  Proton Mail (Proton Mail Bridge IMAP/SMTP local, MCP Mail) and Proton Pass secrets
-  (pass-cli v2.3+ with JSON output, MCP Pass). Use when the operator requests reading,
-  searching, sending or classifying Proton Mail, or obtaining tokens, passwords and API keys
-  stored in Proton Pass. Do not use for other email providers or CI/GitHub secrets.
+description: Proton Mail (Proton Mail Bridge IMAP/SMTP local, MCP Mail) and Proton Pass secrets (pass-cli v2.3+ with JSON output, MCP Pass). Use when the operator requests reading, searching, sending or classifying Proton Mail, or obtaining tokens, passwords and API keys stored in Proton Pass. Do not use for other email providers or CI/GitHub secrets.
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.0.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: build
   type: atomic
   language: en
+  keywords: build-proton-suite
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Build Proton Suite

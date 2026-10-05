@@ -1,16 +1,16 @@
 ---
 name: verify-hooks
-description: >-
-  Configure and run local git hooks (Husky, lint-staged, Prettier, typecheck, tests in pre-commit;
-  e2e in pre-push if they exist). Use when the operator wants pre-commit hooks, husky, lint-staged
-  or the local gate of a work close. Not for CI pipelines (→ operate-release) nor e2e test authorship.
+description: Configure and run local git hooks (Husky, lint-staged, Prettier, typecheck, tests in pre-commit; e2e in pre-push if they exist). Use when the operator wants pre-commit hooks, husky, lint-staged or the local gate of a work close. Not for CI pipelines (→ operate-release) nor e2e test authorship.
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.3.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: verify
   type: atomic
   language: en
+  keywords: verify-hooks
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Verify Hooks

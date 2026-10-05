@@ -1,17 +1,16 @@
 ---
 name: verify-repo
-description: >-
-  Integral repository audit and canonical plan start: syncs the clone, status/roadmap/failures
-  board, contrasts with repo-standard (P0/P1/P2, CI quality→test→smoke, Renovate) and corrects
-  thereafter. Use when the operator requests to scan, health check, repo starting, plan start or
-  plan mode. Not for release close or publication (→ operate-release).
+description: "Integral repository audit and canonical plan start: syncs the clone, status/roadmap/failures board, contrasts with repo-standard (P0/P1/P2, CI quality→test→smoke, Renovate) and corrects thereafter. Use when the operator requests to scan, health check, repo starting, plan start or plan mode. Not for release close or publication (→ operate-release)."
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.3.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: verify
   type: atomic
   language: en
+  keywords: verify-repo
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Verify Repo

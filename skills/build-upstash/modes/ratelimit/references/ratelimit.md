@@ -1,6 +1,6 @@
 # Rate Limiting (Upstash Ratelimit) — Referencia Completa
 
-> **Submódulo de `construir-upstash`** — Modo interno de `construir-upstash` (`modes/ratelimit/MODE.md`)
+> **Submódulo de `build-upstash`** — Modo interno de `build-upstash` (`modes/ratelimit/MODE.md`)
 
 ---
 

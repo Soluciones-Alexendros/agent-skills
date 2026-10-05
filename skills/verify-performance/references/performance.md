@@ -1,6 +1,6 @@
 # Performance web — Core Web Vitals, rendering y caché
 
-Ámbito de `verificar-performance`: rapidez de carga, estabilidad visual, estrategia de
+Ámbito de `verify-performance`: rapidez de carga, estabilidad visual, estrategia de
 renderizado, caching HTTP/CDN y tecnologías. Todo en español.
 
 ## Herramientas
@@ -54,5 +54,5 @@ real de usuarios). Ante discrepancia, manda field.
 
 ## Límites
 
-El compliance legal y la accesibilidad profunda no viven aquí: usar `verificar-compliance`.
-La auditoría E2E completa con evidencias de navegador vive en `verificar-fullaudit` (modos e2e/full).
+El compliance legal y la accesibilidad profunda no viven aquí: usar `verify-compliance`.
+La auditoría E2E completa con evidencias de navegador vive en `verify-fullaudit` (modos e2e/full).

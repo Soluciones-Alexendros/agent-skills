@@ -1,6 +1,6 @@
 # Modo Box (ES)
 
-> Modo interno de la skill `construir-upstash` (no es skill separada). Router: `construir-upstash` → este modo
+> Modo interno de la skill `build-upstash` (no es skill separada). Router: `build-upstash` → este modo
 > ante container, sandbox, agente IA, browser headless, snapshot o workspace remoto.
 
 ## Cubre
@@ -13,12 +13,12 @@ navegador headless y agentes integrados. SDK JS/TS (`@upstash/box`), Python
 
 Guía principal (ES): `references/box.md`.
 
-| Fichero | Contenido |
-|---|---|
-| `references/box.md` | guía principal ES (JS/Python/CLI) |
-| `references/box-js-overview.md` | SDK `@upstash/box` (referencia JS) |
-| `references/box-py-overview.md` | SDK `upstash-box` (referencia Python, espejo snake_case) |
-| `references/box-cli-overview.md` | CLI `box` (contenedor remoto, no local) |
+| Fichero                          | Contenido                                                |
+| -------------------------------- | -------------------------------------------------------- |
+| `references/box.md`              | guía principal ES (JS/Python/CLI)                        |
+| `references/box-js-overview.md`  | SDK `@upstash/box` (referencia JS)                       |
+| `references/box-py-overview.md`  | SDK `upstash-box` (referencia Python, espejo snake_case) |
+| `references/box-cli-overview.md` | CLI `box` (contenedor remoto, no local)                  |
 
 ## Ejemplos
 

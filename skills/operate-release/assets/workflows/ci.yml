@@ -9,7 +9,7 @@
 #
 # After shipping CI hardening via PR: the agent MUST run Fase F
 # (references/merge-watch.md) — watch required checks and merge. That loop is
-# part of /operar-release, not a separate user ask.
+# part of /operate-release, not a separate user ask.
 name: CI
 
 on:

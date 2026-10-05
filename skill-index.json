@@ -1,0 +1,418 @@
+{
+  "version": "3.0.0",
+  "skills": [
+    {
+      "name": "build-automation",
+      "description": "Automation of build, test, and deployment pipelines. Use when setting up CI/CD, automating repetitive tasks, or configuring pipeline as code. Use when the operator requests pipeline creation, automation of release processes, or configuration of build workflows across multiple environments. Not for visual design (→ build-interface) nor security review (→ verify-owasp).",
+      "domain": "build",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "build-automation"
+      ],
+      "triggers": [],
+      "entry": "skills/build-automation/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "build-design-system",
+      "description": "Build design systems with tokens (Style Dictionary, Figma Tokens/Tokens Studio), Tailwind v4 and reusable UI components. Use when creating a design system, tokens or a UI component library. Not for pinpoint aesthetic direction of a screen (→ build-interface) or a11y/SEO audit (→ verify-compliance).\n",
+      "domain": "build",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "build-design-system"
+      ],
+      "triggers": [],
+      "entry": "skills/build-design-system/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "build-interface",
+      "description": "Direction for visual design and interaction of interfaces: aesthetics, typography, palette, motion and microinteractions. Use when designing or redesigning interfaces, visual identity or interaction polish. Not for formal design systems or tokens (→ build-design-system) nor a11y/SEO audits (→ verify-compliance).\n",
+      "domain": "build",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "build-interface"
+      ],
+      "triggers": [],
+      "entry": "skills/build-interface/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "build-proton-suite",
+      "description": "Proton Mail (Proton Mail Bridge IMAP/SMTP local, MCP Mail) and Proton Pass secrets (pass-cli v2.3+ with JSON output, MCP Pass). Use when the operator requests reading, searching, sending or classifying Proton Mail, or obtaining tokens, passwords and API keys stored in Proton Pass. Do not use for other email providers or CI/GitHub secrets.",
+      "domain": "build",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "build-proton-suite"
+      ],
+      "triggers": [],
+      "entry": "skills/build-proton-suite/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "build-typescript",
+      "description": "Advanced TypeScript typing: generics, conditional types, infer, branded types and typed API patterns. Use when there are complex types, difficult inference errors or typed API design. Do not use for security review (→ verify-owasp) nor general architecture (→ verify-architecture).",
+      "domain": "build",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "build-typescript"
+      ],
+      "triggers": [],
+      "entry": "skills/build-typescript/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "build-upstash",
+      "description": "Upstash ecosystem router: Redis, Vector/RAG, Search, QStash/Workflows, Ratelimit, Blob, Box with 7 internal modes. Use when the operator requests Upstash, serverless Redis, managed embeddings/RAG, QStash or rate limiting. Not for Postgres nor other relational databases.",
+      "domain": "build",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "build-upstash"
+      ],
+      "triggers": [
+        "qstash",
+        "ratelimit",
+        "redis",
+        "upstash",
+        "vector"
+      ],
+      "entry": "skills/build-upstash/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "operate-health",
+      "description": "Diagnosis and audit of Linux system health: health-check, quick/complete audit, system fingerprint, health scoring (0-100), P0-P4 findings, temporal diff. Use when the operator requests health-check, configuration/performance/hygiene audit, CIS/Lynis compliance or server onboarding. Not for execution cleanup (→ operate-maintenance) nor hardening/forensics (→ operate-security).",
+      "domain": "operate",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "operate-health"
+      ],
+      "triggers": [
+        "audit-full",
+        "cribar filesystem",
+        "fingerprint",
+        "health check sistema",
+        "huérfanos",
+        "journal vacuum",
+        "limpia",
+        "limpiar",
+        "limpieza",
+        "mantenimiento",
+        "optimiza",
+        "paccache",
+        "salud del sistema",
+        "sistema arch"
+      ],
+      "entry": "skills/operate-health/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "operate-lifecycle",
+      "description": "Orchestrates the work lifecycle: init-work (start of plan, repo starting), verify-hooks (Husky) or operate-release (close, publication and close of work post-plan). Use when the operator asks where to start, starts plan mode, or mixes audit, hooks, release or repo close. Do not use for executing audits, hooks or publications (→ verify-repo, verify-hooks, operate-release).",
+      "domain": "operate",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "operate-lifecycle"
+      ],
+      "triggers": [
+        "audítalo y publícalo",
+        "ciclo de vida",
+        "por donde empiezo",
+        "qué hago con este repo"
+      ],
+      "entry": "skills/operate-lifecycle/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "operate-maintenance",
+      "description": "Systematic Linux system maintenance by IA agent: hygiene, updates, ordering, optimization and suggestions. Graduated modes (quick/complete audit, routine, optimization, cleanup) with read-only execution by default, deterministic command validation by risk level, reversible snapshots and system health KPIs. Defensive security (hardening, records/forensics, vulns, scans, AppArmor) NOT this skill: handled by sister operate-security skill. Use when asked: auditing a Linux system, routine review, cleaning packages/caches/logs, orphan pacman/AUR, boot or resource optimization, OS health-check, or periodic maintenance of Arch/EndeavourOS/ CachyOS/Debian/RHEL. Includes guided interaction to select objective, mode and depth according to context. Not for defensive security hardening or forensics (→ operate-security).",
+      "domain": "operate",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "operate-maintenance"
+      ],
+      "triggers": [
+        "cribar filesystem",
+        "huérfanos",
+        "journal vacuum",
+        "limpia",
+        "limpiar",
+        "limpieza",
+        "mantenimiento",
+        "optimiza",
+        "paccache",
+        "sistema arch"
+      ],
+      "entry": "skills/operate-maintenance/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "operate-monitoring",
+      "description": "System and application monitoring orchestration. Use when setting up monitoring, alerting, and observability for infrastructure and applications. Use when the operator requests monitoring configuration, alert setup, or observability tooling. Not for debugging incidents (→ operate-security) nor system cleanup (→ operate-maintenance).\n",
+      "domain": "operate",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "operate-monitoring"
+      ],
+      "triggers": [],
+      "entry": "skills/operate-monitoring/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "operate-release",
+      "description": "Closes a GitHub repository: version publication, CI/CD audit, or close of work at the end of a plan (repo ending, merge the plan, ship). Use when the topic is semantic versioning, Keep a Changelog, supply-chain of Actions, Husky+e2e+PR+merge-watch post-plan. Not for implementing product features or forges distinct from github.com.",
+      "domain": "operate",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "operate-release"
+      ],
+      "triggers": [
+        "changelog",
+        "cierra repo",
+        "prepara release",
+        "publica version",
+        "semver"
+      ],
+      "entry": "skills/operate-release/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "operate-security",
+      "description": "Defensive Linux host security: posture, light forensic record management, CVEs, sysctl/SSH hardening, AppArmor/SELinux, auditd and fail2ban. Use when the operator requests system security audit, host hardening or auth log review. Not for application code vulnerabilities (→ verify-owasp) nor disk cleanup (→ operate-maintenance).",
+      "domain": "operate",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "operate-security"
+      ],
+      "triggers": [
+        "apparmor",
+        "auditd",
+        "firewall",
+        "forense",
+        "hardening",
+        "seguridad host"
+      ],
+      "entry": "skills/operate-security/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "planning-source-driven-development",
+      "description": "Every implementation decision must be backed by official documentation. Use when you want to verify an approach against the official docs before implementing it, or when you want authoritative, source-cited code free from outdated patterns. Not for trivial changes where correctness does not depend on a version (renaming variables, fixing typos). Use when building with any framework or library where correctness matters.\n",
+      "domain": "planning",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "planning-source-driven-development"
+      ],
+      "triggers": [],
+      "entry": "skills/planning-source-driven-development/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "planning-spec-driven-development",
+      "description": "Write a structured specification before writing any code. The spec is the shared source of truth between you and the human engineer — it defines what we're building, why, and how we'll know it's done. Code without a spec is guessing. Use when starting a new project or feature, when requirements are ambiguous, or when the change touches multiple modules. Not for single-line fixes or typo corrections.\n",
+      "domain": "planning",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "planning-spec-driven-development"
+      ],
+      "triggers": [],
+      "entry": "skills/planning-spec-driven-development/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "planning-task-breakdown",
+      "description": "Decompose work into small, verifiable tasks with explicit acceptance criteria. Good task breakdown is the difference between an agent that completes work reliably and one that produces a tangled mess. Every task should be small enough to implement, test, and verify in a single focused session. Use when you have a spec to break into implementable units or when work must be parallelized. Not for single-file changes with obvious scope.\n",
+      "domain": "planning",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "planning-task-breakdown"
+      ],
+      "triggers": [],
+      "entry": "skills/planning-task-breakdown/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "planning-test-driven-development",
+      "description": "Drive development with tests using the red-green-refactor loop. Use when implementing any logic, fixing any bug, or changing any behavior. Use when you need to prove that code works, when a bug report arrives, or when you're about to modify existing functionality. Not for pure configuration changes, documentation updates, or static content.\n",
+      "domain": "planning",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "planning-test-driven-development"
+      ],
+      "triggers": [],
+      "entry": "skills/planning-test-driven-development/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "verify-architecture",
+      "description": "Code architecture verification and analysis. Use when analyzing code structure, dependencies, architectural drift, or refactoring opportunities. Use when the operator requests architectural analysis, dependency mapping, or code health assessment. Not for security code review (→ verify-owasp) nor minor implementation changes (→ verify-dependencies).\n",
+      "domain": "verify",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "verify-architecture"
+      ],
+      "triggers": [
+        "C4",
+        "acoplamiento",
+        "deepening",
+        "mapa de módulos",
+        "revisa la arquitectura"
+      ],
+      "entry": "skills/verify-architecture/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "verify-compliance",
+      "description": "Web compliance audit: accessibility (WCAG 2.2 AA / EN 301 549), legal (GDPR, Consent Mode v2, privacy policy, cookies), SEO on-page/off-page/SEM/analytics. PASS/FAIL/N/A matrix, weighted scoring, web compliance verdict POSITIVE/NEGATIVE/PARTIAL and remediation plan RICE. Use when auditing web compliance, dictating web compliance or remediation plan for SEO/accessibility/legal. Not for performance audits (→ verify-performance) nor dependency scanning (→ verify-dependencies).",
+      "domain": "verify",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "verify-compliance"
+      ],
+      "triggers": [
+        "accesibilidad",
+        "compliance",
+        "gdpr",
+        "seo",
+        "wcag"
+      ],
+      "entry": "skills/verify-compliance/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "verify-dependencies",
+      "description": "Dependency audit (SCA/CVE): multi-language pipeline (npm/pip/cargo/go/maven/gradle/composer/gem) to detect vulnerabilities, malware, typosquatting, unused dependencies and outdated. Use when performing dependency audit, SCA, CVE scanning, supply chain security or SBOM generation. Not for code security review (→ verify-owasp) nor web compliance audits (→ verify-compliance).",
+      "domain": "verify",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "verify-dependencies"
+      ],
+      "triggers": [],
+      "entry": "skills/verify-dependencies/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "verify-fullaudit",
+      "description": "Holistic web audit router: derives to verify-compliance (web compliance SEO/a11y/legal), verify-performance (CWV/rendering), verify-repo (health check repo) or build-interface (visual direction). Use when the operator requests a complete audit, holistic audit, 'review everything' or full audit without focus. Not for executing the specialized audits themselves; it only routes to them.",
+      "domain": "verify",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "verify-fullaudit"
+      ],
+      "triggers": [],
+      "entry": "skills/verify-fullaudit/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "verify-hooks",
+      "description": "Configure and run local git hooks (Husky, lint-staged, Prettier, typecheck, tests in pre-commit; e2e in pre-push if they exist). Use when the operator wants pre-commit hooks, husky, lint-staged or the local gate of a work close. Not for CI pipelines (→ operate-release) nor e2e test authorship.",
+      "domain": "verify",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "verify-hooks"
+      ],
+      "triggers": [
+        "hooks locales",
+        "husky",
+        "lint-staged",
+        "pre-commit"
+      ],
+      "entry": "skills/verify-hooks/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "verify-owasp",
+      "description": "Code security review (OWASP): injection, XSS, authn/authz, cryptography, SSRF, secrets and misconfiguration. Use when performing security review, OWASP or searching for vulnerabilities in this code. Not for dependency CVEs (→ verify-dependencies) nor web compliance (→ verify-compliance).",
+      "domain": "verify",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "verify-owasp"
+      ],
+      "triggers": [
+        "inyección",
+        "owasp",
+        "sqli",
+        "vulnerabilidad código",
+        "xss"
+      ],
+      "entry": "skills/verify-owasp/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "verify-performance",
+      "description": "Web performance audit: Core Web Vitals (LCP, INP, CLS), Lighthouse 12, TTFB/FCP, rendering (SSR/SSG/ISR/islands), caching HTTP/CDN, load optimization and technical frontend diagnosis. Use when performing performance audit, Lighthouse/CWV, load optimization, stability visual, caching or technical frontend diagnosis. Not for compliance audits (→ verify-compliance) nor backend load testing.",
+      "domain": "verify",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "verify-performance"
+      ],
+      "triggers": [
+        "core web vitals",
+        "lighthouse",
+        "performance",
+        "ttfb"
+      ],
+      "entry": "skills/verify-performance/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "verify-repo",
+      "description": "Integral repository audit and canonical plan start: syncs the clone, status/roadmap/failures board, contrasts with repo-standard (P0/P1/P2, CI quality→test→smoke, Renovate) and corrects thereafter. Use when the operator requests to scan, health check, repo starting, plan start or plan mode. Not for release close or publication (→ operate-release).",
+      "domain": "verify",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "verify-repo"
+      ],
+      "triggers": [
+        "C4",
+        "acoplamiento",
+        "audita repo",
+        "deepening",
+        "estructura repo",
+        "mapa de módulos",
+        "pon al día proyecto",
+        "repo standard",
+        "revisa la arquitectura"
+      ],
+      "entry": "skills/verify-repo/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "verify-testing",
+      "description": "Testing verification and quality assurance. Use when planning, implementing, or verifying test strategies, test quality metrics, and test coverage goals. Use when the operator requests test planning, test quality review, or test coverage analysis. Not for production debugging (→ operate-health) nor single test-case authorship (→ planning-test-driven-development).\n",
+      "domain": "verify",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "verify-testing"
+      ],
+      "triggers": [],
+      "entry": "skills/verify-testing/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    }
+  ]
+}

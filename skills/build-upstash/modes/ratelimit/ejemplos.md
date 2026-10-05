@@ -16,10 +16,15 @@ const ratelimit = new Ratelimit({
 
 const { success, reset } = await ratelimit.limit(`api:${userId}`);
 if (!success) {
-  return Response.json({ error: "límite excedido" }, {
-    status: 429,
-    headers: { "Retry-After": String(Math.ceil((reset - Date.now()) / 1000)) },
-  });
+  return Response.json(
+    { error: "límite excedido" },
+    {
+      status: 429,
+      headers: {
+        "Retry-After": String(Math.ceil((reset - Date.now()) / 1000)),
+      },
+    }
+  );
 }
 ```
 

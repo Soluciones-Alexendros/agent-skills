@@ -1,4 +1,4 @@
-# Security checklist (verificar-owasp)
+# Security checklist (verify-owasp)
 
 Checklist operativo. Detalle en cada referencia.
 

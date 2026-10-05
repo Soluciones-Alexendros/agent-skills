@@ -11,7 +11,7 @@ import importlib.util
 
 import pytest
 
-# Cargar módulos desde scripts/ explícitamente para evitar colisiones con verificar-fullaudit
+# Cargar módulos desde scripts/ explícitamente para evitar colisiones con verify-fullaudit
 SCRIPTS_DIR = os.path.join(os.path.dirname(__file__), "..", "scripts")
 
 def _load_module(name):

@@ -1,6 +1,6 @@
 # Search (Upstash) — Full-Text & Semántico con Reranking
 
-> **Submódulo de `construir-upstash`** — Modo interno de `construir-upstash` (`modes/search/MODE.md`).
+> **Submódulo de `build-upstash`** — Modo interno de `build-upstash` (`modes/search/MODE.md`).
 
 ---
 

@@ -1,6 +1,6 @@
 # Fase F — Remediación y merge-watch
 
-Cuando la auditoría deja `BLOCK` remediables o el usuario pide aplicar correcciones de `/operar-release`, esta fase es **parte del workflow**, no un favor opcional.
+Cuando la auditoría deja `BLOCK` remediables o el usuario pide aplicar correcciones de `/operate-release`, esta fase es **parte del workflow**, no un favor opcional.
 
 ## Cuándo aplica
 
@@ -14,7 +14,7 @@ No aplica en modo **auditoría pura** (solo informe).
 
 Un sí a «aplica remediación» o «sigue con el pipeline» autoriza:
 
-1. Commits en rama `chore/operar-release-*` (o `audit/AAAAMMDD` si ya existe).
+1. Commits en rama `chore/operate-release-*` (o `audit/AAAAMMDD` si ya existe).
 2. Push + PR **draft** a `main`.
 3. **Monitorización hasta merge** de ese PR (ver abajo).
 

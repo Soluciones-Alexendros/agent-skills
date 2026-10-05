@@ -1,6 +1,6 @@
 # Índice de modos Upstash (ES)
 
-> Recurso de la skill `construir-upstash`. Los 7 modos son internos (no skills separadas).
+> Recurso de la skill `build-upstash`. Los 7 modos son internos (no skills separadas).
 
 ## Modos
 

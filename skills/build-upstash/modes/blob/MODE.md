@@ -1,6 +1,6 @@
 # Modo Blob (ES)
 
-> Modo interno de la skill `construir-upstash` (no es skill separada). Router: `construir-upstash` → este modo
+> Modo interno de la skill `build-upstash` (no es skill separada). Router: `build-upstash` → este modo
 > ante S3, blob, upload, presigned URL, multipart o subida directa desde navegador.
 
 ## Cubre
@@ -13,9 +13,9 @@ lecturas firmadas y cabeceras de caché.
 
 Guía principal (ES): `references/blob.md`.
 
-| Fichero | Contenido |
-|---|---|
-| `references/blob.md` | guía principal ES |
+| Fichero                  | Contenido                              |
+| ------------------------ | -------------------------------------- |
+| `references/blob.md`     | guía principal ES                      |
 | `references/overview.md` | visión general del SDK `@upstash/blob` |
 
 ## Ejemplos

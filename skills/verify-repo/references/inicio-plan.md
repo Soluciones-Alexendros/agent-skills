@@ -1,6 +1,6 @@
 # I — Inicio de plan (repo starting)
 
-Punto de partida de cada tarea: un tablero canónico del repo **antes** de escribir el plan. Es el espejo de `operar-release` G (cierre de trabajo). `repo-starting` es el alias histórico; el procedimiento vive aquí.
+Punto de partida de cada tarea: un tablero canónico del repo **antes** de escribir el plan. Es el espejo de `operate-release` G (cierre de trabajo). `repo-starting` es el alias histórico; el procedimiento vive aquí.
 
 Leer este fichero cuando el operador pida repo starting, inicio de plan, modo plan, «por dónde empiezo», o al abrir `/design` / `enter_plan_mode` sobre un repositorio.
 
@@ -64,7 +64,7 @@ Con el tablero a la vista:
 ### 5. Handoff
 
 - Implementar el plan → `execute-plan` / `codigo`.
-- Terminar el trabajo → `operar-release` G (`cierre-trabajo.md`).
+- Terminar el trabajo → `operate-release` G (`cierre-trabajo.md`).
 - Auditoría profunda del repo → seguir Fases 1–7 de `SKILL.md`.
 
 ## Entregable

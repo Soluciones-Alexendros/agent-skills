@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# gate-husky.sh — Modo gate de verificar-hooks para operar-release G.
+# gate-husky.sh — Modo gate de verify-hooks para operate-release G.
 # Si falta .husky/pre-commit lo instala (husky+lint-staged+prettier) y luego
 # ejecuta el gate: lint-staged, typecheck (si existe), test (si existe).
 # Uso: bash gate-husky.sh <repo_path>

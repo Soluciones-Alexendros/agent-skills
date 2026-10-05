@@ -1,16 +1,19 @@
 ---
 name: verify-architecture
-description: >
-  Code architecture verification and analysis. Use when analyzing code structure,
-  dependencies, architectural drift, or refactoring opportunities. Use when the
-  operator requests architectural analysis, dependency mapping, or code health assessment. Not for security code review (→ verify-owasp) nor minor implementation changes (→ verify-dependencias).
+description:
+  "Code architecture verification and analysis. Use when analyzing code structure, dependencies, architectural drift, or refactoring opportunities. Use when the operator requests architectural analysis, dependency mapping, or code health assessment. Not for security code review (→ verify-owasp) nor minor implementation changes (→ verify-dependencies).
+
+  "
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "1.0.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: verify
   type: atomic
   language: en
+  keywords: verify-architecture
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Verify Architecture
@@ -31,7 +34,7 @@ operator requests architectural analysis, dependency mapping, or code health ass
 ## Not for
 
 - Security code review (use verify-owasp)
-- Minor implementation changes (use verify-dependencias)
+- Minor implementation changes (use verify-dependencies)
 
 ## Architectural Analysis
 

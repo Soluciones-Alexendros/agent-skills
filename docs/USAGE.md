@@ -1,17 +1,17 @@
 # Using the skills
 
-## Claude Code
+## Generic harness (vendor-neutral)
 
 Copy or link the skill folder into the user or project skills directory:
 
 ```bash
-# global
-cp -r skills/verify-owasp ~/.claude/skills/
+# global (example)
+cp -r skills/verify-owasp ~/.agents/skills/
 # or per project
-cp -r skills/verify-owasp /path/project/.claude/skills/
+cp -r skills/verify-owasp /path/project/.agents/skills/
 ```
 
-Claude Code discovers `SKILL.md` through its frontmatter (`name` + `description`).
+Compatible harnesses discover `SKILL.md` through its frontmatter (`name` + `description`).
 
 ## OpenAI Codex / compatible agents
 

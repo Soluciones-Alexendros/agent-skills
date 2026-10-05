@@ -118,7 +118,7 @@
 - **framer-motion v11** (Motion): layouts animados (`layoutId`), gestos (`whileHover`/`whileTap`), `AnimatePresence` y `useScroll`/`useTransform` en stacks React.
 - **Scroll-driven Animations** (CSS nativo): `animation-timeline: scroll() | view()` + `animation-range` para parallax, progress bars y reveals sin JS. Fallback: IntersectionObserver + clase.
 - **View Transitions API**: `document.startViewTransition()` para transiciones de página/vista SPA y MPA (`@view-transition`); envolver en `@supports` y respetar `prefers-reduced-motion`.
-- **Anchor Positioning**: tooltips/popovers anclados en CSS puro (`anchor-name`, `position-anchor`); ver `disenar-design-system`.
+- **Anchor Positioning**: tooltips/popovers anclados en CSS puro (`anchor-name`, `position-anchor`); ver `build-design-system`.
 - **Color moderno**: OKLCH, `color-mix()`, color relativo `oklch(from …)` para escalas y estados sin multiplicar tokens.
 
 ### Duraciones Estándar

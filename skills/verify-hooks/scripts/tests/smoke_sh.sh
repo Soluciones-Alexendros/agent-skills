@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# smoke_sh.sh — Smoke test de verificar-hooks/scripts.
+# smoke_sh.sh — Smoke test de verify-hooks/scripts.
 # Crea un repo temporal minimo con package.json y verifica que gate-husky.sh
 # instala hooks y pasa el gate en verde.
 set -euo pipefail
@@ -36,4 +36,4 @@ git add -A 2>/dev/null || true
 bash "$ROOT/scripts/gate-husky.sh" "$TMP"
 test -f "$TMP/.husky/pre-commit"
 test -f "$TMP/.lintstagedrc"
-echo "smoke verificar-hooks: OK"
+echo "smoke verify-hooks: OK"

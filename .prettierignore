@@ -1,0 +1,14 @@
+# Generated artifacts — produced by tools/skill-router/build_index.py.
+skill-index.json
+
+# Untracked migration-pack scaffolding (source of the v3.0 migration).
+docs/NuevoPlan/
+
+# Historical / frozen material.
+docs/archives/
+
+# Reference material: verbatim source excerpts and third-party docs.
+**/references/
+
+# Test fixtures: exact-bytes inputs, must not be reformatted.
+**/fixtures/

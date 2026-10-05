@@ -32,5 +32,7 @@ await upload({ file, pathname: `avatares/${file.name}` });
 ## URL firmada de lectura
 
 ```typescript
-const url = await bucket.getSignedUrl("facturas/2026-001.pdf", { expiresIn: 3600 });
+const url = await bucket.getSignedUrl("facturas/2026-001.pdf", {
+  expiresIn: 3600,
+});
 ```

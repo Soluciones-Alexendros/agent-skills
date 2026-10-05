@@ -1,4 +1,4 @@
-# construir-typescript — ejemplos detallados
+# build-typescript — ejemplos detallados
 
 ## Patrones avanzados
 

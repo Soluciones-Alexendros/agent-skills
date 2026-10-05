@@ -49,5 +49,5 @@ else
   ok "inicio_plan.py args inválidos fallan"
 fi
 
-if [[ $fail -eq 0 ]]; then echo "smoke verificar-repo scripts: VERDE"; else echo "smoke verificar-repo scripts: ROJO" >&2; fi
+if [[ $fail -eq 0 ]]; then echo "smoke verify-repo scripts: VERDE"; else echo "smoke verify-repo scripts: ROJO" >&2; fi
 exit "$fail"

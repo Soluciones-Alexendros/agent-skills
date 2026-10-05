@@ -1,6 +1,6 @@
 # Configuración común Upstash (ES)
 
-> Recurso interno de la skill `construir-upstash`. Variables de entorno y patrón `fromEnv()` compartidos por los 7 modos.
+> Recurso interno de la skill `build-upstash`. Variables de entorno y patrón `fromEnv()` compartidos por los 7 modos.
 
 ## Variables de entorno por servicio
 

@@ -63,7 +63,7 @@ docs/
 | `make test` | unit/function (+ coverage) |
 | `make smoke` | health/rutas/`--help` post-build |
 
-## Cómo usar en auditoría (verificar-repo)
+## Cómo usar en auditoría (verify-repo)
 
 1. Detectar perfil (P0/P1/P2) según runtime, público y docs existentes.
 2. Ejecutar `scripts/check-product-structure.sh <repo> --profile P0|P1|P2`.

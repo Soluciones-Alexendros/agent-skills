@@ -1,6 +1,6 @@
 # Redis Serverless (Upstash) — Referencia Completa
 
-> **Modo interno de `construir-upstash`** (`modes/redis/MODE.md`) — referencia completa de nivel standalone.
+> **Modo interno de `build-upstash`** (`modes/redis/MODE.md`) — referencia completa de nivel standalone.
 
 ---
 

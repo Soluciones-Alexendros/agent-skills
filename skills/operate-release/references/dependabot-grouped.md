@@ -1,6 +1,6 @@
 # Actualizaciones agrupadas: Renovate (canon) y sintaxis Dependabot groups
 
-Usar en Fase C de `operar-release`. El bot de version-updates de la flota es Renovate; Dependabot `version-updates` sigue prohibido. Este documento fija cómo agrupar en Renovate y deja la sintaxis `groups` de Dependabot solo como referencia de migración.
+Usar en Fase C de `operate-release`. El bot de version-updates de la flota es Renovate; Dependabot `version-updates` sigue prohibido. Este documento fija cómo agrupar en Renovate y deja la sintaxis `groups` de Dependabot solo como referencia de migración.
 
 ## Renovate agrupado (canon)
 

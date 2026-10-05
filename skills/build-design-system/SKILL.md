@@ -1,17 +1,19 @@
 ---
 name: build-design-system
-description: >
-  Build design systems with tokens (Style Dictionary, Figma Tokens/Tokens Studio),
-  Tailwind v4 and reusable UI components. Use when creating a design system,
-  tokens or a UI component library. Not for pinpoint aesthetic direction of a
-  screen (→ build-interface) or a11y/SEO audit (→ verify-compliance).
+description:
+  "Build design systems with tokens (Style Dictionary, Figma Tokens/Tokens Studio), Tailwind v4 and reusable UI components. Use when creating a design system, tokens or a UI component library. Not for pinpoint aesthetic direction of a screen (→ build-interface) or a11y/SEO audit (→ verify-compliance).
+
+  "
 license: MIT
 metadata:
-  author: "Soluciones-Alexendros (adapted)"
-  version: "2.0.0"
+  author: Soluciones-Alexendros (adapted)
+  version: 3.0.0
   domain: build
   type: atomic
   language: en
+  keywords: build-design-system
+compatibility: opencode, codex, cursor, copilot
+allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # Web Design System (tokens + Tailwind + components)

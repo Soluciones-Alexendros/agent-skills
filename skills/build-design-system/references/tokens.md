@@ -59,5 +59,5 @@ Ver `references/modern-css.md` para el setup completo con `@tailwindcss/vite`.
 ## Gate de accesibilidad
 
 Verificar contraste WCAG AA en cada par semántico (texto/fondo) con la matriz de
-`verificar-compliance` (`scripts/contrast.py` como referencia de cálculo). 0 violaciones
+`verify-compliance` (`scripts/contrast.py` como referencia de cálculo). 0 violaciones
 AA antes de entregar el set de tokens.

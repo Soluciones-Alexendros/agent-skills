@@ -1,6 +1,6 @@
 # Factoría de clientes Upstash (ES)
 
-> Recurso interno de la skill `construir-upstash`. Creación de clientes por servicio y runtime. Detalle de credenciales en `config.md`.
+> Recurso interno de la skill `build-upstash`. Creación de clientes por servicio y runtime. Detalle de credenciales en `config.md`.
 
 ## Node.js / Edge / Vercel (`@upstash/*`)
 

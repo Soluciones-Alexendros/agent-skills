@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Entrada única de Fase 0 (verificar-repo): ejecuta el escáner y el chequeo de estructura.
+# Entrada única de Fase 0 (verify-repo): ejecuta el escáner y el chequeo de estructura.
 # Uso: audit-repo.sh <ruta_repo> [--profile P0|P1|P2] [--out DIR]
 # No modifica el repositorio auditado; escribe scan.json/scan.md fuera de él.
 
