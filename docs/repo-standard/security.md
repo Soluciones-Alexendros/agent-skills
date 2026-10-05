@@ -2,9 +2,9 @@
 
 ### Propósito de este documento
 
-- **Objetivos:** Fijar la línea mínima de seguridad no negociable de la flota: escaneo de secretos, pinning de Actions con SHA, permisos mínimos, anti script-injection y supply chain. Solo lectura: la auditoría la ejecuta `operar-release` (Fase D) con `operar-release/references/actions-security.md` como procedimiento.
+- **Objetivos:** Fijar la línea mínima de seguridad no negociable de la flota: escaneo de secretos, pinning de Actions con SHA, permisos mínimos, anti script-injection y supply chain. Solo lectura: la auditoría la ejecuta `operate-release` (Fase D) con `operate-release/references/actions-security.md` como procedimiento.
 - **Estructura:** Esta meta-sección → Línea mínima (bloqueos) → Secret scanning → Pinning → Permisos → Script injection → Supply chain/OIDC → Incidentes de referencia.
-- **Contenido a integrar según contexto:** En un producto, aplicar la línea mínima sin excepciones por tamaño; el gate proporcional (`operar-release/assets/checklist-readiness.md`) decide qué avisos suben a bloqueo en repos críticos.
+- **Contenido a integrar según contexto:** En un producto, aplicar la línea mínima sin excepciones por tamaño; el gate proporcional (`operate-release/assets/checklist-readiness.md`) decide qué avisos suben a bloqueo en repos críticos.
 
 ## Línea mínima (siempre bloquea)
 
@@ -31,7 +31,7 @@ Nunca hacer commit de un `uses:` con tag flotante (`@v*`, `@main`, `@master`) ni
 
 ## Pinning de Actions (procedimiento resumido)
 
-Procedimiento completo en `operar-release/references/actions-security.md`; antes de citarlo, abrir las fuentes oficiales:
+Procedimiento completo en `operate-release/references/actions-security.md`; antes de citarlo, abrir las fuentes oficiales:
 
 - `https://docs.github.com/en/actions/reference/security/secure-use`
 - `https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/`
@@ -43,9 +43,9 @@ Procedimiento completo en `operar-release/references/actions-security.md`; antes
 4. Si es tag anotado, resolver `git/tags/OBJECT_SHA` hasta el commit.
 5. Confirmar `gh api repos/OWNER/REPO/commits/COMMIT_SHA --jq .sha`.
 6. Escribir `uses: owner/repo@COMMIT # vX.Y.Z`.
-7. Mantener con Renovate (`github-actions`) o Dependabot `github-actions` en PRs revisables.
+7. Mantener con Renovate (`github-actions`) en PRs revisables.
 
-Los SHA de `operar-release/assets/` se verificaron el 2026-09-23: repetir el procedimiento antes de copiarlos. Si un paso falla, `[PENDIENTE]` y no reutilizar el pin.
+Los SHA de `operate-release/assets/` se verificaron el 2026-09-23: repetir el procedimiento antes de copiarlos. Si un paso falla, `[PENDIENTE]` y no reutilizar el pin.
 
 ## Permisos mínimos
 

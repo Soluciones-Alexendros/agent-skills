@@ -6,6 +6,10 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [Unreleased]
 
+- `operate-release` 2.0.0 -> 2.0.1 (patch)
+
+  Sustituir Dependabot por Renovate
+
 ### Added
 
 - `operar-release` 2.2.0: modo G cierre de trabajo al finalizar un plan (`references/cierre-trabajo.md`): gate Husky, e2e Playwright, revisión contra el plan, PRs a `main`, merge-watch squash y limpieza.
@@ -17,6 +21,26 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 - `verificar-hooks` 3.2.0: modo gate y `pre-push` e2e cuando el repo ya tiene script Playwright.
 - `verificar-repo` Fase 8 distingue publicación (B/F) y cierre de trabajo (G).
 - `operar-release` merge-watch: `/pr-babysit --ship`, Vercel Hobby no requerido, `--delete-branch`.
+
+## [3.0.1] - 2026-10-05
+
+### Changed
+
+- `devDependencies.lint-staged` 15.5.2 → 17.6.0 (Dependabot #8).
+
+## [3.0.0] - 2026-10-05
+
+### Changed
+
+- **Breaking:** estándar v3.0 OpenCode-first: 25 skills en layout plano `skills/<name>/SKILL.md`.
+- **Breaking:** nombres en inglés (`operate-health`, `operate-maintenance`, `operate-security`, `verify-dependencies`) y frontmatter de 6 claves (`name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`); `compatibility` = `opencode, codex, cursor, copilot`, `metadata` string→string, sin dependencia de un único vendor.
+- 4 skills largas extraídas a `references/` manteniendo `SKILL.md` < 200 líneas; referencias `→` reescritas a nombres ingleses; `docs/TAXONOMY.md` actualizado.
+
+### Added
+
+- Router determinista `tools/skill-router/` (`route.py`, `build_index.py`, `intent-map.yaml`) y `skill-index.json` regenerable (25 skills).
+- Harness OpenCode-first: `AGENTS.md`, `opencode.json`, `.opencode/agents/`, `templates/SKILL_TEMPLATE.md`.
+- Validación v3 en `run-validation.sh` (frontmatter, referencias, arcos domain-scoped, paridad de índice, smoke del router) y guías en `docs/`.
 
 ## [2.2.0] - 2026-09-30
 
@@ -95,7 +119,9 @@ Primera publicación pública del repo `Soluciones-Alexendros/agent-skills` (21 
 - Estructura `skills/<nombre>/` con frontmatter normalizado (`license: MIT`, `metadata` con autor, versión, dominio e idioma).
 - Validadores `tools/validate/` (spec + enlaces), CI en `.github/workflows/` y `run-validation.sh` agregado.
 
-[Unreleased]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v3.0.1...HEAD
+[3.0.1]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v2.2.0...v3.0.0
 [2.2.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v2.0.0...v2.2.0
 [2.0.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v0.1.0...v1.0.0
