@@ -43,3 +43,11 @@ Content is Spanish, frontmatter description is bilingual (EN + ES triggers) for 
 ## Progressive Disclosure
 
 SKILL.md is <200 lines. Heavy docs live in references/. Read them only when SKILL.md says so.
+
+## Learned User Preferences
+
+- Al cerrar el modo BUILD de un plan (implementación completa): validar en local (pre-commit / que el proyecto monte) antes de sincronizar; crear el commit sin esperar a que el usuario diga «commit»; crear el PR según el plan; el verde local debe anticipar CI verde y merge sin babysitting ni checks en rojo.
+
+## Learned Workspace Facts
+
+- El catálogo canónico son 18 skills en 5 dominios: `plan`, `system`, `project`, `web`, `role` (prefijo del nombre = dominio).
