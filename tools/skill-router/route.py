@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Deterministic router for Soluciones-Alexendros/agent-skills — OpenCode-first
+Deterministic router for Soluciones-Alexendros/autoworkspace — OpenCode-first
 No LLM, vendor-neutral, pure Python TF + trigger boost.
 Usage:
   python tools/skill-router/route.py "audita y publica este repo" --top 3

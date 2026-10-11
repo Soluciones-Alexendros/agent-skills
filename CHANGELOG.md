@@ -6,8 +6,22 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-10-11
+
+### Added
+
+- Pipeline Autoworkspace: `templates/autoworkspace/` (`project.yaml`, `status.yaml`) y `tools/workspace-router/` (fases DEFINE→STATUS + bump declarativo).
+- Renovate cubre también `pip_requirements` / `pep621`; referencia `renovate-grouped.md`.
+- `role-front` 1.0.0 y `role-back` 1.0.0: agentes especialistas de implementación con métodos ejecutables.
+
+### Security
+
+- `pytest` 8.3.5 → 9.0.3 (GHSA-6w46-j5rx-g56g).
+- Hallazgos de secretos en `scan_repo` / `inicio_plan`: solo path/línea/tipo/fingerprint (sin valor).
+
 ### Changed
 
+- **Breaking:** producto renombrado a **autoworkspace** (antes agent-skills).
 - **Breaking:** taxonomía v4 — 18 skills en 5 dominios (`plan`, `system`, `project`, `web`, `role`). Prefijo del nombre = dominio.
   - `planning-*` → `plan-specification`, `plan-continue`, `plan-validation` (sin sufijo `driven-development`).
   - `operate-{health,maintenance,security}` → `system-*`; `build-proton-suite` → `system-proton`.
@@ -17,16 +31,13 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 - `plan-continue` absorbe el análisis de repo de `verify-repo` (scripts y refs de inicio de plan).
 - `plan-specification` absorbe el desglose de `planning-task-breakdown`.
 - `role-back` destila patrones serverless (caché/KV, colas, rate limit, blobs, búsqueda); Upstash como proveedor de ejemplo.
+- `project-publish` 4.0.0 → 4.1.0 (merge-watch listen + política merge commit).
 
 ### Removed
 
 - Skills finas: `operate-lifecycle`, `operate-monitoring`, `verify-fullaudit`, `build-automation`.
 - Skills de lenguaje/ecosistema: `build-typescript`, `build-upstash` (contenido útil en `role-back`).
 - Skills absorbidas: `planning-task-breakdown`, `verify-repo`, `build-interface`, `build-design-system`.
-
-### Added
-
-- `role-front` 1.0.0 y `role-back` 1.0.0: agentes especialistas de implementación con métodos ejecutables.
 
 ## [3.0.2] - 2026-10-05
 
@@ -126,16 +137,16 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [0.1.0] - 2026-09-26
 
-Primera publicación pública del repo `Soluciones-Alexendros/agent-skills` (21 skills, licencia MIT).
+Primera publicación pública del repo `Soluciones-Alexendros/autoworkspace` (21 skills, licencia MIT).
 
 - Estructura `skills/<nombre>/` con frontmatter normalizado (`license: MIT`, `metadata` con autor, versión, dominio e idioma).
 - Validadores `tools/validate/` (spec + enlaces), CI en `.github/workflows/` y `run-validation.sh` agregado.
 
-[Unreleased]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v3.0.2...HEAD
-[3.0.2]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v3.0.1...v3.0.2
-[3.0.1]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v3.0.0...v3.0.1
-[3.0.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v2.2.0...v3.0.0
-[2.2.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v2.0.0...v2.2.0
-[2.0.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v1.0.0...v2.0.0
-[1.0.0]: https://github.com/Soluciones-Alexendros/agent-skills/compare/v0.1.0...v1.0.0
-[0.1.0]: https://github.com/Soluciones-Alexendros/agent-skills/releases/tag/v0.1.0
+[Unreleased]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v3.0.2...HEAD
+[3.0.2]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v2.2.0...v3.0.0
+[2.2.0]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v2.0.0...v2.2.0
+[2.0.0]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v1.0.0...v2.0.0
+[1.0.0]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v0.1.0...v1.0.0
+[0.1.0]: https://github.com/Soluciones-Alexendros/autoworkspace/releases/tag/v0.1.0

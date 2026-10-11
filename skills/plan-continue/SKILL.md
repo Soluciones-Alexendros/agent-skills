@@ -1,10 +1,10 @@
 ---
 name: plan-continue
-description: "Continue work according to the existing roadmap; when none exists, audit repository state against repo-standard and reason the next logical steps. Cite official documentation when framework-specific decisions matter. Use when asking where to start, plan mode, repo starting, or bringing a project up to date. Not for release close or version publication (→ project-publish)."
+description: "Autoworkspace orchestrator: continue from roadmap or .autoworkspace status; when missing, audit the repo, scaffold project.yaml/status.yaml, and route DEFINE→SCHEMAS→IMPLEMENT→VALIDATE→INTEGRATE→STATUS. Use when asking where to start, plan mode, repo starting, or bringing a project up to date. Not for release close or version publication (→ project-publish)."
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 4.0.0
+  version: 4.1.0
   domain: plan
   type: orchestrator
   language: en
@@ -17,75 +17,100 @@ allowed-tools: Read, Grep, Glob, Bash, Write
 
 ## Overview
 
-Continue according to the planned roadmap. When there is no roadmap, analyze
-repository state (sync, status board, failures, contrast with repo-standard)
-and reason the next logical steps. Framework-specific decisions cite official
-documentation — training data goes stale.
+Continue according to the planned roadmap and the declarative Autoworkspace
+status. When none exists, analyze the repository, scaffold `.autoworkspace/`,
+and reason the next pipeline phase. Framework-specific decisions cite official
+documentation.
 
 ## When to Use
 
 - Operator asks where to start or opens plan mode
 - Repo starting / bring a project up to date
-- An existing `tasks/`, roadmap or status board should drive the next work
+- Drive work from `.autoworkspace/status.yaml`, `tasks/`, or a roadmap
 - Mix of audit then continue implementation
 
 **When NOT to use:** Release close or version publication (→ project-publish);
-writing a fresh multi-module spec from scratch (→ plan-specification).
+writing a fresh multi-module spec from scratch without orchestration
+(→ plan-specification alone).
+
+## Autoworkspace pipeline
+
+```text
+DEFINE → SCHEMAS → IMPLEMENT → VALIDATE → INTEGRATE → STATUS
+```
+
+1. Ensure `.autoworkspace/project.yaml` and `status.yaml` exist (copy from
+   `templates/autoworkspace/` or run the router once).
+2. Route the current phase:
+
+```bash
+python tools/workspace-router/run.py --phase DEFINE --repo . --json
+```
+
+3. Invoke the skill returned (`skill` field). After a successful phase, bump status:
+
+```bash
+python tools/workspace-router/run.py --phase STATUS --repo . --bump --note "phase done"
+```
+
+| Phase     | Typical skill                        | Output                                 |
+| --------- | ------------------------------------ | -------------------------------------- |
+| DEFINE    | plan-specification                   | Spec + tasks                           |
+| SCHEMAS   | plan-continue (acceptance schemas)   | `.autoworkspace/schemas/` + test stubs |
+| IMPLEMENT | role-front / role-back / role-design | Code                                   |
+| VALIDATE  | plan-validation                      | Red-green-refactor proof               |
+| INTEGRATE | project-hooks / project-publish      | Local gates / CI / release handoff     |
+| STATUS    | plan-continue                        | `status.yaml` bump + ESTADO board      |
 
 ## Process
 
-### 1. Detect existing plan
+### 1. Detect existing plan / status
 
-Look for `tasks/plan.md`, `tasks/todo.md`, `ESTADO.md`, roadmap docs, open
-milestones or an active branch with a clear work package.
+Look for `.autoworkspace/status.yaml`, `tasks/plan.md`, `tasks/todo.md`,
+`ESTADO.md`, roadmap docs, or an active work branch.
 
-- **Roadmap present** → pick the next unfinished task with unmet dependencies;
-  verify acceptance criteria still match the codebase; proceed.
-- **No roadmap** → run the repository analysis below, then propose the next
-  steps (and optionally hand off to → plan-specification).
+- **Status/roadmap present** → route the current `phase` and continue.
+- **None** → repository analysis, then scaffold `.autoworkspace/` and DEFINE.
 
 ### 2. Repository analysis (when no roadmap)
 
 1. Sync clone with remote
-2. Verify status board and roadmap / failures
-3. Contrast with repo-standard: P0/P1/P2, CI quality → test → smoke, Renovate
-4. Apply necessary corrections that unblock progress
-5. Identify the evolution plan and write it down
+2. Status board via `inicio_plan.py` (P0/P1/P2, Renovate, CI)
+3. Contrast with repo-standard; apply unblockers
+4. Write evolution plan; hand off to DEFINE if needed
 
-Detail for plan start: [inicio-plan.md](references/inicio-plan.md).
-Canon contrast: [canon.md](references/canon.md), [convenciones-y-canon.md](references/convenciones-y-canon.md).
+Detail: [inicio-plan.md](references/inicio-plan.md).
 
-### 3. Source-backed decisions
+### 3. SCHEMAS after approved spec
 
-When the next step depends on a framework or library version:
+From the approved spec, write acceptance schemas and failing test stubs under
+`.autoworkspace/schemas/` (and the project's test tree). Then IMPLEMENT with
+roles and VALIDATE with → plan-validation.
 
-1. Detect stack and versions from dependency files
-2. Fetch the specific official docs page (not the homepage)
-3. Implement following documented patterns; surface conflicts with existing code
-4. Cite sources (formats in [citation-guide.md](references/citation-guide.md))
+### 4. Source-backed decisions
 
-Authority hierarchy and safety: [source-guide.md](references/source-guide.md).
-Verification checklist: [verification-guide.md](references/verification-guide.md).
+Detect stack versions, fetch official docs for the feature page, cite sources.
+Guides: [source-guide.md](references/source-guide.md),
+[citation-guide.md](references/citation-guide.md).
 
-### 4. Handoff
+### 5. Handoff
 
-- Implementation work → → role-front / → role-back / → role-design plus
-  → plan-validation
-- Publish or close work → → project-publish
-- Mixed «audítalo y publícalo» → finish analysis here, then hand off to
-  → project-publish
+- Publish / close → → project-publish
+- «Audítalo y publícalo» → analysis here, then → project-publish
+- Supply-chain before new deps → → project-libraries
 
 ## Tools
 
-- `scripts/scan_repo.py` — repository scan
+- `scripts/scan_repo.py` — repository scan (secret findings: path/line/fingerprint only)
 - `scripts/audit-repo.sh` — repo audit
 - `scripts/check-product-structure.sh` — product structure check
 - `scripts/inicio_plan.py` — plan initialization / status board
+- `../../tools/workspace-router/run.py` — phase router + status bump
 
 ## References
 
-- [inicio-plan.md](references/inicio-plan.md) — plan start / repo starting mode
+- [inicio-plan.md](references/inicio-plan.md) — plan start / repo starting
 - [plantilla-informe.md](references/plantilla-informe.md) — report template
-- [source-guide.md](references/source-guide.md) — authority hierarchy, fetch safety
+- [source-guide.md](references/source-guide.md) — authority hierarchy
 - [citation-guide.md](references/citation-guide.md) — citation formats
 - [verification-guide.md](references/verification-guide.md) — checklist

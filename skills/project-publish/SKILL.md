@@ -4,7 +4,7 @@ description: "Closes a GitHub repository: version publication, CI/CD audit, or c
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 4.0.0
+  version: 4.1.0
   domain: project
   type: atomic
   language: en

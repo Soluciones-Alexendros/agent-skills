@@ -1,12 +1,16 @@
-# agent-skills
+# autoworkspace
 
-18 skills de ingeniería para agentes de programación, mantenidas por Soluciones-Alexendros bajo licencia MIT. Los nombres, dominios y contenido de las skills están en inglés; las conversaciones y los resultados permanecen en español.
+Workspace agéntico de Soluciones-Alexendros (MIT): no es una vitrina de skills, sino un pipeline preprogramado con variables por proyecto — especificación → esquemas/tests → código → validación → integración → status declarativo versionado.
+
+18 skills en 5 dominios (`plan`, `system`, `project`, `web`, `role`). Nombres y contenido de skills en inglés; conversaciones en español.
+
+**Deps:** version-updates vía [Renovate](.github/renovate.json) (Dependabot Alerts de seguridad pueden quedar ON). App Renovate en la org es prerrequisito humano.
 
 ## Inicio rápido
 
 ```bash
-git clone https://github.com/Soluciones-Alexendros/agent-skills.git
-cp -r agent-skills/skills/<nombre-de-la-skill> ~/.agents/skills/
+git clone https://github.com/Soluciones-Alexendros/autoworkspace.git
+cp -r autoworkspace/skills/<nombre-de-la-skill> ~/.agents/skills/
 ```
 
 ## Configuración en OpenCode (harness principal)
@@ -14,8 +18,8 @@ cp -r agent-skills/skills/<nombre-de-la-skill> ~/.agents/skills/
 OpenCode es el harness principal: no necesita sistema de plugins, solo `AGENTS.md` + `opencode.json` (`skillDirectories`). El agente evalúa cada petición y la asigna a una skill según su descripción y palabras clave.
 
 ```bash
-git clone https://github.com/Soluciones-Alexendros/agent-skills.git
-cd agent-skills
+git clone https://github.com/Soluciones-Alexendros/autoworkspace.git
+cd autoworkspace
 bash scripts/install.sh            # global: ~/.config/opencode/skills, ~/.agents/skills, ~/.codex/skills, ~/.cursor/skills
 bash scripts/install-opencode.sh   # local al proyecto: .opencode/skills + .agents/skills
 ```
@@ -24,7 +28,10 @@ Comprueba el enrutado con:
 
 ```bash
 python tools/skill-router/route.py "limpia mi sistema Arch" --top 3
+python tools/workspace-router/run.py --phase DEFINE --repo . --json
 ```
+
+Plantillas de proyecto: `templates/autoworkspace/` → copiar a `<repo>/.autoworkspace/`.
 
 Consulta `docs/harness-integration.md` (tabla multi-harness), `docs/opencode-setup.md` y `docs/routing.md`.
 

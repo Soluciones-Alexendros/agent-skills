@@ -256,11 +256,16 @@ def fallos_desde(scan: dict, git: dict, est: dict, gh: dict) -> list[dict]:
     fallos: list[dict] = []
     for s in scan.get("secretos_potenciales") or []:
         if s.get("confianza") == "alta":
+            # Solo path:línea:tipo:fingerprint — nunca valor del match
+            fp = s.get("fingerprint") or "n/d"
             fallos.append(
                 {
                     "sev": "P0",
                     "fuente": "escaneo",
-                    "detalle": f"posible secreto en {s.get('fichero')}:{s.get('linea')} ({s.get('tipo')})",
+                    "detalle": (
+                        f"posible secreto en {s.get('fichero')}:{s.get('linea')} "
+                        f"({s.get('tipo')}; fp={fp})"
+                    ),
                 }
             )
     for env in scan.get("env_versionados") or []:

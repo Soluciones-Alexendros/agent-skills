@@ -7,7 +7,7 @@
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch"],
-      "matchManagers": ["npm", "github-actions"],
+      "matchManagers": ["npm", "github-actions", "pip_requirements", "pep621"],
       "groupName": "minor + patch (CI verde)",
       "automerge": true
     },
