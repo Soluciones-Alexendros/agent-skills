@@ -27,10 +27,9 @@ User Prompt
 Prompt: "audita y publica este repo"
 
 - route.py:
-  9.5 verify-repo -> skills/verify-repo/SKILL.md
-  8.8 operate-release -> skills/operate-release/SKILL.md
-  7.1 operate-lifecycle -> skills/operate-lifecycle/SKILL.md
-- Agente OpenCode ejecuta verify-repo Fase 1..8, Fase 8 hace handoff a operate-release
+  9.5 plan-continue -> skills/plan-continue/SKILL.md
+  8.8 project-publish -> skills/project-publish/SKILL.md
+- Agente OpenCode ejecuta plan-continue (análisis / roadmap), luego handoff a project-publish
 
 ## Añadir triggers
 
@@ -45,7 +44,7 @@ python tools/skill-router/build_index.py
 ```bash
 python tools/skill-router/route.py --interactive
 prompt> por donde empiezo con este repo
-8.90 operate-lifecycle -> skills/operate-lifecycle/SKILL.md
+8.90 plan-continue -> skills/plan-continue/SKILL.md
 ```
 
 ## Vendor-neutral

@@ -1,4 +1,4 @@
-# OpenCode Setup — agent-skills v3.0 (vendor-neutral)
+# OpenCode Setup — agent-skills (vendor-neutral)
 
 Esta guía explica cómo usar Agent Skills con OpenCode de forma agent-driven (sin slash commands).
 
@@ -49,21 +49,22 @@ OpenCode agents son instruidos vía AGENTS.md a:
 El agente evalúa cada request y mapea a skill apropiada.
 Ejemplos:
 
-- "limpia mi Arch" → `operate-maintenance` + `operate-health`
-- "revisa la arquitectura" → `verify-architecture`
-- "prepara release" → `operate-release`
-- "audita compliance" → `verify-compliance`
+- "limpia mi Arch" → `system-maintenance` + `system-health`
+- "revisa la arquitectura" → `project-architecture`
+- "prepara release" → `project-publish`
+- "audita compliance" → `web-compliance`
+- "implementa el frontend" → `role-front`
 
 El usuario NO necesita pedir skills explícitamente.
 
 ### 3. Lifecycle Mapping
 
-- DEFINE → planning-spec-driven-development
-- PLAN → planning-task-breakdown
-- BUILD → build-* + planning-test-driven-development
-- VERIFY → verify-*
-- OPERATE → operate-*
-- DESIGN → design-*
+- DEFINE → plan-specification
+- CONTINUE → plan-continue
+- IMPLEMENT → role-* + plan-validation
+- PROJECT GATES → project-*
+- WEB AUDITS → web-*
+- SYSTEM (local OS) → system-*
 
 ### Agent Expectations (Critical)
 
@@ -78,13 +79,7 @@ Estas reglas son forzadas vía AGENTS.md y `tools/skill-router/route.py`.
 
 Usa lenguaje natural:
 
-- "Diseña feature X"
-- "Planifica este cambio"
-- "Limpia mi sistema"
-- "Audita y publica"
-
-El agente seleccionará automáticamente la skill correcta.
-
-## Vendor-neutral
-
-Este setup es OpenCode-first, solo usa OpenCode + estándares abiertos, sin dependencias de un único vendor.
+- "especifica esta feature"
+- "por dónde empiezo con este repo"
+- "publica la release"
+- "audita OWASP este código"

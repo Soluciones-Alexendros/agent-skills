@@ -15,15 +15,15 @@ Before ANY action, you MUST evaluate if a skill in `skills/` applies.
 
 ## Lifecycle Enforcement
 
-DEFINE → planning-spec-driven-development
-PLAN → planning-task-breakdown
-BUILD → build-* + planning-test-driven-development
-VERIFY → verify-*
-OPERATE → operate-*
-DESIGN → design-*
+DEFINE → plan-specification
+CONTINUE → plan-continue
+IMPLEMENT → role-* + plan-validation
+PROJECT GATES → project-*
+WEB AUDITS → web-*
+SYSTEM (local OS) → system-*
 
-Ambiguous "¿por dónde empiezo?" or "pon al día este proyecto" → operate-lifecycle
-Mix audit+release ("audítalo y publícalo") → verify-repo first, its Phase 8 hands off to operate-release
+Ambiguous "¿por dónde empiezo?" or "pon al día este proyecto" → plan-continue
+Mix audit+release ("audítalo y publícalo") → plan-continue first, then hand off to project-publish
 
 ## OpenCode Specific
 

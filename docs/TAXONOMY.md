@@ -1,18 +1,18 @@
 # Skill taxonomy
 
-25 skills in 5 domains. The `metadata.domain` frontmatter field reflects this table, and the name prefix is the domain (normative, not advisory). The taxonomy is closed: every new skill must fit an existing domain or propose a new one in the PR (see CONTRIBUTING.md).
+18 skills in 5 domains. The `metadata.domain` frontmatter field reflects this table, and the name prefix is the domain (normative, not advisory). The taxonomy is closed: every new skill must fit an existing domain or propose a new one in the PR (see CONTRIBUTING.md).
 
-| Domain     | Scope                                                     | Skills                                                                                                                                                             |
-| ---------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `build`    | Building: typing, automation, data, integrations          | build-automation · build-design-system · build-interface · build-proton-suite · build-typescript · build-upstash                                                   |
-| `operate`  | Publishing and continuous operation                       | operate-lifecycle · operate-maintenance · operate-monitoring · operate-release · operate-health · operate-security                                                 |
-| `planning` | Work planning and decomposition                           | planning-source-driven-development · planning-spec-driven-development · planning-task-breakdown · planning-test-driven-development                                 |
-| `verify`   | Quality gates and audits                                  | verify-architecture · verify-compliance · verify-dependencies · verify-fullaudit · verify-hooks · verify-owasp · verify-performance · verify-repo · verify-testing |
-| `design`   | Reserved for future architecture skills (currently empty) | —                                                                                                                                                                  |
+| Domain    | Scope                                                                                    | Skills                                                                                       |
+| --------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `plan`    | How work is decided: specification, continuation, validation                             | plan-specification · plan-continue · plan-validation                                         |
+| `system`  | Local OS and workstation tooling (not online DevOps)                                     | system-health · system-maintenance · system-security · system-proton                         |
+| `project` | Static repository concerns: docs, config, versioning, packaging, local quality           | project-architecture · project-hooks · project-libraries · project-publish · project-testing |
+| `web`     | Dynamic behavior of a deployed, internet-accessible project                              | web-compliance · web-owasp · web-performance                                                 |
+| `role`    | Specialist implementation agents with executable methods (replace vague persona prompts) | role-back · role-design · role-front                                                         |
 
 ## Closed sets (normative)
 
-**Domain** (metadata.domain): `build` | `design` | `operate` | `planning` | `verify`
+**Domain** (metadata.domain): `plan` | `system` | `project` | `web` | `role`
 
 **Type** (metadata.type): `atomic` | `orchestrator` | `router` | `audit`
 

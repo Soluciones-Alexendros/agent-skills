@@ -6,9 +6,9 @@ Copy or link the skill folder into the user or project skills directory:
 
 ```bash
 # global (example)
-cp -r skills/verify-owasp ~/.agents/skills/
+cp -r skills/web-owasp ~/.agents/skills/
 # or per project
-cp -r skills/verify-owasp /path/project/.agents/skills/
+cp -r skills/web-owasp /path/project/.agents/skills/
 ```
 
 Compatible harnesses discover `SKILL.md` through its frontmatter (`name` + `description`).
@@ -57,8 +57,6 @@ Each skill follows the progressive loading pattern:
 1. `SKILL.md` — self-contained start covering 80% of cases.
 2. `references/` — detailed guides per topic, loaded only when the case needs them.
 3. `scripts/` — automation utilities (never loaded into context, executed instead).
-
-`build-upstash` adds `core/` and `modes/<mode>/` as internal router resources; they are not separate skills.
 
 This keeps agent context light: only what the task needs gets read.
 

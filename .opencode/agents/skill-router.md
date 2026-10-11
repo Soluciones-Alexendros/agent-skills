@@ -13,7 +13,7 @@ You are the routing layer for OpenCode harness. No single-vendor dependencies.
 2. Execute: `python tools/skill-router/route.py "$PROMPT" --top 3 --json > /tmp/routed.json`
 3. Parse /tmp/routed.json
 4. If top score > 3.0, you MUST invoke skill tool for that skill: `skill(name="<top-skill>")`
-5. If ambiguous (scores close), present top 3 to user and ask which to execute, then chain in order: audit → hooks → release
+5. If ambiguous (scores close), present top 3 to user and ask which to execute, then chain in order: plan-continue → project-hooks → project-publish
 
 ## Rules
 
@@ -26,7 +26,7 @@ You are the routing layer for OpenCode harness. No single-vendor dependencies.
 
 User: "limpia caches y publica"
 
-- route.py returns operate-maintenance (7.2), operate-release (6.8)
-- Invoke operate-maintenance first (dry-run), then operate-release
+- route.py returns system-maintenance (7.2), project-publish (6.8)
+- Invoke system-maintenance first (dry-run), then project-publish
 
 This agent ensures fluidez en invocación automatizada.

@@ -22,11 +22,11 @@ SKILLS = ROOT / "skills"
 
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+$")
-SKILL_TOKEN_RE = re.compile(r"\b((?:build|design|operate|planning|verify)-[a-z0-9-]+)\b")
-ARROW_RE = re.compile(r"→\s*`?((?:build|design|operate|planning|verify)-[a-z0-9-]+)`?")
+SKILL_TOKEN_RE = re.compile(r"\b((?:plan|system|project|web|role)-[a-z0-9-]+)\b")
+ARROW_RE = re.compile(r"→\s*`?((?:plan|system|project|web|role)-[a-z0-9-]+)`?")
 H2_RE = re.compile(r"^## (.+?)\s*$", re.M)
 PROHIBITED_DIRS = {"agents", "infrastructure", "languages"}
-DOMINIOS = {"build", "design", "operate", "planning", "verify"}
+DOMINIOS = {"plan", "system", "project", "web", "role"}
 TIPOS = {"atomic", "orchestrator", "router", "audit"}
 REQUIRED_H2 = ("Overview", "When to Use")
 FORBIDDEN_H2 = {

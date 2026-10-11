@@ -13,7 +13,7 @@ license: MIT # repo-wide license
 metadata:
   author: Soluciones-Alexendros
   version: "0.1.0" # skill semver
-  domain: build # one of docs/TAXONOMY.md: build | design | operate | planning | verify
+  domain: plan # one of docs/TAXONOMY.md: plan | system | project | web | role
   type: atomic # atomic | orchestrator | router | audit
   language: en
 ---
@@ -49,8 +49,6 @@ skills/<name>/
 └── configs/      # sample configurations
 ```
 
-Exception: `build-upstash` uses `core/` and `modes/<mode>/` as internal router resources. Each `modes/<mode>/references/` stays flat. They are not separate skills.
-
 Forbidden in the repo: `__pycache__/`, `.pytest_cache/`, `.archivado-*` dirs, per-skill `LICENSE` files, loose `agents/`, `infrastructure/`, `languages/` dirs (flattened into `references/`). The validator only fails when those residues are tracked by git.
 
 ## Procedures (scripts and logic)
@@ -80,7 +78,7 @@ Skill autoversioning with `tools/version/bump.py`:
 | `patch`   | fix, docs, typos       | `x.y.Z` → `x.y.Z+1` | compatible fix, docs, typos |
 
 ```bash
-python3 tools/version/bump.py --type minor --skills verify-owasp
+python3 tools/version/bump.py --type minor --skills web-owasp
 python3 tools/version/bump.py --type patch --all --dry-run
 python3 tools/version/bump.py --check --auto --base origin/main
 python3 tools/version/cut_tag.py --dry-run

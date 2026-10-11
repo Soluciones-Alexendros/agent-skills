@@ -6,21 +6,27 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [Unreleased]
 
-- `operate-release` 2.0.0 -> 2.0.1 (patch)
+### Changed
 
-  Sustituir Dependabot por Renovate
+- **Breaking:** taxonomía v4 — 18 skills en 5 dominios (`plan`, `system`, `project`, `web`, `role`). Prefijo del nombre = dominio.
+  - `planning-*` → `plan-specification`, `plan-continue`, `plan-validation` (sin sufijo `driven-development`).
+  - `operate-{health,maintenance,security}` → `system-*`; `build-proton-suite` → `system-proton`.
+  - `verify-{hooks,testing,architecture,dependencies}` → `project-{hooks,testing,architecture,libraries}`; `operate-release` → `project-publish`.
+  - `verify-{compliance,owasp,performance}` → `web-*`.
+  - `build` pasa a dominio `role`: `role-front`, `role-back`, `role-design` (fusión interface + design-system).
+- `plan-continue` absorbe el análisis de repo de `verify-repo` (scripts y refs de inicio de plan).
+- `plan-specification` absorbe el desglose de `planning-task-breakdown`.
+- `role-back` destila patrones serverless (caché/KV, colas, rate limit, blobs, búsqueda); Upstash como proveedor de ejemplo.
+
+### Removed
+
+- Skills finas: `operate-lifecycle`, `operate-monitoring`, `verify-fullaudit`, `build-automation`.
+- Skills de lenguaje/ecosistema: `build-typescript`, `build-upstash` (contenido útil en `role-back`).
+- Skills absorbidas: `planning-task-breakdown`, `verify-repo`, `build-interface`, `build-design-system`.
 
 ### Added
 
-- `operar-release` 2.2.0: modo G cierre de trabajo al finalizar un plan (`references/cierre-trabajo.md`): gate Husky, e2e Playwright, revisión contra el plan, PRs a `main`, merge-watch squash y limpieza.
-- `verificar-repo` 2.2.0: modo I inicio de plan / repo starting (`references/inicio-plan.md`) y script `inicio_plan.py` (tablero `ESTADO.md` + `ESTADO.html`: git, camino del producto, fallos).
-
-### Changed
-
-- `operar-lifecycle` 1.3.0: enruta repo starting / modo plan a `verificar-repo` I y repo ending a `operar-release` G.
-- `verificar-hooks` 3.2.0: modo gate y `pre-push` e2e cuando el repo ya tiene script Playwright.
-- `verificar-repo` Fase 8 distingue publicación (B/F) y cierre de trabajo (G).
-- `operar-release` merge-watch: `/pr-babysit --ship`, Vercel Hobby no requerido, `--delete-branch`.
+- `role-front` 1.0.0 y `role-back` 1.0.0: agentes especialistas de implementación con métodos ejecutables.
 
 ## [3.0.2] - 2026-10-05
 

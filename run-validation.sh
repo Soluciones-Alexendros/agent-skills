@@ -106,7 +106,7 @@ python3 - <<'PY'
 import pathlib, re, sys
 # Domain-scoped: only <domain>-<slug> tokens count as skill refs.
 # Bare prose after an arrow (e.g. "-> test", "-> smoke") is not a skill ref.
-ARROW_RE = re.compile(r"→\s*`?((?:build|design|operate|planning|verify)-[a-z0-9-]+)`?")
+ARROW_RE = re.compile(r"→\s*`?((?:plan|system|project|web|role)-[a-z0-9-]+)`?")
 skills=set(p.name for p in pathlib.Path("skills").iterdir() if p.is_dir())
 ok=True
 for f in sorted(pathlib.Path("skills").glob("*/SKILL.md")):
@@ -119,16 +119,16 @@ print("Arrows OK" if ok else "Arrow checks FAILED")
 sys.exit(0 if ok else 1)
 PY
 
-echo "[4] skill-index.json parity (25 skills)"
+echo "[4] skill-index.json parity (18 skills)"
 python3 tools/skill-router/build_index.py
 python3 - <<'PY'
 import json, sys
 d = json.load(open("skill-index.json"))
 n = len(d.get("skills", []))
 print(f"Index holds {n} skills")
-sys.exit(0 if n == 25 else 1)
+sys.exit(0 if n == 18 else 1)
 PY
-echo "Index rebuilt (25 skills)"
+echo "Index rebuilt (18 skills)"
 fi
 
 if [ "$FULL" = 1 ] || [ "$ONLY_SMOKE" = 1 ]; then
