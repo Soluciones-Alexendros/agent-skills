@@ -27,3 +27,9 @@ Thumbs.db
 *.tmp
 *.bak
 *.log
+
+# Basura local / harness state
+artifacts/
+proteccion-*.json
+proteccion-*.zip
+.cursor/
