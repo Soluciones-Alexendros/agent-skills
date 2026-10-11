@@ -6,12 +6,13 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [Unreleased]
 
-- `project-publish` 4.0.0 -> 4.1.0 (minor)
+## [4.0.0] - 2026-10-11
 
 ### Added
 
 - Pipeline Autoworkspace: `templates/autoworkspace/` (`project.yaml`, `status.yaml`) y `tools/workspace-router/` (fases DEFINE→STATUS + bump declarativo).
 - Renovate cubre también `pip_requirements` / `pep621`; referencia `renovate-grouped.md`.
+- `role-front` 1.0.0 y `role-back` 1.0.0: agentes especialistas de implementación con métodos ejecutables.
 
 ### Security
 
@@ -30,16 +31,13 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 - `plan-continue` absorbe el análisis de repo de `verify-repo` (scripts y refs de inicio de plan).
 - `plan-specification` absorbe el desglose de `planning-task-breakdown`.
 - `role-back` destila patrones serverless (caché/KV, colas, rate limit, blobs, búsqueda); Upstash como proveedor de ejemplo.
+- `project-publish` 4.0.0 → 4.1.0 (merge-watch listen + política merge commit).
 
 ### Removed
 
 - Skills finas: `operate-lifecycle`, `operate-monitoring`, `verify-fullaudit`, `build-automation`.
 - Skills de lenguaje/ecosistema: `build-typescript`, `build-upstash` (contenido útil en `role-back`).
 - Skills absorbidas: `planning-task-breakdown`, `verify-repo`, `build-interface`, `build-design-system`.
-
-### Added
-
-- `role-front` 1.0.0 y `role-back` 1.0.0: agentes especialistas de implementación con métodos ejecutables.
 
 ## [3.0.2] - 2026-10-05
 
