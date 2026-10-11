@@ -51,9 +51,12 @@ SKILL.md is <200 lines. Heavy docs live in references/. Read them only when SKIL
 
 ## Learned User Preferences
 
-- Al cerrar el modo BUILD de un plan (implementación completa): validar en local (pre-commit / que el proyecto monte) antes de sincronizar; crear el commit sin esperar a que el usuario diga «commit»; crear el PR según el plan; el verde local debe anticipar CI verde y merge sin babysitting ni checks en rojo.
+- Al cerrar el modo BUILD de un plan (implementación completa): validar en local (pre-commit / que el proyecto monte) antes de sincronizar; crear el commit sin esperar a que el usuario diga «commit»; crear el PR según el plan; el verde local debe anticipar CI verde.
+- Tras abrir el PR: `gh pr merge <n> --auto --merge --delete-branch` (merge commit; nunca squash/rebase/`--admin`). Suscribir `subscribe_github_ci` (rama head) + `subscribe_github_pr` (scope pr), declarar qué se espera y terminar el turno — escuchar notificaciones de fallo o merge; no hacer polling/babysitting.
+- No crear skills de lenguajes de programación; para dudas o fallos de lenguaje usar Context7 / documentación oficial vigente.
 
 ## Learned Workspace Facts
 
 - El catálogo canónico son 18 skills en 5 dominios: `plan`, `system`, `project`, `web`, `role` (prefijo del nombre = dominio).
 - Producto: **autoworkspace** — pipeline agéntico, no vitrina de skills.
+- Actualización de dependencias: Renovate (no Dependabot).

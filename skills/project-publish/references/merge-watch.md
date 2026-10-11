@@ -1,48 +1,73 @@
-# Fase F — Remediación y merge-watch
+# Fase F — Remediación y merge-watch (escuchar, no vigilar)
 
 Cuando la auditoría deja `BLOCK` remediables o el usuario pide aplicar correcciones de `/project-publish`, esta fase es **parte del workflow**, no un favor opcional.
 
 ## Cuándo aplica
 
 - El usuario dice sí a remediación de pipeline / labels / docs de cierre.
-- El usuario pide «monitoriza hasta mergear» o equivalente tras abrir PRs de remediación.
-- Modo **cierre con publicación**: tras el PR de changelog/version bump, el mismo bucle aplica antes del tag.
+- El usuario pide mergear / auto-merge tras abrir PRs de remediación o de cierre BUILD.
+- Modo **cierre con publicación**: tras el PR de changelog/version bump.
 
 No aplica en modo **auditoría pura** (solo informe).
 
 ## Autorización
 
-Un sí a «aplica remediación» o «sigue con el pipeline» autoriza:
+Un sí a «aplica remediación», «abre el PR» o cierre BUILD autoriza:
 
-1. Commits en rama `chore/project-publish-*` (o `audit/AAAAMMDD` si ya existe).
-2. Push + PR **draft** a `main`.
-3. **Monitorización hasta merge** de ese PR (ver abajo).
+1. Commits en rama de trabajo (`chore/project-publish-*`, `cursor/*`, etc.).
+2. Push + PR (draft si el plan lo pide) a `main`.
+3. **Auto-merge con merge commit** + suscripción a eventos (ver abajo).
 
 Sigue exigiendo sí aparte: borrar labels legacy, tags, `gh release create`, rulesets, rotar secretos.
 
-## Bucle merge-watch (obligatorio tras abrir el PR)
+## Política de merge (normativa)
 
-En Grok, el bucle es `/pr-babysit add --ship <n>` más ciclos `check` hasta MERGED. Sin Graphite: el mismo `--ship` sobre PRs independientes, o `gh pr checks --watch` por PR. El turno no termina con la vigilancia aplazada.
+| Permitido                                      | Prohibido                                      |
+| ---------------------------------------------- | ---------------------------------------------- |
+| `gh pr merge <n> --auto --merge --delete-branch` | `--squash`, `--rebase`                         |
+| Esperar checks required vía auto-merge         | `--admin` / bypass de protección o merge queue |
 
-1. **Estado fresco** cada pasada: `gh pr view`, `gh pr checks` (o `gh pr checks --watch` mientras corren).
-2. Prioridad de bloqueos: conflictos → comentarios no resueltos → CI en rojo.
-3. Fallos de CI **en alcance del PR**: corrige, verifica en local lo mínimo, push (`--force-with-lease` si el rebase lo exige; nunca `--force`).
-4. Cuando required checks están verdes y `mergeable`:
-   - `gh pr ready <n>` si sigue en draft.
-   - `gh pr merge <n> --squash --delete-branch` (o el método que use el repo; no inventes política).
-5. Si un check no requerido falla (job de draft/`pr-summary`, Vercel Hobby en repo privado de org) y los required están verdes: documenta y mergea.
-6. Self-hosted en cola indefinida: solo mergea si el ruleset/branch protection **no** exige ese check; anótalo en el informe.
-7. Nunca force-push a `main`. Nunca cambies workflows solo para silenciar un fallo.
+Si el repo exige otro método en branch protection, documentarlo en el informe y **no** inventar squash.
 
-Tras MERGED, la limpieza de ramas y worktrees del plan está en `cierre-trabajo.md` paso 6.
+## Flujo: publicar y escuchar
+
+Tras abrir el PR (y `gh pr ready` si deja de ser draft):
+
+1. Activar auto-merge:
+
+```bash
+gh pr merge <n> --auto --merge --delete-branch
+```
+
+2. Suscribir la conversación del agente (Cursor):
+
+- `subscribe_github_ci` → `repo: owner/name`, `branch: <head-del-PR>`
+- `subscribe_github_pr` → `scope: pr`, mismo repo + `pullNumber` (o `prUrl`)
+
+3. Declarar en una frase qué se espera (CI terminal o PR merged) y **terminar el turno**.
+   No hacer `gh pr checks --watch` ni bucles de polling: el aviso llega como notificación.
+
+   En Cursor (usuario): `~/.cursor/hooks.json` refuerza esto —
+   `beforeShellExecution` deniega `--squash`/`--rebase`/`--admin` en `gh pr merge`;
+   `afterShellExecution` inyecta el recordatorio de suscribir y terminar turno.
+   El aviso de fallo/éxito **no** lo emite el hook local: lo emiten
+   `subscribe_github_ci` / `subscribe_github_pr` como notificación de la conversación.
+
+4. Cuando llegue el evento:
+
+- **CI failure** → corregir en alcance del PR, push (`--force-with-lease` solo si rebase local lo exige; nunca `--force`), reactivar `--auto --merge` si hace falta, volver a suscribir si la suscripción se cerró, terminar turno otra vez.
+- **PR merged** → limpieza de ramas/worktrees (`cierre-trabajo.md` paso 6); actualizar informe.
+- **PR closed without merge** → informar bloqueo; no reabrir sin instrucción.
+
+## Grok / otros harnesses
+
+Si no hay `subscribe_github_*`, equivalente: webhook/notificación del forge, o un único `gh pr checks --watch` no bloqueante en background que avise al completar — nunca revisión manual periódica en el chat.
 
 ## Multi-repo
 
-Si el alcance es N repos, abre un PR por repo y ejecuta el bucle en paralelo (subagentes o `gh pr checks --watch` por PR). El informe final es una tabla: repo · PR · MERGED/blocked · SHA o bloqueo.
+Un PR por repo; una suscripción CI + PR por cada uno. Informe final: tabla repo · PR · MERGED/blocked · SHA.
 
 ## Entregable
-
-Tras mergear (o al bloquearse):
 
 ```markdown
 ## Merge-watch

@@ -11,7 +11,7 @@ Pedir este cierre autoriza, en el repo del plan:
 1. Ejecutar el gate local (Husky, typecheck, tests, e2e).
 2. Una ronda crítica de revisión contra el resultado esperado del plan y los commits de corrección.
 3. Abrir o actualizar PRs contra `main` (draft → ready).
-4. El bucle merge-watch hasta squash merge con checks required verdes.
+4. Auto-merge con **merge commit** (`--auto --merge`) y suscripción a CI/PR (escuchar avisos; no squash ni bypass).
 5. Borrar ramas ya mergeadas y temporales locales del plan.
 
 Sigue exigiendo sí aparte: tag anotado, `gh release create`, borrar el repositorio remoto, tocar repos archivados o `voicebox`. Nunca force-push a `main`/`master`.
@@ -58,17 +58,21 @@ Si `/execute-plan` ya abrió PRs (Graphite stack o `gh pr create`): reutilizarlo
 gh pr create --base main --head <rama> --fill --draft
 ```
 
-Un PR por incremento lineal; en stack, base = padre del stack, el fondo contra `main`. Título y cuerpo en el idioma del plan. Squash es la política de flota.
+Un PR por incremento lineal; en stack, base = padre del stack, el fondo contra `main`. Título y cuerpo en el idioma del plan. Merge commit (`--merge`) es la política; nunca squash ni `--admin`.
 
 Tags y changelog: solo si el plan incluye bump de versión. Entonces Fases B y F de `SKILL.md` **antes** del tag. Un sí a este cierre no publica una release.
 
-### 5. Merge-watch
+### 5. Merge-watch (escuchar)
 
-Seguir `merge-watch.md`. En Grok: `/pr-babysit add --ship <número-del-fondo>` y un ciclo `check` (o `gh pr checks --watch` por PR). El orquestador no termina el turno dejando la vigilancia «para luego»: bloquea hasta MERGED o bloqueo durable.
+Seguir `merge-watch.md`:
 
-Checks required verdes. Un job no requerido en rojo (p. ej. Vercel Hobby en repo privado de org) se documenta y no bloquea. Automerge solo con required verdes. Conflicto o CI en rojo: corregir, push con lease, repetir.
+```bash
+gh pr merge <n> --auto --merge --delete-branch
+```
 
-Merge: `gh pr merge <n> --squash --delete-branch` (o el método del repo si ya está fijado).
+Luego `subscribe_github_ci` (rama head) + `subscribe_github_pr` (scope pr), declarar qué se espera y **terminar el turno**. No polling. Ante notificación de fallo → corregir y re-suscribir; ante merged → paso 6.
+
+Un job no requerido en rojo se documenta y no bloquea el auto-merge si los required están verdes.
 
 ### 6. Limpieza
 
@@ -93,7 +97,7 @@ Borrar worktrees del plan (`grok worktree rm --force` si el aislamiento los cre�
 | Husky            | OK / FAIL       |                    |
 | e2e              | OK / N/A / FAIL |                    |
 | Revisión vs plan | OK              | bugs corregidos: N |
-| PR               | #N MERGED       | squash, SHA        |
+| PR               | #N MERGED       | merge commit, SHA  |
 | Limpieza         | OK              | ramas y worktrees  |
 ```
 
