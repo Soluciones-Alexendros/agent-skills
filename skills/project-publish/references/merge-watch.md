@@ -48,8 +48,11 @@ gh pr merge <n> --auto --merge --delete-branch
    No hacer `gh pr checks --watch` ni bucles de polling: el aviso llega como notificación.
 
    En Cursor (usuario): `~/.cursor/hooks.json` refuerza esto —
-   `beforeShellExecution` deniega `--squash`/`--rebase`/`--admin` en `gh pr merge`;
-   `afterShellExecution` inyecta el recordatorio de suscribir y terminar turno.
+   `beforeShellExecution` (`pr_policy.py`, `failClosed`) deniega `--squash`/
+   `--rebase`/`--admin` y exige `--merge` en invocaciones reales de `gh pr merge`
+   (ignora texto en comillas/heredocs para evitar falsos positivos);
+   `afterShellExecution` (`pr_listen.py`) inyecta el recordatorio de suscribir
+   solo si la salida parece éxito, sin reinyectar el output crudo (anti-fuga).
    El aviso de fallo/éxito **no** lo emite el hook local: lo emiten
    `subscribe_github_ci` / `subscribe_github_pr` como notificación de la conversación.
 
