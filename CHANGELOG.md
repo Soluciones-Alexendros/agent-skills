@@ -6,6 +6,8 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [Unreleased]
 
+- `project-publish` 4.0.0 -> 4.1.0 (minor)
+
 ### Added
 
 - Pipeline Autoworkspace: `templates/autoworkspace/` (`project.yaml`, `status.yaml`) y `tools/workspace-router/` (fases DEFINE→STATUS + bump declarativo).
