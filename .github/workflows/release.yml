@@ -76,8 +76,8 @@ jobs:
           set -euo pipefail
           VERSION="${{ needs.publish.outputs.version }}"
           if [ -z "$VERSION" ]; then VERSION="${GITHUB_REF_NAME#v}"; fi
-          git archive --format=tar.gz --prefix="agent-skills-${VERSION}/" -o "agent-skills-${VERSION}.tar.gz" HEAD
-          echo "ARCHIVE=agent-skills-${VERSION}.tar.gz" >> "$GITHUB_ENV"
+          git archive --format=tar.gz --prefix="autoworkspace-${VERSION}/" -o "autoworkspace-${VERSION}.tar.gz" HEAD
+          echo "ARCHIVE=autoworkspace-${VERSION}.tar.gz" >> "$GITHUB_ENV"
       - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: ${{ env.ARCHIVE }}

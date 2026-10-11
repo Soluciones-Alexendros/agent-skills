@@ -75,7 +75,7 @@ El agente no cambia rulesets ni protección de `main`: informa y deja el paso ma
 ## Renovate agrupado (único bot de version-updates)
 
 - Dependabot `version-updates` prohibido (eliminar el bloque en el mismo PR que añade Renovate). Dependabot Alerts de seguridad pueden quedar ON.
-- Base en `project-publish/references/dependabot-grouped.md`: schedule de madrugada `Europe/Madrid`, automerge `patch`+`minor`, minors agrupados con label `dependencies`, majors solo con revisión humana.
+- Base en `project-publish/references/renovate-grouped.md`: schedule de madrugada `Europe/Madrid`, automerge `patch`+`minor`, minors agrupados con label `dependencies`, majors solo con revisión humana.
 - Prerrequisito humano: la GitHub App Renovate instalada en la org o habilitada en el repo; sin ella el JSON no genera PRs.
 - Pins de Actions (Renovate `github-actions`) se actualizan en PRs revisables, manteniendo SHA completo + comentario de versión.
 

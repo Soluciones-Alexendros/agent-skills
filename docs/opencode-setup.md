@@ -1,6 +1,6 @@
-# OpenCode Setup — agent-skills (vendor-neutral)
+# OpenCode Setup — autoworkspace (vendor-neutral)
 
-Esta guía explica cómo usar Agent Skills con OpenCode de forma agent-driven (sin slash commands).
+Esta guía explica cómo usar Autoworkspace con OpenCode de forma agent-driven (sin slash commands).
 
 ## Overview
 
@@ -15,7 +15,7 @@ OpenCode no tiene plugin system nativo. Logramos paridad con:
 1. Clone:
 
 ```bash
-git clone https://github.com/Soluciones-Alexendros/agent-skills.git
+git clone https://github.com/Soluciones-Alexendros/autoworkspace.git
 ```
 
 2. Abre proyecto en OpenCode

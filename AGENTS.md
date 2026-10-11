@@ -1,4 +1,4 @@
-# Soluciones-Alexendros Agent Skills — Routing Contract
+# Soluciones-Alexendros Autoworkspace — Routing Contract
 
 ## Discovery
 
@@ -13,17 +13,22 @@ Before ANY action, you MUST evaluate if a skill in `skills/` applies.
 - Follow SKILL.md exactly, including reading its `references/` when instructed
 - Never skip required workflows
 
-## Lifecycle Enforcement
+## Lifecycle Enforcement (Autoworkspace pipeline)
 
-DEFINE → plan-specification
-CONTINUE → plan-continue
-IMPLEMENT → role-* + plan-validation
-PROJECT GATES → project-*
-WEB AUDITS → web-*
-SYSTEM (local OS) → system-*
+Preprogrammed flow with per-project variables in `.autoworkspace/project.yaml`:
 
-Ambiguous "¿por dónde empiezo?" or "pon al día este proyecto" → plan-continue
-Mix audit+release ("audítalo y publícalo") → plan-continue first, then hand off to project-publish
+DEFINE (plan-specification) → SCHEMAS/TESTS → IMPLEMENT (role-_) → VALIDATE (plan-validation) → INTEGRATE (project-_) → STATUS
+
+Route a phase with:
+
+```bash
+python tools/workspace-router/run.py --phase DEFINE --repo . --json
+python tools/workspace-router/run.py --phase STATUS --repo . --bump --note "advance"
+```
+
+- Ambiguous "¿por dónde empiezo?" or "pon al día este proyecto" → plan-continue (loads/creates `.autoworkspace/`)
+- Mix audit+release ("audítalo y publícalo") → plan-continue first, then project-publish
+- WEB AUDITS → web-* · SYSTEM (local OS) → system-*
 
 ## OpenCode Specific
 
@@ -51,3 +56,4 @@ SKILL.md is <200 lines. Heavy docs live in references/. Read them only when SKIL
 ## Learned Workspace Facts
 
 - El catálogo canónico son 18 skills en 5 dominios: `plan`, `system`, `project`, `web`, `role` (prefijo del nombre = dominio).
+- Producto: **autoworkspace** — pipeline agéntico, no vitrina de skills.

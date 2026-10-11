@@ -35,6 +35,19 @@ from collections import Counter, defaultdict
 
 logger = logging.getLogger("scan_repo")
 
+
+def _secret_finding(tipo: str, fichero: str, linea: int, confianza: str) -> dict:
+    """Metadatos de hallazgo sin valor ni snippet (anti clear-text storage)."""
+    fp_src = f"{fichero}:{linea}:{tipo}".encode("utf-8")
+    return {
+        "tipo": tipo,
+        "fichero": fichero,
+        "linea": int(linea),
+        "confianza": confianza,
+        "fingerprint": hashlib.sha256(fp_src).hexdigest()[:16],
+    }
+
+
 # ---------------------------------------------------------------------------
 # Configuración
 # ---------------------------------------------------------------------------
@@ -420,13 +433,11 @@ def scan(root):
 
             for name, pat in SECRET_PATTERNS.items():
                 for m in pat.finditer(text):
-                    line = text.count("\n", 0, m.start()) + 1
-                    report["secretos_potenciales"].append({
-                        "tipo": name,
-                        "fichero": r,
-                        "linea": line,
-                        "confianza": confidence,
-                    })
+                    # Solo metadatos: nunca m.group() / valor / snippet (CodeQL clear-text).
+                    line_no = text.count("\n", 0, m.start()) + 1
+                    report["secretos_potenciales"].append(
+                        _secret_finding(name, r, line_no, confidence)
+                    )
                     break  # una coincidencia por tipo y fichero basta
 
             if confidence == "alta":
@@ -658,11 +669,12 @@ def to_markdown(rep):
         for e in rep["env_versionados"][:30]:
             lines.append(f"- `{e}`")
     if rep["secretos_potenciales"]:
-        lines.append("\n### Secretos potenciales (verificar; no se muestra el valor)")
+        lines.append("\n### Secretos potenciales (solo path:línea; sin valor)")
         for s in rep["secretos_potenciales"][:30]:
+            fp = s.get("fingerprint", "n/d")
             lines.append(
                 f"- [{s['tipo']}] `{s['fichero']}:{s['linea']}` "
-                f"(confianza: {s.get('confianza', 'n/d')})"
+                f"(confianza: {s.get('confianza', 'n/d')}; fp: `{fp}`)"
             )
     if rep["salud_dependencias"]:
         lines.append("\n### Salud de dependencias")

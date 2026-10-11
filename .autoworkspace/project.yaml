@@ -1,0 +1,31 @@
+schema_version: 1
+name: autoworkspace
+profile: P1
+forge: github.com
+stack:
+  languages: [python, markdown]
+  package_managers: [npm, pip]
+paths:
+  tests: tools/
+  ci: .github/workflows
+  docs: docs
+skills:
+  enabled: []
+  disabled: []
+handoffs:
+  define: plan-specification
+  continue: plan-continue
+  implement_front: role-front
+  implement_back: role-back
+  implement_design: role-design
+  validate: plan-validation
+  integrate_hooks: project-hooks
+  integrate_publish: project-publish
+  libraries: project-libraries
+phases:
+  - DEFINE
+  - SCHEMAS
+  - IMPLEMENT
+  - VALIDATE
+  - INTEGRATE
+  - STATUS

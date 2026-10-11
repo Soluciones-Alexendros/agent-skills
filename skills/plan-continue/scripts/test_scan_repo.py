@@ -108,6 +108,9 @@ class ScanRepoTests(unittest.TestCase):
             for s in secrets:
                 self.assertNotIn("valor", s)
                 self.assertNotIn("value", s)
+                self.assertNotIn("snippet", s)
+                self.assertIn("fingerprint", s)
+                self.assertEqual(len(s["fingerprint"]), 16)
 
     def test_directorios_test_guardan_ruta(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -30,9 +30,12 @@ Grok ya puede apuntar al árbol con `[skills].paths` en `~/.grok/config.toml`. V
 ```bash
 grok inspect | grep -E 'plan-|system-|project-|web-|role-'
 python tools/skill-router/route.py "limpia mi sistema Arch" --top 3
+python tools/workspace-router/run.py --phase DEFINE --repo . --json
 ```
 
 En Grok CLI: `/skill-route limpia mi Arch` o invoca la skill por nombre (`/user:system-maintenance`).
+
+Version-updates: Renovate (`.github/renovate.json`). No Dependabot version-updates.
 
 ## Instalación proyecto (OpenCode local)
 
