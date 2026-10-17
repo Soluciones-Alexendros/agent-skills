@@ -4,7 +4,7 @@ description: "Web compliance audit: accessibility (WCAG 2.2 AA / EN 301 549), le
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 4.0.0
+  version: "4.1.0"
   domain: web
   type: atomic
   language: en
@@ -31,7 +31,9 @@ auditing web compliance, dictating web compliance or remediation plan for SEO/ac
 ## Not for:
 
 - Core Web Vitals (→ web-performance)
-- Holistic audit without focus (→ web-compliance)
+- Application security review (→ web-owasp)
+- Dependency SCA (→ project-libraries)
+- Certifying full GDPR or accessibility compliance from an automated scan alone
 
 ## Main Checks
 

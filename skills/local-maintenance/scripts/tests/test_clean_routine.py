@@ -92,16 +92,31 @@ def test_clean_detect_pkgmgr_none(monkeypatch):
 
 def test_clean_run_safe_execute(monkeypatch):
     monkeypatch.setattr(clean_routine, "DRY_RUN", False)
+    monkeypatch.setenv("AUTOWORKSPACE_ALLOW_HOST_MUTATION", "1")
+    monkeypatch.setattr(clean_routine, "SNAPSHOT_ID", "snap-test")
     with patch("clean_routine.run_capture", return_value=(0, "ok")):
-        rc = clean_routine.run_safe("echo test", "R1", "desc")
-        assert rc == 0
+        with patch("clean_routine.risk_gate") as gate:
+            gate.validate.return_value = 0
+            rc = clean_routine.run_safe("echo test", "R1", "desc")
+            assert rc == 0
 
 
 def test_clean_run_safe_execute_failure(monkeypatch):
     monkeypatch.setattr(clean_routine, "DRY_RUN", False)
+    monkeypatch.setenv("AUTOWORKSPACE_ALLOW_HOST_MUTATION", "1")
+    monkeypatch.setattr(clean_routine, "SNAPSHOT_ID", "snap-test")
     with patch("clean_routine.run_capture", return_value=(1, "error")):
-        rc = clean_routine.run_safe("false", "R1", "desc")
-        assert rc == 1
+        with patch("clean_routine.risk_gate") as gate:
+            gate.validate.return_value = 0
+            rc = clean_routine.run_safe("false", "R1", "desc")
+            assert rc == 1
+
+
+def test_clean_run_safe_execute_blocked_without_allow(monkeypatch):
+    monkeypatch.setattr(clean_routine, "DRY_RUN", False)
+    monkeypatch.delenv("AUTOWORKSPACE_ALLOW_HOST_MUTATION", raising=False)
+    rc = clean_routine.run_safe("echo test", "R1", "desc")
+    assert rc == 3
 
 
 def test_clean_package_cache_pacman(monkeypatch):

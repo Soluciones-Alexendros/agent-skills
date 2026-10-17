@@ -1,146 +1,118 @@
 #!/bin/bash
-# v5.0 Validation — OpenCode-first, multi-harness, legacy-vendor-free.
+# Canonical validation gate — wraps tools/validate/* (no duplicated rules).
 #
-# Usage: bash run-validation.sh [--pytest-only] [--smoke-only]
-#   default: full gate. --pytest-only: only [6]. --smoke-only: only [5].
-#   both flags: [5] + [6] (fast CI path used by `npm test`).
-set -e
+# Usage: bash run-validation.sh [--pytest-only] [--smoke-only] [--check-index]
+#   default: full gate. --pytest-only: tests only. --smoke-only: router smoke.
+#   --check-index: compare skill-index.json without rewriting it.
+set -euo pipefail
 
 ONLY_PYTEST=0
 ONLY_SMOKE=0
+CHECK_INDEX=0
 for arg in "$@"; do
   case "$arg" in
     --pytest-only) ONLY_PYTEST=1 ;;
     --smoke-only) ONLY_SMOKE=1 ;;
+    --check-index) CHECK_INDEX=1 ;;
+    --help|-h)
+      echo "Usage: bash run-validation.sh [--pytest-only] [--smoke-only] [--check-index]"
+      exit 0
+      ;;
+    *)
+      echo "ERROR: invalid flag: $arg" >&2
+      exit 2
+      ;;
   esac
 done
 FULL=1
 if [ "$ONLY_PYTEST" = 1 ] || [ "$ONLY_SMOKE" = 1 ]; then FULL=0; fi
 
-echo "=== v5.0 Validation — OpenCode-first, multi-harness ==="
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$ROOT"
+
+echo "=== Autoworkspace validation (canonical) ==="
 
 if [ "$FULL" = 1 ]; then
-echo "[0] Legacy-harness hygiene (scoped)"
-python3 - <<'PY'
-import subprocess, sys
-# Needle built at runtime so this file never contains the literal.
-needle = "cl" + "aude"
-cmd = [
-    "grep", "-r", "-i", needle, ".",
-    "--include=*.md", "--include=*.json", "--include=*.sh",
-    "--include=*.py", "--include=*.yaml", "--include=*.yml",
-    "--exclude-dir=node_modules", "--exclude-dir=.git",
-    "--exclude-dir=.pytest_cache",
-    "--exclude-dir=references",      # third-party SDK/API reference docs
-    "--exclude-dir=NuevoPlan",       # untracked migration-pack source
-]
-p = subprocess.run(cmd, capture_output=True, text=True)
-hits = [l for l in p.stdout.splitlines() if l.strip()]
-if hits:
-    print("FAIL: legacy harness references found (outside references/):")
-    for h in hits:
-        print(f"  {h}")
-    sys.exit(1)
-print("Hygiene OK: no legacy harness references in scope")
-PY
+  echo "[1] skill_spec.py (catalog + frontmatter + domain)"
+  python3 tools/validate/skill_spec.py --root "$ROOT"
 
-echo "[1] Frontmatter whitelist + name==dir"
-python3 - <<'PY'
-import pathlib, sys, yaml
-allowed={"name","description","license","compatibility","metadata","allowed-tools"}
-ok=True
-for f in sorted(pathlib.Path("skills").glob("*/SKILL.md")):
-    txt=f.read_text(encoding="utf-8")
-    if not txt.startswith("---"):
-        print(f"FAIL {f}: missing frontmatter"); ok=False; continue
-    try:
-        fm=yaml.safe_load(txt.split("---")[1])
-    except Exception as e:
-        print(f"FAIL {f}: yaml {e}"); ok=False; continue
-    if not isinstance(fm, dict):
-        print(f"FAIL {f}: frontmatter is not a mapping"); ok=False; continue
-    extra=set(fm)-allowed
-    if extra:
-        print(f"FAIL {f}: extra keys {extra} — only {allowed} allowed"); ok=False
-    if fm.get("name")!=f.parent.name:
-        print(f"FAIL {f}: name {fm.get('name')} != dir {f.parent.name}"); ok=False
-    desc=fm.get("description","")
-    if not isinstance(desc,str) or not (1 <= len(desc) <= 1024):
-        print(f"FAIL {f}: description length not in 1-1024"); ok=False
-    # no legacy-harness references in the skill file itself
-    if ("cl" + "aude") in txt.lower():
-        print(f"FAIL {f}: contains a legacy harness reference — must be removed"); ok=False
-    # metadata must be map string->string
-    meta=fm.get("metadata",{})
-    if not isinstance(meta, dict):
-        print(f"FAIL {f}: metadata is not a mapping"); ok=False
-    else:
-        for k,v in meta.items():
-            if not isinstance(v,str):
-                print(f"FAIL {f}: metadata.{k} not string: {type(v)}"); ok=False
-    # compatibility must include opencode
-    comp=fm.get("compatibility","")
-    if "opencode" not in str(comp).lower():
-        print(f"WARN {f}: compatibility should include opencode: {comp}")
-print("Frontmatter checks done" if ok else "Frontmatter checks FAILED")
-sys.exit(0 if ok else 1)
-PY
+  echo "[2] skill_links.py"
+  python3 tools/validate/skill_links.py --root "$ROOT"
 
-echo "[2] References exist"
-refs_ok=1
-for f in skills/*/SKILL.md; do
-  # extract references/ paths (process substitution: no subshell swallowing exit)
-  while IFS= read -r ref; do
-    dir=$(dirname "$f")
-    if [ ! -f "$dir/$ref" ]; then
-      echo "FAIL $f: missing $dir/$ref"
-      refs_ok=0
-    fi
-  done < <(grep -o "references/[A-Za-z0-9_./-]*\.md" "$f" 2>/dev/null || true)
-done
-[ "$refs_ok" = 1 ] || exit 1
-echo "References OK"
+  echo "[3] release_coherence.py"
+  python3 tools/validate/release_coherence.py --root "$ROOT"
 
-echo "[3] Arrow cross-refs resolve (domain-scoped)"
-python3 - <<'PY'
-import pathlib, re, sys
-# Domain-scoped: only <domain>-<slug> tokens count as skill refs.
-# Bare prose after an arrow (e.g. "-> test", "-> smoke") is not a skill ref.
-ARROW_RE = re.compile(r"→\s*`?((?:plan|local|project|web|role)-[a-z0-9-]+)`?")
-skills=set(p.name for p in pathlib.Path("skills").iterdir() if p.is_dir())
-ok=True
-for f in sorted(pathlib.Path("skills").glob("*/SKILL.md")):
-    txt=f.read_text(encoding="utf-8")
-    for m in ARROW_RE.findall(txt):
-        if m not in skills:
-            print(f"FAIL {f}: arrow -> {m} not in catalog")
-            ok=False
-print("Arrows OK" if ok else "Arrow checks FAILED")
-sys.exit(0 if ok else 1)
-PY
+  echo "[4] hygiene.py"
+  python3 tools/validate/hygiene.py --root "$ROOT"
 
-echo "[4] skill-index.json parity (16 skills)"
-python3 tools/skill-router/build_index.py
-python3 - <<'PY'
+  echo "[4b] execution contracts (if present)"
+  if [ -f tools/contracts/validate_contracts.py ]; then
+    python3 tools/contracts/validate_contracts.py --root "$ROOT"
+  fi
+
+  echo "[5] skill-index.json check (read-only)"
+  python3 - <<'PY'
 import json, sys
-d = json.load(open("skill-index.json"))
-n = len(d.get("skills", []))
-print(f"Index holds {n} skills")
-sys.exit(0 if n == 16 else 1)
+from pathlib import Path
+root = Path(".")
+skills = sorted(p.name for p in (root / "skills").iterdir() if p.is_dir() and (p / "SKILL.md").is_file())
+index_path = root / "skill-index.json"
+if not index_path.is_file():
+    print("FAIL: skill-index.json missing (run: python3 tools/skill-router/build_index.py)")
+    sys.exit(1)
+data = json.loads(index_path.read_text(encoding="utf-8"))
+indexed = [s["name"] for s in data.get("skills", [])]
+set_skills, set_idx = set(skills), set(indexed)
+dupes = [n for n in indexed if indexed.count(n) > 1]
+if dupes:
+    print(f"FAIL: duplicate index names: {sorted(set(dupes))}"); sys.exit(1)
+missing = sorted(set_skills - set_idx)
+extra = sorted(set_idx - set_skills)
+if missing or extra:
+    print(f"FAIL: index mismatch missing={missing} extra={extra}")
+    print("Hint: python3 tools/skill-router/build_index.py  # explicit rebuild, not part of check")
+    sys.exit(1)
+print(f"Index OK: {len(skills)} skills (identity match, not count-only)")
 PY
-echo "Index rebuilt (16 skills)"
+fi
+
+if [ "$CHECK_INDEX" = 1 ] && [ "$FULL" = 0 ]; then
+  python3 tools/skill-router/build_index.py --check 2>/dev/null || {
+    # fallback check without build_index --check support
+    python3 - <<'PY'
+import json, sys
+from pathlib import Path
+skills = sorted(p.name for p in Path("skills").iterdir() if p.is_dir() and (p / "SKILL.md").is_file())
+data = json.loads(Path("skill-index.json").read_text(encoding="utf-8"))
+indexed = [s["name"] for s in data.get("skills", [])]
+sys.exit(0 if set(skills) == set(indexed) else 1)
+PY
+  }
 fi
 
 if [ "$FULL" = 1 ] || [ "$ONLY_SMOKE" = 1 ]; then
-echo "[5] Router smoke test"
-python3 tools/skill-router/route.py "por donde empiezo con este repo" --top 2
-python3 tools/skill-router/route.py "limpia mi sistema" --top 2
-python3 tools/skill-router/route.py "refactoriza este código aplicando clean code" --top 2
+  echo "[6] Router smoke (selection only — not behavior proof)"
+  python3 tools/skill-router/route.py "por donde empiezo con este repo" --top 2
+  python3 tools/skill-router/route.py "limpia mi sistema" --top 2
+  python3 tools/skill-router/route.py "refactoriza este código aplicando clean code" --top 2
 fi
 
 if [ "$FULL" = 1 ] || [ "$ONLY_PYTEST" = 1 ]; then
-echo "[6] Python test-suite (existing v2 validators stay green)"
-python3 -m pytest tools/ -q
+  echo "[7] Pytest tools/ + safe skills surfaces"
+  # Manifest of safe test roots (effects inventoried; host mutators use doubles).
+  python3 -m pytest tools/ \
+    skills/local-maintenance/scripts/tests/ \
+    skills/web-compliance/tests/ \
+    skills/local-security/scripts/tests/ \
+    skills/local-proton/scripts/ \
+    -q --ignore=skills/local-proton/scripts/test_proton_bridge.py
+fi
+
+if [ "$FULL" = 1 ]; then
+  echo "[8] Bash syntax (scripts/ + root wrappers)"
+  while IFS= read -r -d '' f; do
+    bash -n "$f"
+  done < <(find scripts skills tools -name '*.sh' -print0 2>/dev/null; printf '%s\0' run-validation.sh)
 fi
 
 echo "=== All checks passed ==="

@@ -4,7 +4,7 @@ description: "Autoworkspace orchestrator: continue from roadmap or .autoworkspac
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 4.2.0
+  version: "4.3.0"
   domain: plan
   type: orchestrator
   language: en
@@ -44,14 +44,14 @@ DEFINE → SCHEMAS → IMPLEMENT → VALIDATE → INTEGRATE → STATUS
 2. Route the current phase:
 
 ```bash
+# workspace-required: needs full checkout (skills/ + tools/workspace-router)
 python tools/workspace-router/run.py --phase DEFINE --repo . --json
+# first-time scaffold only:
+python tools/workspace-router/run.py --init --repo .
 ```
 
-3. Invoke the skill returned (`skill` field). After a successful phase, bump status:
-
-```bash
-python tools/workspace-router/run.py --phase STATUS --repo . --bump --note "phase done"
-```
+3. Invoke the skill returned (`skill` field). Route does not execute the skill.
+   Completing a phase requires verified evidence (see execution.yaml); legacy `--bump` is rejected.
 
 | Phase     | Typical skill                                          | Output                                 |
 | --------- | ------------------------------------------------------ | -------------------------------------- |

@@ -173,12 +173,49 @@ def diff_snapshot(base_dir: str, snapshot_id: str) -> tuple[list, list, int]:
     return changed, missing, total
 
 
-def rollback_snapshot(base_dir: str, snapshot_id: str, execute: bool = False) -> int:
-    """Rollback de /etc contra un snapshot.
+def _safe_tar_members(tarball: str, restore_root: str) -> list[str] | None:
+    """Return member names that stay under restore_root; None if unsafe."""
+    import tarfile
 
-    Por defecto dry-run: diff + plan de restauracion. Con --execute restaura
-    desde etc-backup.tar.gz (si existe) con backup previo; snapper/timeshift
-    se indican como comandos manuales (no se auto-restauran).
+    root = os.path.realpath(restore_root)
+    safe: list[str] = []
+    try:
+        with tarfile.open(tarball, "r:*") as tf:
+            for member in tf.getmembers():
+                if member.islnk() or member.issym():
+                    # Reject links that escape restore_root
+                    target = os.path.realpath(os.path.join(root, member.name))
+                    if not target.startswith(root + os.sep) and target != root:
+                        logger.error("symlink/hardlink escape: %s", member.name)
+                        return None
+                name = member.name.lstrip("/")
+                if ".." in name.split("/"):
+                    logger.error("path traversal in archive: %s", member.name)
+                    return None
+                dest = os.path.realpath(os.path.join(root, name))
+                if not dest.startswith(root + os.sep) and dest != root:
+                    logger.error("absolute/escape path in archive: %s", member.name)
+                    return None
+                if member.isdev() or member.ischr() or member.isblk() or member.isfifo():
+                    logger.error("special file rejected: %s", member.name)
+                    return None
+                safe.append(name)
+    except (tarfile.TarError, OSError) as exc:
+        logger.error("tar unreadable: %s", exc)
+        return None
+    return safe
+
+
+def rollback_snapshot(
+    base_dir: str,
+    snapshot_id: str,
+    execute: bool = False,
+    restore_root: str | None = None,
+) -> int:
+    """Rollback against a snapshot.
+
+    Dry-run by default. Real extract requires --restore-root pointing at an
+    explicit temporary root — host '/' restore is not authorized in this increment.
     """
     if "/" in snapshot_id or snapshot_id in ("", ".", ".."):
         logger.error("snapshot_id inválido: %r", snapshot_id)
@@ -199,38 +236,51 @@ def rollback_snapshot(base_dir: str, snapshot_id: str, execute: bool = False) ->
         print("[dry-run] Sin cambios. Plan de restauracion:")
         if os.path.isfile(tarball):
             print(f"  tar -tzf {tarball}  # verificar contenido")
-            print(f"  snapshot_state.py --rollback {snapshot_id} --execute  # restaura /etc desde tarball")
+            print(
+                f"  snapshot_state.py --rollback {snapshot_id} --execute "
+                f"--restore-root /tmp/restore-sandbox  # solo raíz temporal"
+            )
         if which("snapper") is not None:
             print("  snapper undochange <pre>..<post>  # alternativa btrfs (manual)")
         if which("timeshift") is not None:
             print("  timeshift --restore  # alternativa (interactivo, ventana acordada)")
         return 0
+    if not restore_root:
+        logger.error("host restore blocked: --restore-root (temp root) required")
+        print(
+            "ERROR: --execute requiere --restore-root con una raíz temporal. "
+            "La restauración real del host no está autorizada.",
+            file=sys.stderr,
+        )
+        return 3
+    restore_root = os.path.realpath(restore_root)
+    if restore_root in ("/", "/etc", "/usr", "/var", "/home"):
+        logger.error("restore_root too privileged: %s", restore_root)
+        return 3
+    if not os.path.isdir(restore_root):
+        logger.error("restore_root missing: %s", restore_root)
+        return 1
     if not os.path.isfile(tarball):
         log_warn("sin etc-backup.tar.gz: restauracion manual con los comandos de arriba")
         return 1
-    backup_dir = os.path.join(snapshot_path, f"pre-rollback-{utcnow_iso().replace('-', '').replace(':', '').replace('T', '-').replace('Z', '')}")
-    try:
-        os.makedirs(backup_dir, exist_ok=True)
-    except OSError as exc:
-        logger.error("no se pudo crear %r: %s", backup_dir, exc)
+    members = _safe_tar_members(tarball, restore_root)
+    if members is None:
         return 1
-    restored, failed = 0, 0
-    for path in changed + missing:
-        rel = path.lstrip("/")
-        try:
-            if os.path.isfile(path):
-                with open(path, "rb") as src, open(os.path.join(backup_dir, rel.replace("/", "_")), "wb") as dst:
-                    dst.write(src.read())
-        except OSError as exc:
-            logger.warning("no se pudo respaldar %r: %s", path, exc)
-        rc, _ = run_capture(f"tar -xzf '{tarball}' -C / '{rel}' 2>/dev/null", timeout=120)
-        if rc == 0:
-            restored += 1
-        else:
-            failed += 1
-            log_warn(f"no se pudo restaurar {path}")
-    log_info(f"Rollback {snapshot_id}: {restored} restaurados, {failed} fallidos (backup en {backup_dir})")
-    return 0 if failed == 0 else 1
+    import tarfile
+
+    try:
+        with tarfile.open(tarball, "r:*") as tf:
+            for name in members:
+                member = tf.getmember(name) if name in tf.getnames() else None
+                if member is None:
+                    # try with leading ./
+                    continue
+                tf.extract(member, path=restore_root, set_attrs=False)
+    except (tarfile.TarError, OSError, KeyError) as exc:
+        logger.error("extract failed: %s", exc)
+        return 1
+    log_info(f"Rollback {snapshot_id}: extracted to temp root {restore_root} (not host /)")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -238,8 +288,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("snapshot_id", nargs="?", default=None, help="ID del snapshot")
     parser.add_argument("--snapshot-dir", default=None, help="Override directorio base de snapshots")
     parser.add_argument("--list", action="store_true", help="Listar snapshots existentes")
-    parser.add_argument("--rollback", default="", help="ID del snapshot contra el que comparar/restaurar /etc")
+    parser.add_argument("--rollback", default="", help="ID del snapshot contra el que comparar/restaurar")
     parser.add_argument("--execute", action="store_true", help="Ejecutar rollback (por defecto dry-run)")
+    parser.add_argument(
+        "--restore-root",
+        default="",
+        help="Raíz temporal explícita para extract (obligatoria con --execute; no se admite /)",
+    )
     parser.add_argument("--verbose", action="store_true", help="Logging verboso a stderr")
     args = parser.parse_args(argv)
     _setup_logging(args.verbose)
@@ -251,7 +306,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.list:
         return list_snapshots(base_dir)
     if args.rollback:
-        return rollback_snapshot(base_dir, args.rollback, execute=args.execute)
+        return rollback_snapshot(
+            base_dir,
+            args.rollback,
+            execute=args.execute,
+            restore_root=args.restore_root or None,
+        )
     snapshot_id = args.snapshot_id or f"snap-{utcnow_iso().replace('-', '').replace(':', '').replace('T', '-').replace('Z', '')}"
     if "/" in snapshot_id or snapshot_id in ("", ".", ".."):
         logger.error("snapshot_id inválido: %r", snapshot_id)
@@ -262,13 +322,20 @@ def main(argv: list[str] | None = None) -> int:
     pkg_mgr = detect_pkg_mgr()
 
     try:
-        os.makedirs(snapshot_path, exist_ok=True)
+        os.makedirs(snapshot_path, mode=0o700, exist_ok=True)
+        os.chmod(snapshot_path, 0o700)
     except OSError as exc:
         logger.error("no se pudo crear %r: %s", snapshot_path, exc)
         return 1
 
     log_info(f"Creando snapshot: {snapshot_id}")
     log_info(f"Destino: {snapshot_path}")
+
+    inventory_ok = True
+    backend_name = "none"
+    backend_status = "not_run"
+    backup_status = "not_run"
+    recovery_scope = "none"
 
     metadata = {
         "snapshot_id": snapshot_id,
@@ -278,16 +345,23 @@ def main(argv: list[str] | None = None) -> int:
         "package_manager": pkg_mgr,
         "kernel": run("uname -r", timeout=5).strip(),
         "skill_version": SKILL_VERSION,
+        "inventory_status": "pending",
+        "backend_name": backend_name,
+        "backend_status": backend_status,
+        "backup_status": backup_status,
+        "recovery_scope": recovery_scope,
+        "integrity_status": "pending",
     }
     try:
         with open(f"{snapshot_path}/metadata.json", "w", encoding="utf-8") as fh:
             json.dump(metadata, fh, indent=2)
+        os.chmod(f"{snapshot_path}/metadata.json", 0o600)
     except (OSError, TypeError, ValueError) as exc:
         logger.error("no se pudo escribir metadata.json: %s", exc)
         return 1
 
     try:
-        log_info("Capturando lista de paquetes...")
+        log_info("Capturando lista de paquetes (inventario, no backup restaurable)...")
         capture_packages(pkg_mgr, snapshot_path)
 
         log_info("Capturando checksums de /etc...")
@@ -315,25 +389,39 @@ def main(argv: list[str] | None = None) -> int:
 
         write_text(f"{snapshot_path}/journal-size.txt", run("journalctl --disk-usage 2>/dev/null", timeout=15))
     except OSError:
-        return 1
+        inventory_ok = False
+
+    metadata["inventory_status"] = "ok" if inventory_ok else "failed"
 
     if which("timeshift"):
+        backend_name = "timeshift"
         log_info("Creando snapshot timeshift...")
-        rc, _ = run_capture(f"timeshift --create --comments 'mantenimiento-linux: {snapshot_id}' --tags D 2>/dev/null", timeout=300)
-        if rc != 0:
-            log_warn("No se pudo crear snapshot timeshift")
+        rc, _ = run_capture(
+            f"timeshift --create --comments 'mantenimiento-linux: {snapshot_id}' --tags D 2>/dev/null",
+            timeout=300,
+        )
+        backend_status = "ok" if rc == 0 else "failed"
+        backup_status = backend_status
+        # Code zero alone is not full recovery — evidence of id/scope still required.
+        recovery_scope = "partial" if rc == 0 else "none"
     elif which("snapper"):
+        backend_name = "snapper"
         log_info("Creando snapshot snapper...")
         rc, _ = run_capture(
             f"snapper create --description 'mantenimiento-linux: {snapshot_id}' --cleanup-algorithm number 2>/dev/null",
             timeout=300,
         )
-        if rc != 0:
-            log_warn("No se pudo crear snapshot snapper")
+        backend_status = "ok" if rc == 0 else "failed"
+        backup_status = backend_status
+        recovery_scope = "partial" if rc == 0 else "none"
     else:
-        log_warn("No hay snapshot tool (timeshift/snapper). Creando backup tar de configs críticas...")
+        backend_name = "tar-config"
+        log_warn(
+            "No hay timeshift/snapper. Backup tar de configs públicas (sin claves privadas)..."
+        )
         family = detect_pkg_mgr()
-        etc_files = ["/etc/ssh/sshd_config", "/etc/ssh/ssh_host_*", "/etc/fstab"]
+        # Never include ssh_host_* private keys by default.
+        etc_files = ["/etc/ssh/sshd_config", "/etc/fstab"]
         if family == "pacman":
             etc_files.extend(["/etc/pacman.conf", "/etc/pacman.d"])
         elif family == "apt":
@@ -341,9 +429,42 @@ def main(argv: list[str] | None = None) -> int:
         elif family == "dnf":
             etc_files.extend(["/etc/yum.repos.d/", "/etc/dnf/dnf.conf"])
         etc_str = " ".join(etc_files)
-        rc, _ = run_capture(f"tar -czf '{snapshot_path}/etc-backup.tar.gz' {etc_str} 2>/dev/null", timeout=120)
+        rc, _ = run_capture(
+            f"tar -czf '{snapshot_path}/etc-backup.tar.gz' {etc_str} 2>/dev/null",
+            timeout=120,
+        )
+        backend_status = "ok" if rc == 0 else "failed"
+        backup_status = "ok" if rc == 0 else "failed"
+        recovery_scope = "partial" if rc == 0 else "none"
         if rc != 0:
-            log_warn("Backup parcial de configs")
+            log_warn("Backup parcial de configs falló")
+
+    metadata.update(
+        {
+            "backend_name": backend_name,
+            "backend_status": backend_status,
+            "backup_status": backup_status,
+            "recovery_scope": recovery_scope,
+            "backend_required": True,
+        }
+    )
+
+    if backend_status == "failed":
+        metadata["outcome"] = "failed"
+        try:
+            with open(f"{snapshot_path}/metadata.json", "w", encoding="utf-8") as fh:
+                json.dump(metadata, fh, indent=2)
+            os.chmod(f"{snapshot_path}/metadata.json", 0o600)
+        except OSError:
+            pass
+        logger.error(
+            "backend/backup falló: inventario puede existir pero no hay recuperación válida"
+        )
+        print(
+            "ERROR: captura de inventario no implica backup restaurable; backend falló",
+            file=sys.stderr,
+        )
+        return 1
 
     log_info("Calculando hash del snapshot...")
     hash_lines = []
@@ -365,11 +486,29 @@ def main(argv: list[str] | None = None) -> int:
                 hashes_digest.update(chunk)
         snapshot_hash = hashes_digest.hexdigest()
         write_text(f"{snapshot_path}/SNAPSHOT-HASH.txt", snapshot_hash + "\n")
+        metadata["integrity_status"] = "ok"
+        metadata["snapshot_hash"] = snapshot_hash
+        metadata["outcome"] = "partial" if recovery_scope == "partial" else "succeeded"
     except OSError as exc:
         logger.error("no se pudo calcular hash del snapshot: %s", exc)
+        metadata["integrity_status"] = "failed"
+        metadata["outcome"] = "failed"
+        try:
+            with open(f"{snapshot_path}/metadata.json", "w", encoding="utf-8") as fh:
+                json.dump(metadata, fh, indent=2)
+        except OSError:
+            pass
         return 1
 
-    log_info(f"Snapshot creado exitosamente: {snapshot_id}")
+    try:
+        with open(f"{snapshot_path}/metadata.json", "w", encoding="utf-8") as fh:
+            json.dump(metadata, fh, indent=2)
+        os.chmod(f"{snapshot_path}/metadata.json", 0o600)
+    except OSError as exc:
+        logger.error("no se pudo actualizar metadata: %s", exc)
+        return 1
+
+    log_info(f"Snapshot registrado: {snapshot_id} recovery_scope={recovery_scope}")
     log_info(f"Hash: {snapshot_hash}")
     log_info(f"Ubicación: {snapshot_path}")
 
@@ -386,6 +525,9 @@ def main(argv: list[str] | None = None) -> int:
             "timestamp": utcnow_iso(),
             "package_manager": pkg_mgr,
             "files_captured": files_captured,
+            "recovery_scope": recovery_scope,
+            "backend_status": backend_status,
+            "inventory_status": metadata["inventory_status"],
         }
         try:
             print(json.dumps(result, indent=2))

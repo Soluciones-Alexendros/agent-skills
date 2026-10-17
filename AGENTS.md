@@ -44,11 +44,11 @@ The agent must load `opencode.json` for skillDirectories.
 
 ## Language
 
-Content is Spanish, frontmatter description is bilingual (EN + ES triggers) for embedding quality.
+Skill bodies and technical contracts are written in English. Frontmatter `description` is bilingual (EN + ES triggers) for discovery. Operator-facing plans and reports in this repo may be Spanish. Canonical detail: `docs/STANDARD.md` and `docs/repo-standard/`.
 
 ## Progressive Disclosure
 
-SKILL.md is <200 lines. Heavy docs live in references/. Read them only when SKILL.md says so.
+SKILL.md body should stay focused (repo gate: ≤500 lines / token budget in `tools/validate/skill_spec.py`). Prefer <200 lines when practical. Heavy docs live in `references/`. Read them only when SKILL.md says so.
 
 ## Learned User Preferences
 

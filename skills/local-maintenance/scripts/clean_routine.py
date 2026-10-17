@@ -27,6 +27,11 @@ from common import (
     which,
 )
 
+try:
+    import risk_gate
+except ImportError:  # pragma: no cover
+    risk_gate = None  # type: ignore
+
 DRY_RUN = True
 EXECUTE = False
 SNAPSHOT_ID = ""
@@ -38,6 +43,10 @@ JOURNAL_VACUUM_TIME = "7d"
 JOURNAL_VACUUM_SIZE = "500M"
 JSON_MODE = False
 WITH_FIRMWARE = False
+ACTION_RESULTS: list[dict[str, object]] = []
+
+# Host mutations stay blocked unless the typed executor / explicit allow is set.
+_HOST_MUTATION_ENV = "AUTOWORKSPACE_ALLOW_HOST_MUTATION"
 
 logger = logging.getLogger("mantenimiento.clean")
 
@@ -113,20 +122,78 @@ def apply_args(args: argparse.Namespace) -> None:
         JSON_OUTPUT = ""
 
 
+def _record(action: str, status: str, rc: int = 0, detail: str = "") -> None:
+    ACTION_RESULTS.append(
+        {"action": action, "status": status, "rc": rc, "detail": detail}
+    )
+
+
+def _snapshot_dir() -> str:
+    return os.environ.get(
+        "SNAPSHOT_DIR",
+        os.path.expanduser("~/.local/share/mantenimiento-linux/snapshots"),
+    )
+
+
+def validate_snapshot(snapshot_id: str) -> tuple[bool, str]:
+    """Validate snapshot id, directory, and recovery metadata before mutation."""
+    if not snapshot_id or "/" in snapshot_id or snapshot_id in (".", ".."):
+        return False, "invalid snapshot_id"
+    path = os.path.join(_snapshot_dir(), snapshot_id)
+    if not os.path.isdir(path):
+        return False, f"snapshot directory missing: {path}"
+    meta_path = os.path.join(path, "metadata.json")
+    if not os.path.isfile(meta_path):
+        return False, "metadata.json missing"
+    try:
+        with open(meta_path, encoding="utf-8") as fh:
+            meta = json.load(fh)
+    except (OSError, json.JSONDecodeError) as exc:
+        return False, f"metadata unreadable: {exc}"
+    if meta.get("backend_status") == "failed":
+        return False, "snapshot backend_status=failed"
+    if meta.get("recovery_scope") == "none" and meta.get("backend_required"):
+        return False, "recovery_scope=none with required backend"
+    return True, path
+
+
+def host_mutations_allowed() -> bool:
+    return os.environ.get(_HOST_MUTATION_ENV, "") == "1"
+
+
 def run_safe(cmd: str, risk_level: str, description: str) -> int:
+    action = description
     if DRY_RUN:
         log_info(f"[DRY-RUN] {description}")
         log_info(f"  Comando: {cmd}")
         log_info(f"  Riesgo: {risk_level}")
+        _record(action, "simulated", 0, cmd)
         return 0
+
+    if not host_mutations_allowed():
+        log_error(
+            f"Mutación bloqueada ({description}): set {_HOST_MUTATION_ENV}=1 "
+            "only after typed executor approval (T10)."
+        )
+        _record(action, "blocked", 3, "host mutations disabled")
+        return 3
+
+    if risk_gate is not None:
+        gate_rc = risk_gate.validate(cmd, snapshot_id=SNAPSHOT_ID, approved=False)
+        if gate_rc != 0:
+            log_error(f"risk_gate DENY: {description}")
+            _record(action, "blocked", gate_rc, "risk_gate")
+            return gate_rc
 
     log_info(f"Ejecutando: {description}")
     log_info(f"  Comando: {cmd}")
     rc, _ = run_capture(cmd, timeout=600)
     if rc == 0:
         log_success(f"  OK: {description}")
+        _record(action, "succeeded", 0, cmd)
         return 0
     log_error(f"  FALLÓ: {description}")
+    _record(action, "failed", rc, cmd)
     return 1
 
 
@@ -298,6 +365,29 @@ def verify_clean() -> None:
 
 def generate_json_output() -> None:
     json_file = JSON_OUTPUT or f"clean-routine-{utcnow_iso().replace('-', '').replace(':', '').replace('T', '-').replace('Z', '')}.json"
+    actions = list(ACTION_RESULTS)
+    if not actions:
+        # Ensure dry-run always emits explicit simulated rows, never fake completed.
+        defaults = [
+            "clean_package_cache",
+            "clean_journal",
+            "clean_orphans",
+            "clean_temp",
+            "clean_needrestart",
+            "update_firmware",
+            "clean_userspace_caches",
+        ]
+        for name in defaults:
+            if name == "update_firmware" and not WITH_FIRMWARE:
+                actions.append({"action": name, "status": "skipped", "rc": 0, "detail": ""})
+            elif DRY_RUN:
+                actions.append({"action": name, "status": "simulated", "rc": 0, "detail": ""})
+            else:
+                actions.append({"action": name, "status": "failed", "rc": 1, "detail": "no result recorded"})
+    completed = sum(1 for a in actions if a.get("status") == "succeeded")
+    failed = sum(1 for a in actions if a.get("status") in ("failed", "blocked"))
+    simulated = sum(1 for a in actions if a.get("status") == "simulated")
+    skipped = sum(1 for a in actions if a.get("status") == "skipped")
     result = {
         "metadata": {
             "timestamp": utcnow_iso(),
@@ -308,19 +398,13 @@ def generate_json_output() -> None:
             "snapshot_id": SNAPSHOT_ID or "none",
             "skill_version": SKILL_VERSION,
         },
-        "actions": [
-            {"action": "clean_package_cache", "status": "completed"},
-            {"action": "clean_journal", "status": "completed"},
-            {"action": "clean_orphans", "status": "completed"},
-            {"action": "clean_temp", "status": "completed"},
-            {"action": "clean_needrestart", "status": "completed"},
-            {"action": "update_firmware", "status": "completed" if WITH_FIRMWARE else "skipped"},
-            {"action": "clean_userspace_caches", "status": "completed"},
-        ],
+        "actions": actions,
         "summary": {
-            "total_actions": 7,
-            "completed": 7 if WITH_FIRMWARE else 6,
-            "failed": 0,
+            "total_actions": len(actions),
+            "completed": completed,
+            "failed": failed,
+            "simulated": simulated,
+            "skipped": skipped,
         },
     }
     try:
@@ -332,8 +416,32 @@ def generate_json_output() -> None:
     log_info(f"JSON output: {json_file}")
 
 
+def _ensure_snapshot_for_execute() -> int:
+    """Create or validate snapshot before any host effect. Returns process rc."""
+    global SNAPSHOT_ID
+    if not SNAPSHOT_ID:
+        log_warn("No se especificó --snapshot-id. Creando snapshot...")
+        SNAPSHOT_ID = f"snap-{utcnow_iso().replace('-', '').replace(':', '').replace('T', '-').replace('Z', '')}"
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        script = os.path.join(script_dir, "snapshot_state.py")
+        rc, out = run_capture(f"{sys.executable} '{script}' '{SNAPSHOT_ID}'", timeout=600)
+        if rc != 0:
+            log_error(f"Creación de snapshot falló (rc={rc})")
+            _record("create_snapshot", "failed", rc, out[:200] if out else "")
+            return 1
+        log_info(f"Snapshot ID: {SNAPSHOT_ID}")
+    ok, detail = validate_snapshot(SNAPSHOT_ID)
+    if not ok:
+        log_error(f"Snapshot inválido: {detail}")
+        _record("validate_snapshot", "failed", 1, detail)
+        return 1
+    _record("validate_snapshot", "succeeded", 0, detail)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     global SNAPSHOT_ID, PKG_MGR
+    ACTION_RESULTS.clear()
     parser = build_parser()
     args = parser.parse_args(argv)
     _setup_logging(args.verbose)
@@ -349,29 +457,56 @@ def main(argv: list[str] | None = None) -> int:
     log_info("Modo: " + ("DRY-RUN" if DRY_RUN else "EJECUCIÓN"))
     log_info(f"Gestor de paquetes: {PKG_MGR}")
 
-    if EXECUTE and not SNAPSHOT_ID:
-        log_warn("No se especificó --snapshot-id. Creando snapshot...")
-        SNAPSHOT_ID = f"snap-{utcnow_iso().replace('-', '').replace(':', '').replace('T', '-').replace('Z', '')}"
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        try:
-            run_capture(f"{script_dir}/snapshot_state.py {SNAPSHOT_ID}", timeout=600)
-        except (OSError, ValueError) as exc:
-            logger.error("fallo creando snapshot previo: %s", exc)
-            return 1
-        log_info(f"Snapshot ID: {SNAPSHOT_ID}")
-
-    clean_package_cache()
-    clean_journal()
-    clean_orphans()
-    clean_temp()
-    clean_needrestart()
-    update_firmware()
-    clean_userspace_caches()
-
     if EXECUTE:
+        snap_rc = _ensure_snapshot_for_execute()
+        if snap_rc != 0:
+            if JSON_MODE:
+                try:
+                    generate_json_output()
+                except (OSError, TypeError, ValueError):
+                    pass
+            return snap_rc
+        if not host_mutations_allowed():
+            log_error(
+                f"Ejecución real bloqueada: {_HOST_MUTATION_ENV}=1 requerido "
+                "tras aprobación del ejecutor tipado."
+            )
+            _record("host_mutation_gate", "blocked", 3, _HOST_MUTATION_ENV)
+            if JSON_MODE:
+                try:
+                    generate_json_output()
+                except (OSError, TypeError, ValueError):
+                    pass
+            return 3
+
+    # Route cleanup through run_safe so dry-run records simulated and execute is gated.
+    run_safe(f"clean_package_cache:{PKG_MGR}", "R1", "clean_package_cache")
+    run_safe("clean_journal", "R1", "clean_journal")
+    run_safe(f"clean_orphans:{PKG_MGR}", "R1", "clean_orphans")
+    run_safe("clean_temp", "R1", "clean_temp")
+    run_safe("needrestart", "R1", "clean_needrestart")
+    if WITH_FIRMWARE:
+        run_safe("fwupdmgr update", "R2", "update_firmware")
+    else:
+        _record("update_firmware", "skipped", 0, "requires --firmware")
+    run_safe("clean_userspace_caches", "R1", "clean_userspace_caches")
+
+    if EXECUTE and host_mutations_allowed():
+        # Legacy detailed cleaners only when host mutation explicitly allowed.
+        clean_package_cache()
+        clean_journal()
+        clean_orphans()
+        clean_temp()
+        clean_needrestart()
+        update_firmware()
+        clean_userspace_caches()
         verify_clean()
 
-    log_info("Rutina de limpieza completada")
+    failed = sum(1 for a in ACTION_RESULTS if a.get("status") in ("failed", "blocked"))
+    if failed:
+        log_error(f"Rutina finalizada con {failed} acción(es) fallidas/bloqueadas")
+    else:
+        log_info("Rutina de limpieza completada")
 
     if JSON_MODE:
         try:
@@ -379,6 +514,10 @@ def main(argv: list[str] | None = None) -> int:
         except (OSError, TypeError, ValueError) as exc:
             logger.error("no se pudo generar JSON: %s", exc)
             return 1
+    if failed and EXECUTE:
+        return 1
+    if any(a.get("status") == "blocked" for a in ACTION_RESULTS) and EXECUTE:
+        return 3
     return 0
 
 

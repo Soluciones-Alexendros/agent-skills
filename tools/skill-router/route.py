@@ -62,6 +62,10 @@ def route(prompt: str, top: int = 3):
                 score += 2.0
         ranked.append((score, sk))
     ranked.sort(key=lambda x: x[0], reverse=True)
+    # Lexical score is not calibrated confidence. Abstain when all scores are zero.
+    ranked = [(s, sk) for s, sk in ranked if s > 0]
+    if not ranked:
+        return []
     return ranked[:top]
 
 def main():
@@ -88,8 +92,15 @@ def main():
     if not prompt:
         prompt = sys.stdin.read().strip()
     results = route(prompt, args.top)
+    if not results:
+        payload = {"abstain": True, "reason": "no lexical signal (score=0); refusing automatic first-catalog pick", "score_kind": "lexical_not_probabilistic"}
+        if args.json:
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+        else:
+            print("ABSTAIN: no lexical signal — do not auto-select a skill")
+        return
     if args.json:
-        print(json.dumps([{"score": sc, "name": sk["name"], "entry": sk["entry"]} for sc, sk in results], ensure_ascii=False, indent=2))
+        print(json.dumps([{"score": sc, "name": sk["name"], "entry": sk["entry"], "score_kind": "lexical_not_probabilistic"} for sc, sk in results], ensure_ascii=False, indent=2))
     else:
         for sc, sk in results:
             print(f"{sc:.2f} {sk['name']} -> {sk['entry']}  keywords={','.join(sk.get('keywords',[])[:4])}")

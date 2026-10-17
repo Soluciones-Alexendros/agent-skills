@@ -4,7 +4,7 @@ description: "Defensive Linux host security: posture, light forensic record mana
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 5.0.0
+  version: "5.1.0"
   domain: local
   type: atomic
   language: en

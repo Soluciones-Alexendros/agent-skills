@@ -58,11 +58,31 @@ def validate_project(data: dict[str, Any]) -> None:
 
 
 def filter_skills(catalog: list[str], project: dict[str, Any]) -> list[str]:
+    """Apply enabled/disabled against the real catalog.
+
+    - enabled absent / null → default catalog
+    - enabled: [] → allow none (blocks routing)
+    - disabled always wins
+    - names not in catalog are rejected (ProjectConfigError via validate or here)
+    """
+    catalog_set = set(catalog)
     skills = project.get("skills") or {}
-    enabled = skills.get("enabled") or []
-    disabled = set(skills.get("disabled") or [])
-    base = list(enabled) if enabled else list(catalog)
-    return [s for s in base if s not in disabled]
+    if "enabled" in skills and skills["enabled"] is not None:
+        enabled = skills["enabled"]
+        if not isinstance(enabled, list):
+            raise ProjectConfigError("skills.enabled must be a list")
+        unknown = [s for s in enabled if s not in catalog_set]
+        if unknown:
+            raise ProjectConfigError(f"skills.enabled not in catalog: {unknown}")
+        base = list(enabled)
+    else:
+        base = list(catalog)
+    disabled = skills.get("disabled") or []
+    unknown_dis = [s for s in disabled if s not in catalog_set]
+    if unknown_dis:
+        raise ProjectConfigError(f"skills.disabled not in catalog: {unknown_dis}")
+    disabled_set = set(disabled)
+    return [s for s in base if s not in disabled_set]
 
 
 def handoff_for_phase(project: dict[str, Any], phase: str) -> str | None:

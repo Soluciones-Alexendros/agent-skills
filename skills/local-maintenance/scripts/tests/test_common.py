@@ -60,21 +60,21 @@ def test_finding_collector_health_score_golden():
     hs = c.health_score()
     assert hs["security"] == 50
     assert hs["updates"] == 100
-    assert hs["hygiene"] == 100
-    assert hs["resources"] == 100
-    assert hs["stability"] == 100
-    assert hs["overall"] == (
+    # Unchecked categories are None (not silent 100)
+    assert hs["hygiene"] is None
+    assert hs["resources"] is None
+    assert hs["stability"] is None
+    covered = (
         50 * common.CATEGORY_WEIGHTS["security"]
         + 100 * common.CATEGORY_WEIGHTS["updates"]
-        + 100 * common.CATEGORY_WEIGHTS["hygiene"]
-        + 100 * common.CATEGORY_WEIGHTS["resources"]
-        + 100 * common.CATEGORY_WEIGHTS["stability"]
-    ) // 100
-    assert hs["overall"] == 82
+    )
+    weight = common.CATEGORY_WEIGHTS["security"] + common.CATEGORY_WEIGHTS["updates"]
+    assert hs["overall"] == covered // weight
     s = c.summary()
     assert s["total_checks"] == 3
     assert s["passed"] == 2
     assert s["failed"] == 1
+    assert s["check_coverage"] == 3
 
 
 def test_health_score_skip_no_penaliza():
@@ -160,7 +160,8 @@ def test_check_pkg_06_si_gestor_desconocido_skip():
     c = common.FindingCollector()
     common.check_pkg_06(c, "zypper", runner=lambda cmd, timeout=10: "")
     assert c.findings[0]["status"] == "SKIP"
-    assert c.health_score()["hygiene"] == 100
+    # SKIP-only category is not_checked — never silent 100
+    assert c.health_score()["hygiene"] is None
 
 
 def test_load_profile_family_tmp(tmp_path):

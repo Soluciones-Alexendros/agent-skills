@@ -216,6 +216,22 @@ def cmd_mark(args):
 
 
 def cmd_send(args):
+    """Send requires explicit approval bound to exact recipient and body digest."""
+    import hashlib
+
+    approve = getattr(args, "approve_send", None) or os.environ.get("PROTON_APPROVE_SEND", "")
+    digest = hashlib.sha256(
+        f"{args.to}\n{args.subject}\n{args.body}".encode("utf-8")
+    ).hexdigest()
+    expected = getattr(args, "approve_digest", None) or os.environ.get("PROTON_APPROVE_DIGEST", "")
+    if approve != "CONFIRM_SEND" or expected != digest:
+        print(
+            "BLOCKED: send requires --approve-send CONFIRM_SEND and "
+            f"--approve-digest {digest} matching exact to/subject/body. "
+            "Read/search never send. approved=true is not accepted.",
+            file=sys.stderr,
+        )
+        raise ProtonBridgeError("send blocked: approval missing or digest mismatch")
     _, _, _, _, user, _ = get_config()
     require_creds()
     msg = EmailMessage()
@@ -252,6 +268,16 @@ def build_parser():
 
     sp = sub.add_parser("send"); sp.add_argument("--to", required=True)
     sp.add_argument("--subject", required=True); sp.add_argument("--body", required=True)
+    sp.add_argument(
+        "--approve-send",
+        default="",
+        help="Must be CONFIRM_SEND; env PROTON_APPROVE_SEND also accepted",
+    )
+    sp.add_argument(
+        "--approve-digest",
+        default="",
+        help="SHA-256 hex of to\\nsubject\\nbody; must match exactly",
+    )
     sp.set_defaults(fn=cmd_send)
     return p
 

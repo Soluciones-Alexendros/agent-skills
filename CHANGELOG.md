@@ -6,6 +6,25 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [Unreleased]
 
+- `local-maintenance` 5.0.0 -> 5.1.0 (minor)
+- `local-proton` 5.0.0 -> 5.1.0 (minor)
+- `local-security` 5.0.0 -> 5.1.0 (minor)
+- `plan-continue` 4.2.0 -> 4.3.0 (minor)
+- `plan-specification` 4.1.0 -> 4.2.0 (minor)
+- `plan-validators` 5.0.0 -> 5.1.0 (minor)
+- `project-architecture` 4.0.0 -> 4.1.0 (minor)
+- `project-libraries` 4.0.1 -> 4.1.0 (minor)
+- `project-publish` 4.2.0 -> 4.3.0 (minor)
+- `role-back` 1.1.0 -> 1.2.0 (minor)
+- `role-clean-code` 1.1.0 -> 1.2.0 (minor)
+- `role-design` 4.1.0 -> 4.2.0 (minor)
+- `role-front` 1.1.0 -> 1.2.0 (minor)
+- `web-compliance` 4.0.0 -> 4.1.0 (minor)
+- `web-owasp` 4.1.0 -> 4.2.0 (minor)
+- `web-performance` 4.0.0 -> 4.1.0 (minor)
+
+  execution contracts + P0 containment + canonical gate
+
 ## [5.0.0] - 2026-10-17
 
 ### Changed

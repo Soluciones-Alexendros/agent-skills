@@ -1,13 +1,13 @@
 ---
 name: project-architecture
 description:
-  "Code architecture verification and analysis. Use when analyzing code structure, dependencies, architectural drift, or refactoring opportunities. Use when the operator requests architectural analysis, dependency mapping, or code health assessment. Not for security code review (→ web-owasp) nor minor implementation changes (→ project-libraries).
+  "Code architecture verification and analysis. Use when analyzing code structure, dependencies, architectural drift, or refactoring opportunities. Use when the operator requests architectural analysis, dependency mapping, or code health assessment. Not for security code review (→ web-owasp) nor SCA/CVE dependency audits (→ project-libraries); minor implementation without architecture analysis uses role-* skills.
 
   "
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 4.0.0
+  version: "4.1.0"
   domain: project
   type: atomic
   language: en
@@ -34,7 +34,7 @@ operator requests architectural analysis, dependency mapping, or code health ass
 ## Not for
 
 - Security code review (use web-owasp)
-- Minor implementation changes (use project-libraries)
+- Minor implementation changes without architectural analysis (use the matching role-* skill; dependency advisories → project-libraries)
 
 ## Architectural Analysis
 

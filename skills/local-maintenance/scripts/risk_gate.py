@@ -197,6 +197,35 @@ def classify_command(cmd: str) -> str:
     return "R0"
 
 
+# Typed operation registry (deny-by-default). Shell classification above is support only.
+KNOWN_OPERATIONS = {
+    "clean_package_cache": {"effect": "mutate-host", "min_risk": "R1"},
+    "clean_journal": {"effect": "mutate-host", "min_risk": "R1"},
+    "clean_orphans": {"effect": "mutate-host", "min_risk": "R1"},
+    "clean_temp": {"effect": "mutate-host", "min_risk": "R1"},
+    "clean_needrestart": {"effect": "mutate-host", "min_risk": "R1"},
+    "update_firmware": {"effect": "mutate-host", "min_risk": "R2"},
+    "clean_userspace_caches": {"effect": "mutate-host", "min_risk": "R1"},
+    "create_snapshot": {"effect": "write-workspace", "min_risk": "R0"},
+    "validate_snapshot": {"effect": "read", "min_risk": "R0"},
+    "probe_system": {"effect": "read", "min_risk": "R0"},
+}
+
+
+def authorize_operation(operation_id: str, params: dict | None = None) -> tuple[bool, str]:
+    """Deny-by-default for typed operations. Unknown ids are never allowed."""
+    params = params or {}
+    if operation_id not in KNOWN_OPERATIONS:
+        return False, f"unknown operation: {operation_id}"
+    spec = KNOWN_OPERATIONS[operation_id]
+    if spec["effect"] == "mutate-host" and not params.get("approved"):
+        if spec["min_risk"] in ("R2", "R3") and not params.get("approved"):
+            return False, "approval required"
+        if not params.get("snapshot_id") and spec["min_risk"] != "R0":
+            return False, "snapshot_id required"
+    return True, "ok"
+
+
 def validate(cmd: str, snapshot_id: str = "", approved: bool = False) -> int:
     risk_level = classify_command(cmd)
 

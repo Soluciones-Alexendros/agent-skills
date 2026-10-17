@@ -115,15 +115,48 @@ def test_snapshot_rollback_dry_run(tmp_path):
     assert rc == 0  # dry-run by default
 
 
-def test_snapshot_rollback_execute(tmp_path):
+def test_snapshot_rollback_execute_requires_restore_root(tmp_path):
     snap_dir = tmp_path / "snapshots"
     snap_dir.mkdir()
     meta = snap_dir / "snap-test" / "metadata.json"
     meta.parent.mkdir(parents=True, exist_ok=True)
     meta.write_text('{"id": "snap-test", "packages": ["pkg1"]}', encoding="utf-8")
-    # Create required files for rollback
     (meta.parent / "etc-checksums.txt").write_text("abc123  /etc/fstab\n", encoding="utf-8")
     (meta.parent / "etc-backup.tar.gz").write_bytes(b"dummy")
-    with patch("snapshot_state.run_capture", return_value=(0, "ok")):
-        rc = snapshot_state.main(["--rollback", "snap-test", "--snapshot-dir", str(snap_dir), "--execute"])
-        assert rc == 0
+    rc = snapshot_state.main(
+        ["--rollback", "snap-test", "--snapshot-dir", str(snap_dir), "--execute"]
+    )
+    assert rc == 3
+
+
+def test_snapshot_rollback_execute_temp_root(tmp_path):
+    import tarfile
+
+    snap_dir = tmp_path / "snapshots"
+    snap_dir.mkdir()
+    meta = snap_dir / "snap-test" / "metadata.json"
+    meta.parent.mkdir(parents=True, exist_ok=True)
+    meta.write_text('{"id": "snap-test"}', encoding="utf-8")
+    (meta.parent / "etc-checksums.txt").write_text("abc123  /etc/fstab\n", encoding="utf-8")
+    tarball = meta.parent / "etc-backup.tar.gz"
+    restore = tmp_path / "restore-root"
+    restore.mkdir()
+    with tarfile.open(tarball, "w:gz") as tf:
+        info = tarfile.TarInfo(name="etc/fstab")
+        data = b"UUID=test / ext4 defaults 0 1\n"
+        info.size = len(data)
+        import io
+
+        tf.addfile(info, io.BytesIO(data))
+    rc = snapshot_state.main(
+        [
+            "--rollback",
+            "snap-test",
+            "--snapshot-dir",
+            str(snap_dir),
+            "--execute",
+            "--restore-root",
+            str(restore),
+        ]
+    )
+    assert rc == 0

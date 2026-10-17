@@ -26,16 +26,21 @@ OpenCode es el harness principal: no necesita sistema de plugins, solo `AGENTS.m
 ```bash
 git clone https://github.com/Soluciones-Alexendros/autoworkspace.git
 cd autoworkspace
-bash scripts/install.sh            # global: ~/.config/opencode/skills, ~/.agents/skills, ~/.codex/skills, ~/.cursor/skills
-bash scripts/install-opencode.sh   # local al proyecto: .opencode/skills + .agents/skills
+# Explicit target required — does not overwrite global AGENTS.md
+bash scripts/install.sh --target "$HOME/.cursor/skills"
+bash scripts/install-opencode.sh --target .   # enlaces del checkout: .opencode/skills + .agents/skills
+bash run-validation.sh                        # canonical full gate
 ```
 
 Comprueba el enrutado con:
 
 ```bash
 python tools/skill-router/route.py "limpia mi sistema Arch" --top 3
-python tools/workspace-router/run.py --phase DEFINE --repo . --json
+python tools/workspace-router/run.py --init --repo .   # scaffold once
+python tools/workspace-router/run.py --phase DEFINE --repo . --json   # read-only route
 ```
+
+Cada skill declara `execution.yaml` (extensión local). OpenCode: ver `docs/harness-integration.md` (nivel B `not_run` hasta probar un binario real).
 
 Plantillas de proyecto: `templates/autoworkspace/` → copiar a `<repo>/.autoworkspace/`.
 
