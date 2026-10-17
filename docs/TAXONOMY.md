@@ -1,6 +1,6 @@
 # Skill taxonomy
 
-15 skills in 5 domains. The `metadata.domain` frontmatter field reflects this table, and the name prefix is the domain (normative, not advisory). The taxonomy is closed: every new skill must fit an existing domain or propose a new one in the PR (see CONTRIBUTING.md).
+16 skills in 5 domains. The `metadata.domain` frontmatter field reflects this table, and the name prefix is the domain (normative, not advisory). The taxonomy is closed: every new skill must fit an existing domain or propose a new one in the PR (see CONTRIBUTING.md).
 
 | Domain    | Scope                                                                                    | Skills                                                     |
 | --------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
@@ -8,7 +8,7 @@
 | `local`   | Local OS and workstation tooling, including health checks and audits (not online DevOps) | local-maintenance · local-security · local-proton          |
 | `project` | Static repository concerns: docs, config, versioning, packaging, local quality           | project-architecture · project-libraries · project-publish |
 | `web`     | Dynamic behavior of a deployed, internet-accessible project                              | web-compliance · web-owasp · web-performance               |
-| `role`    | Specialist implementation agents with executable methods (replace vague persona prompts) | role-back · role-design · role-front                       |
+| `role`    | Specialist implementation agents with executable methods (replace vague persona prompts) | role-back · role-clean-code · role-design · role-front     |
 
 ## Closed sets (normative)
 

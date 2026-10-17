@@ -53,22 +53,22 @@ python tools/workspace-router/run.py --phase DEFINE --repo . --json
 python tools/workspace-router/run.py --phase STATUS --repo . --bump --note "phase done"
 ```
 
-| Phase     | Typical skill                        | Output                                 |
-| --------- | ------------------------------------ | -------------------------------------- |
-| DEFINE    | plan-specification                   | Spec + tasks                           |
-| SCHEMAS   | plan-continue (acceptance schemas)   | `.autoworkspace/schemas/` + test stubs |
-| IMPLEMENT | role-front / role-back / role-design | Code                                   |
-| VALIDATE  | plan-validators                      | Red-green-refactor + integrated tests  |
-| INTEGRATE | project-publish                      | Local gates / CI / release handoff     |
-| STATUS    | plan-continue                        | `status.yaml` bump + ESTADO board      |
+| Phase     | Typical skill                                          | Output                                 |
+| --------- | ------------------------------------------------------ | -------------------------------------- |
+| DEFINE    | plan-specification                                     | Spec + tasks                           |
+| SCHEMAS   | plan-continue (acceptance schemas)                     | `.autoworkspace/schemas/` + test stubs |
+| IMPLEMENT | role-front / role-back / role-design / role-clean-code | Code                                   |
+| VALIDATE  | plan-validators                                        | Red-green-refactor + integrated tests  |
+| INTEGRATE | project-publish                                        | Local gates / CI / release handoff     |
+| STATUS    | plan-continue                                          | `status.yaml` bump + ESTADO board      |
 
 The phase router returns one typical skill as a fallback; it never replaces
 per-task role selection. At plan start and before every task or independent
 implementation action, re-evaluate the current surface and invoke all matching
-roles: backend/API/jobs → role-back, frontend/client routes → role-front, and
-visual direction/tokens → role-design. Repeat this even when the previous action
-used another role. Mixed work requires explicit contracts and handoffs between
-all matching roles.
+roles: backend/API/jobs → role-back, frontend/client routes → role-front,
+visual direction/tokens → role-design, and clean-code/refactoring →
+role-clean-code. Repeat this even when the previous action used another role.
+Mixed work requires explicit contracts and handoffs between all matching roles.
 
 ## Process
 

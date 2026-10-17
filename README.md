@@ -2,7 +2,7 @@
 
 Workspace agéntico de Soluciones-Alexendros (MIT): no es una vitrina de skills, sino un pipeline preprogramado con variables por proyecto — especificación → esquemas/tests → código → validación → integración → status declarativo versionado.
 
-15 skills en 5 dominios (`plan`, `local`, `project`, `web`, `role`). Nombres y contenido de skills en inglés; conversaciones en español.
+16 skills en 5 dominios (`plan`, `local`, `project`, `web`, `role`). Nombres y contenido de skills en inglés; conversaciones en español.
 
 **Deps:** version-updates vía [Renovate](.github/renovate.json) (Dependabot Alerts de seguridad pueden quedar ON). App Renovate en la org es prerrequisito humano.
 
@@ -37,7 +37,7 @@ Consulta `docs/harness-integration.md` (tabla multi-harness), `docs/opencode-set
 
 ## Skills por dominio
 
-15 skills repartidas en 5 dominios (`plan`, `local`, `project`, `web`, `role`).
+16 skills repartidas en 5 dominios (`plan`, `local`, `project`, `web`, `role`).
 
 ### plan (3) — Cómo se decide y verifica el trabajo
 
@@ -71,13 +71,14 @@ Consulta `docs/harness-integration.md` (tabla multi-harness), `docs/opencode-set
 | `web-owasp`       | Revisión de seguridad de código (OWASP): inyección, XSS, autenticación/autorización, criptografía, SSRF, secretos y mala configuración. Úsala al buscar vulnerabilidades en el código. No para hardening del host (ver `local-security`).                                |
 | `web-performance` | Auditoría de rendimiento web: Core Web Vitals, Lighthouse, TTFB/FCP, modos de renderizado, caché HTTP y CDN, optimización de carga. Úsala al diagnosticar lentitud. No para cumplimiento (ver `web-compliance`).                                                         |
 
-### role (3) — Agentes especialistas de implementación
+### role (4) — Agentes especialistas de implementación
 
-| Skill         | Descripción                                                                                                                                                                                                                                      |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `role-front`  | Especialista frontend: estabilidad, compatibilidad, coherencia de estado y contratos de comunicación cliente-servidor. Úsala al implementar o corregir UI y flujos. No para dirección visual (ver `role-design`) ni auditorías (ver `web-*`).    |
-| `role-back`   | Especialista backend: datos en reposo y en movimiento, rutas, despliegue, robustez y seguridad de aplicación. Patrones de caché/KV, colas, rate limit, blobs y búsqueda (Upstash u otros proveedores). Úsala al implementar APIs y persistencia. |
-| `role-design` | Especialista UI/UX: dirección visual, tipografía, paleta, motion, CSS limpio, tokens DTCG y Tailwind v4. Úsala al diseñar interfaces o un design system. No para lógica de aplicación (ver `role-front`) ni a11y/SEO (ver `web-compliance`).     |
+| Skill             | Descripción                                                                                                                                                                                                                                                                                                                                  |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `role-front`      | Especialista frontend: estabilidad, compatibilidad, coherencia de estado y contratos de comunicación cliente-servidor. Úsala al implementar o corregir UI y flujos. No para dirección visual (ver `role-design`) ni auditorías (ver `web-*`).                                                                                                |
+| `role-back`       | Especialista backend: datos en reposo y en movimiento, rutas, despliegue, robustez y seguridad de aplicación. Patrones de caché/KV, colas, rate limit, blobs y búsqueda (Upstash u otros proveedores). Úsala al implementar APIs y persistencia.                                                                                             |
+| `role-clean-code` | Especialista Clean Code: escritura legible y refactor seguro en cualquier lenguaje, con nombres expresivos, funciones cohesionadas, menos duplicación y pasos pequeños verificados. Úsala al aplicar código limpio o refactorizar. No para auditoría arquitectónica (ver `project-architecture`) ni revisión de seguridad (ver `web-owasp`). |
+| `role-design`     | Especialista UI/UX: dirección visual, tipografía, paleta, motion, CSS limpio, tokens DTCG y Tailwind v4. Úsala al diseñar interfaces o un design system. No para lógica de aplicación (ver `role-front`) ni a11y/SEO (ver `web-compliance`).                                                                                                 |
 
 Al iniciar un plan y antes de cada tarea o acción independiente, reevalúa el
 alcance e invoca todos los roles aplicables. Las invocaciones anteriores no

@@ -54,6 +54,7 @@ Ejemplos:
 - "prepara release" → `project-publish`
 - "audita compliance" → `web-compliance`
 - "implementa el frontend" → `role-front`
+- "refactoriza con clean code" → `role-clean-code`
 
 El usuario NO necesita pedir skills explícitamente.
 
@@ -69,9 +70,9 @@ El usuario NO necesita pedir skills explícitamente.
 La secuencia de implementación es planificación → roles → `plan-validators` →
 `project-publish`. Antes de cada tarea o acción independiente se reevalúa el
 alcance y se invocan todos los roles aplicables: backend/API/jobs → `role-back`,
-frontend/rutas cliente → `role-front`, diseño/tokens → `role-design`. Una
-invocación anterior no cubre las acciones siguientes; el trabajo mixto exige
-contratos y handoffs entre roles.
+frontend/rutas cliente → `role-front`, diseño/tokens → `role-design`,
+clean-code/refactor → `role-clean-code`. Una invocación anterior no cubre las
+acciones siguientes; el trabajo mixto exige contratos y handoffs entre roles.
 
 ### Agent Expectations (Critical)
 

@@ -103,11 +103,12 @@ Every implementation task declares **Implementation roles** and **Test surfaces*
 Select roles at plan start, then repeat the selection before each task or
 independent action; an earlier invocation never covers later work.
 
-| Current surface                              | Required role |
-| -------------------------------------------- | ------------- |
-| Backend, API, persistence, jobs, queues      | role-back     |
-| Frontend, client routes, state, interactions | role-front    |
-| Visual direction, tokens, component styling  | role-design   |
+| Current surface                              | Required role   |
+| -------------------------------------------- | --------------- |
+| Backend, API, persistence, jobs, queues      | role-back       |
+| Frontend, client routes, state, interactions | role-front      |
+| Visual direction, tokens, component styling  | role-design     |
+| Clean code, refactoring, duplication cleanup | role-clean-code |
 
 For mixed work, invoke all matching roles and define their contracts and handoffs.
 Re-evaluate whenever scope changes. Cover every declared route, function, job and

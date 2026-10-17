@@ -29,7 +29,7 @@ python tools/workspace-router/run.py --phase STATUS --repo . --bump --note "adva
 - Ambiguous "¿por dónde empiezo?" or "pon al día este proyecto" → plan-continue (loads/creates `.autoworkspace/`)
 - Mix audit+release ("audítalo y publícalo") → plan-continue first, then project-publish
 - WEB AUDITS → web-* · LOCAL (local OS) → local-*
-- At plan start and before EVERY task or independent implementation action, re-evaluate the scope and invoke all matching roles: backend/API/jobs → role-back; frontend/client routes → role-front; visual direction/tokens → role-design. Previous role invocations do not cover later actions. Mixed work requires explicit contracts and handoffs. The phase router's single skill is only a fallback, never a substitute for per-task role selection.
+- At plan start and before EVERY task or independent implementation action, re-evaluate the scope and invoke all matching roles: backend/API/jobs → role-back; frontend/client routes → role-front; visual direction/tokens → role-design; clean-code/refactoring → role-clean-code. Previous role invocations do not cover later actions. Mixed work requires explicit contracts and handoffs. The phase router's single skill is only a fallback, never a substitute for per-task role selection.
 
 ## OpenCode Specific
 
@@ -58,6 +58,6 @@ SKILL.md is <200 lines. Heavy docs live in references/. Read them only when SKIL
 
 ## Learned Workspace Facts
 
-- El catálogo canónico son 15 skills en 5 dominios: `plan`, `local`, `project`, `web`, `role` (prefijo del nombre = dominio).
+- El catálogo canónico son 16 skills en 5 dominios: `plan`, `local`, `project`, `web`, `role` (prefijo del nombre = dominio).
 - Producto: **autoworkspace** — pipeline agéntico, no vitrina de skills.
 - Actualización de dependencias: Renovate (no Dependabot).

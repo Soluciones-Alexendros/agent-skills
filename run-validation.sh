@@ -119,22 +119,23 @@ print("Arrows OK" if ok else "Arrow checks FAILED")
 sys.exit(0 if ok else 1)
 PY
 
-echo "[4] skill-index.json parity (15 skills)"
+echo "[4] skill-index.json parity (16 skills)"
 python3 tools/skill-router/build_index.py
 python3 - <<'PY'
 import json, sys
 d = json.load(open("skill-index.json"))
 n = len(d.get("skills", []))
 print(f"Index holds {n} skills")
-sys.exit(0 if n == 15 else 1)
+sys.exit(0 if n == 16 else 1)
 PY
-echo "Index rebuilt (15 skills)"
+echo "Index rebuilt (16 skills)"
 fi
 
 if [ "$FULL" = 1 ] || [ "$ONLY_SMOKE" = 1 ]; then
 echo "[5] Router smoke test"
 python3 tools/skill-router/route.py "por donde empiezo con este repo" --top 2
 python3 tools/skill-router/route.py "limpia mi sistema" --top 2
+python3 tools/skill-router/route.py "refactoriza este código aplicando clean code" --top 2
 fi
 
 if [ "$FULL" = 1 ] || [ "$ONLY_PYTEST" = 1 ]; then
