@@ -28,7 +28,7 @@ git clone https://github.com/Soluciones-Alexendros/autoworkspace.git
 cd autoworkspace
 # Explicit target required — does not overwrite global AGENTS.md
 bash scripts/install.sh --target "$HOME/.cursor/skills"
-bash scripts/install-opencode.sh --target .   # project-local .opencode/skills + .agents/skills
+bash scripts/install-opencode.sh --target .   # enlaces del checkout: .opencode/skills + .agents/skills
 bash run-validation.sh                        # canonical full gate
 ```
 

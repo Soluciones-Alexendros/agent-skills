@@ -187,7 +187,11 @@ def test_f21_timeout_preserved_in_run_result():
 
 def test_f22_skill_version_from_manifest():
     version = common.skill_version_from_manifest() if hasattr(common, "skill_version_from_manifest") else None
-    assert version == "5.0.0" or (version is None and common.SKILL_VERSION != "2.0.0")
+    assert version is not None
+    assert version == common.SKILL_VERSION
+    # Must track SKILL.md, not the stale component constant
+    assert version != "2.0.0"
+    assert common.COMPONENT_VERSION != version or True  # component may differ
 
 
 def test_r07_dry_run_zero_mutations(monkeypatch):

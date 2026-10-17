@@ -4,7 +4,7 @@ description: "Implements Clean Code principles to write expressive, maintainable
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "1.1.0"
+  version: "1.2.0"
   domain: role
   type: atomic
   language: en

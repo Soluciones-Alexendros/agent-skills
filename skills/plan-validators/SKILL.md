@@ -4,7 +4,7 @@ description: "Drive implementation and QA with integrated tests: red-green-refac
 license: MIT
 metadata:
   author: addyosmani (adapted)
-  version: 5.0.0
+  version: "5.1.0"
   domain: plan
   type: atomic
   language: en

@@ -4,7 +4,7 @@ description: "Autoworkspace orchestrator: continue from roadmap or .autoworkspac
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 4.2.0
+  version: "4.3.0"
   domain: plan
   type: orchestrator
   language: en
