@@ -19,7 +19,7 @@ bash scripts/install.sh
 bash scripts/install.sh --prune
 ```
 
-Enlaza las 18 skills canónicas a:
+Enlaza las 19 skills canónicas a:
 
 - `~/.cursor/skills/` y copia `~/.cursor/AGENTS.md` + docs de taxonomía/routing
 - `~/.grok/skills/`, `~/.grok/AGENTS.md` y comando `/skill-route`

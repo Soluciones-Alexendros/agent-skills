@@ -54,6 +54,7 @@ Ejemplos:
 - "prepara release" → `project-publish`
 - "audita compliance" → `web-compliance`
 - "implementa el frontend" → `role-front`
+- "refactoriza con clean code" → `role-clean-code`
 
 El usuario NO necesita pedir skills explícitamente.
 

@@ -6,6 +6,13 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-10-17
+
+### Added
+
+- `role-clean-code` 1.0.0: método ejecutable e idiomático para escribir código limpio y refactorizar con comportamiento preservado, basado en los fundamentos de _Clean Code_. Incluye principios esenciales, protocolo de refactor, diseño emergente/concurrencia y heurísticas priorizadas en referencias progresivas. Catálogo: **19 skills** en 5 dominios.
+- Routing determinista y semántico ES/EN para «clean code», «código limpio», refactorización, nombres significativos, funciones pequeñas y código duplicado.
+
 ## [4.0.0] - 2026-10-11
 
 ### Added
@@ -142,7 +149,9 @@ Primera publicación pública del repo `Soluciones-Alexendros/autoworkspace` (21
 - Estructura `skills/<nombre>/` con frontmatter normalizado (`license: MIT`, `metadata` con autor, versión, dominio e idioma).
 - Validadores `tools/validate/` (spec + enlaces), CI en `.github/workflows/` y `run-validation.sh` agregado.
 
-[Unreleased]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v3.0.2...HEAD
+[Unreleased]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v4.0.0...v4.1.0
+[4.0.0]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v3.0.2...v4.0.0
 [3.0.2]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v2.2.0...v3.0.0

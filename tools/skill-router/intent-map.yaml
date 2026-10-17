@@ -97,6 +97,22 @@ intents:
     skills: [role-design]
     patterns:
       ["design system", "tokens", "paleta", "tipografía", "dirección visual"]
+  clean_code:
+    skills: [role-clean-code]
+    patterns:
+      [
+        "clean code",
+        "código limpio",
+        "refactor",
+        "refactoring",
+        "code smell",
+        "meaningful names",
+        "nombres significativos",
+        "small functions",
+        "funciones pequeñas",
+        "duplicated code",
+        "código duplicado",
+      ]
   especificar:
     skills: [plan-specification]
     patterns: ["especificación", "spec", "desglosa tareas", "task breakdown"]
