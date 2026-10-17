@@ -57,6 +57,6 @@ SKILL.md is <200 lines. Heavy docs live in references/. Read them only when SKIL
 
 ## Learned Workspace Facts
 
-- El catálogo canónico son 18 skills en 5 dominios: `plan`, `system`, `project`, `web`, `role` (prefijo del nombre = dominio).
+- El catálogo canónico son 19 skills en 5 dominios: `plan`, `system`, `project`, `web`, `role` (prefijo del nombre = dominio).
 - Producto: **autoworkspace** — pipeline agéntico, no vitrina de skills.
 - Actualización de dependencias: Renovate (no Dependabot).

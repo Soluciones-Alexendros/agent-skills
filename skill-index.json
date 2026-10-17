@@ -175,6 +175,43 @@
       "compatibility": "opencode, codex, cursor, copilot"
     },
     {
+      "name": "role-clean-code",
+      "description": "Implements Clean Code principles to write expressive, maintainable software and refactor existing code safely in any language. Use when the operator asks for 'clean code', 'código limpio', refactoring, meaningful names, smaller functions, fewer code smells, or cleanup of duplicated logic. Not for architecture-only assessments (→ project-architecture), test-suite audits (→ project-testing), or security reviews (→ web-owasp).",
+      "domain": "role",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "role-clean-code",
+        "clean code",
+        "código limpio",
+        "refactor",
+        "refactoring",
+        "refactorización",
+        "code smells",
+        "meaningful names",
+        "nombres significativos",
+        "small functions",
+        "funciones pequeñas",
+        "duplicated code",
+        "código duplicado"
+      ],
+      "triggers": [
+        "clean code",
+        "code smell",
+        "código duplicado",
+        "código limpio",
+        "duplicated code",
+        "funciones pequeñas",
+        "meaningful names",
+        "nombres significativos",
+        "refactor",
+        "refactoring",
+        "small functions"
+      ],
+      "entry": "skills/role-clean-code/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
       "name": "role-design",
       "description": "Specialist role for UI/UX and visual systems: intentional visual direction, typography, palette, motion, clean indented CSS, design tokens (DTCG/Style Dictionary), Tailwind v4 and reusable components. Use when designing or redesigning interfaces, building a design system, or polishing interaction. Not for a11y/SEO audits (→ web-compliance) nor frontend application logic (→ role-front).",
       "domain": "role",
