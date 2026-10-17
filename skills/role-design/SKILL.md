@@ -4,7 +4,7 @@ description: "Specialist role for UI/UX and visual systems: intentional visual d
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 4.0.0
+  version: 4.1.0
   domain: role
   type: atomic
   language: en
@@ -77,6 +77,12 @@ References: [builder-source.md](references/builder-source.md),
 [tailwind-source.md](references/tailwind-source.md),
 [tokens.md](references/tokens.md),
 [modern-css.md](references/modern-css.md).
+
+## Re-entry
+
+- Re-invoke this role before every visual-direction, token or component-styling action, not only at plan start.
+- Re-evaluate the scope on every re-entry, including when another role handled the previous action.
+- Hand frontend behavior to role-front and API/data work to role-back with explicit contracts.
 
 ## Related
 

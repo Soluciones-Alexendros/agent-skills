@@ -81,7 +81,7 @@ as a specialized behavioral change, not a formatting or extraction exercise.
   suitable tools, but a passing stress test alone does not prove race freedom.
 
 Before changing concurrency semantics, consult current official language or
-framework documentation and use → plan-validation for the behavioral safety net.
+framework documentation and use → plan-validators for the behavioral safety net.
 If concurrency is outside the requested scope, document the smell and stop there.
 
 ## Final restraint check

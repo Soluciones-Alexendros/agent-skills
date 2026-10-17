@@ -4,7 +4,7 @@ description: "Specialist role for frontend application work: UI stability, brows
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: 1.0.0
+  version: 1.1.0
   domain: role
   type: atomic
   language: en
@@ -62,10 +62,16 @@ and data stores (→ role-back).
 - Idempotent retries only where the API guarantees safety
 - Never put secrets or privileged tokens in client-visible code
 
+## Re-entry
+
+- Re-invoke this role before every frontend, client-route, state or interaction action, not only at plan start.
+- Re-evaluate the scope on every re-entry, including when another role handled the previous action.
+- Hand backend, visual or other out-of-scope surfaces to their matching role with an explicit contract.
+
 ## Method
 
 1. Read the existing frontend patterns in the repo before inventing new ones
-2. Implement with → plan-validation (failing test or repro first when behavior changes)
+2. Implement with → plan-validators (failing test or repro first when behavior changes)
 3. Verify end-to-end: exercise the changed flow as a user would; check sibling routes
 4. Hand visual polish to → role-design; hand API/schema work to → role-back
 

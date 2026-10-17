@@ -4,7 +4,7 @@ description: "Autoworkspace orchestrator: continue from roadmap or .autoworkspac
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 4.1.0
+  version: 4.2.0
   domain: plan
   type: orchestrator
   language: en
@@ -53,14 +53,22 @@ python tools/workspace-router/run.py --phase DEFINE --repo . --json
 python tools/workspace-router/run.py --phase STATUS --repo . --bump --note "phase done"
 ```
 
-| Phase     | Typical skill                        | Output                                 |
-| --------- | ------------------------------------ | -------------------------------------- |
-| DEFINE    | plan-specification                   | Spec + tasks                           |
-| SCHEMAS   | plan-continue (acceptance schemas)   | `.autoworkspace/schemas/` + test stubs |
-| IMPLEMENT | role-front / role-back / role-design | Code                                   |
-| VALIDATE  | plan-validation                      | Red-green-refactor proof               |
-| INTEGRATE | project-hooks / project-publish      | Local gates / CI / release handoff     |
-| STATUS    | plan-continue                        | `status.yaml` bump + ESTADO board      |
+| Phase     | Typical skill                                          | Output                                 |
+| --------- | ------------------------------------------------------ | -------------------------------------- |
+| DEFINE    | plan-specification                                     | Spec + tasks                           |
+| SCHEMAS   | plan-continue (acceptance schemas)                     | `.autoworkspace/schemas/` + test stubs |
+| IMPLEMENT | role-front / role-back / role-design / role-clean-code | Code                                   |
+| VALIDATE  | plan-validators                                        | Red-green-refactor + integrated tests  |
+| INTEGRATE | project-publish                                        | Local gates / CI / release handoff     |
+| STATUS    | plan-continue                                          | `status.yaml` bump + ESTADO board      |
+
+The phase router returns one typical skill as a fallback; it never replaces
+per-task role selection. At plan start and before every task or independent
+implementation action, re-evaluate the current surface and invoke all matching
+roles: backend/API/jobs → role-back, frontend/client routes → role-front,
+visual direction/tokens → role-design, and clean-code/refactoring →
+role-clean-code. Repeat this even when the previous action used another role.
+Mixed work requires explicit contracts and handoffs between all matching roles.
 
 ## Process
 
@@ -85,7 +93,7 @@ Detail: [inicio-plan.md](references/inicio-plan.md).
 
 From the approved spec, write acceptance schemas and failing test stubs under
 `.autoworkspace/schemas/` (and the project's test tree). Then IMPLEMENT with
-roles and VALIDATE with → plan-validation.
+recurrent role routing and VALIDATE with → plan-validators.
 
 ### 4. Source-backed decisions
 

@@ -7,7 +7,7 @@ compatibility: "opencode, codex, cursor, copilot"
 metadata:
   author: "Soluciones-Alexendros"
   version: "1.0.0"
-  domain: "system"
+  domain: "local"
   type: "atomic"
   language: "en"
   keywords: "keyword1, keyword2, español, trigger"
@@ -22,7 +22,7 @@ One paragraph: what this skill produces and why.
 
 - Use when: ...
 - Keywords: mantenimiento, limpieza, etc.
-- Do NOT use when: health-check audit (→ system-health) or hardening (→ system-security)
+- Do NOT use when: health-check audit or hardening (→ local-security)
 
 ## Process
 

@@ -104,6 +104,8 @@ Save the plan to `tasks/plan.md` and record the task list in the task target def
 ```text
 - [ ] Task: [Description]
   - Acceptance: [What must be true when done]
+  - Implementation roles: [Roles to re-evaluate and invoke before each action]
+  - Test surfaces: [Routes, functions, jobs and E2E flows for the standard suite]
   - Verify: [How to confirm — test command, build, manual check]
   - Files: [Which files will be touched]
 ```

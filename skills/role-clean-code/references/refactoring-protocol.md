@@ -7,9 +7,9 @@ protocol before modifying existing code with `role-clean-code`.
 
 | Task | Primary rule | Handoff |
 | --- | --- | --- |
-| New code | Apply Clean Code as behavior is implemented | Use → plan-validation for the behavior loop |
+| New code | Apply Clean Code as behavior is implemented | Use → plan-validators for the behavior loop |
 | Pure refactor | Preserve APIs and observable behavior step by step | Stay in this protocol |
-| Bug fix or feature plus cleanup | Separate behavioral and structural edits | Lead with → plan-validation, then refactor with tests green |
+| Bug fix or feature plus cleanup | Separate behavioral and structural edits | Lead with → plan-validators, then refactor with tests green |
 | Broad architectural redesign | Confirm scope and migration strategy | Use → project-architecture first |
 | Security-sensitive change | Treat security behavior as an invariant | Use → web-owasp for the review |
 
@@ -33,7 +33,7 @@ explicit. Do not hide a behavior change behind the word "refactor".
 Lack of coverage is a risk to manage, not proof that refactoring is safe.
 
 - For important behavior with an existing test framework, add characterization
-  tests through → plan-validation before structural edits. Characterization tests
+  tests through → plan-validators before structural edits. Characterization tests
   document current observable behavior; they do not declare every current behavior
   desirable.
 - For generated or trivial presentational changes, use the project's established

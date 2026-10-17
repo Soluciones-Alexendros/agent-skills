@@ -95,11 +95,11 @@ def test_arrow_to_missing_skill(tmp_path):
 def test_host_profile_heading(tmp_path):
     write_skill(
         tmp_path,
-        "system-demo",
+        "local-demo",
         "## Overview\n\nX.\n\n## When to Use\n\nY.\n\n"
         "## Perfil de Este Equipo\n\nhost.\n\n## References\n\nZ.\n",
     )
-    seed_catalog(tmp_path, ["system-demo"])
+    seed_catalog(tmp_path, ["local-demo"])
     errors = run_root(tmp_path)
     assert any("H2 prohibido" in e for e in errors)
 
@@ -118,12 +118,34 @@ def test_catalog_mismatch(tmp_path):
 def test_smoke_required_when_scripts(tmp_path):
     write_skill(
         tmp_path,
-        "system-demo",
+        "local-demo",
         "## Overview\n\nX.\n\n## When to Use\n\nY.\n\n## Tools\n\ncli.\n\n## References\n\nZ.\n",
     )
-    scripts = tmp_path / "skills" / "system-demo" / "scripts"
+    scripts = tmp_path / "skills" / "local-demo" / "scripts"
     scripts.mkdir()
     (scripts / "run.py").write_text("print(1)\n", encoding="utf-8")
-    seed_catalog(tmp_path, ["system-demo"])
+    seed_catalog(tmp_path, ["local-demo"])
     errors = run_root(tmp_path)
     assert any("smoke_sh.sh" in e for e in errors)
+
+
+def test_local_domain_is_accepted(tmp_path):
+    write_skill(
+        tmp_path,
+        "local-demo",
+        "## Overview\n\nX.\n\n## When to Use\n\nY.\n",
+    )
+    seed_catalog(tmp_path, ["local-demo"])
+    errors = run_root(tmp_path)
+    assert not any("unknown domain" in e for e in errors)
+
+
+def test_legacy_system_domain_is_rejected(tmp_path):
+    write_skill(
+        tmp_path,
+        "system-demo",
+        "## Overview\n\nX.\n\n## When to Use\n\nY.\n",
+    )
+    seed_catalog(tmp_path, ["system-demo"])
+    errors = run_root(tmp_path)
+    assert any("unknown domain" in e for e in errors)

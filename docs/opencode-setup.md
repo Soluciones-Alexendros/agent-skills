@@ -49,7 +49,7 @@ OpenCode agents son instruidos vía AGENTS.md a:
 El agente evalúa cada request y mapea a skill apropiada.
 Ejemplos:
 
-- "limpia mi Arch" → `system-maintenance` + `system-health`
+- "limpia mi Arch" → `local-maintenance`
 - "revisa la arquitectura" → `project-architecture`
 - "prepara release" → `project-publish`
 - "audita compliance" → `web-compliance`
@@ -62,10 +62,17 @@ El usuario NO necesita pedir skills explícitamente.
 
 - DEFINE → plan-specification
 - CONTINUE → plan-continue
-- IMPLEMENT → role-* + plan-validation
-- PROJECT GATES → project-*
+- IMPLEMENT → role-* + plan-validators
+- INTEGRATE → project-publish
 - WEB AUDITS → web-*
-- SYSTEM (local OS) → system-*
+- LOCAL (local OS) → local-*
+
+La secuencia de implementación es planificación → roles → `plan-validators` →
+`project-publish`. Antes de cada tarea o acción independiente se reevalúa el
+alcance y se invocan todos los roles aplicables: backend/API/jobs → `role-back`,
+frontend/rutas cliente → `role-front`, diseño/tokens → `role-design`,
+clean-code/refactor → `role-clean-code`. Una invocación anterior no cubre las
+acciones siguientes; el trabajo mixto exige contratos y handoffs entre roles.
 
 ### Agent Expectations (Critical)
 
@@ -73,6 +80,7 @@ El usuario NO necesita pedir skills explícitamente.
 - If a skill applies, it MUST be used
 - Never skip required workflows
 - Do not jump directly to implementation
+- Re-invoke matching roles before every implementation action
 
 Estas reglas son forzadas vía AGENTS.md y `tools/skill-router/route.py`.
 

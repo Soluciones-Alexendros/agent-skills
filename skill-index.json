@@ -2,6 +2,75 @@
   "version": "3.0.0",
   "skills": [
     {
+      "name": "local-maintenance",
+      "description": "Systematic Linux system maintenance by IA agent: hygiene, updates, ordering, optimization and suggestions. Graduated modes (health-check/quick audit, complete audit, routine, optimization, cleanup) with read-only execution by default, deterministic command validation by risk level, reversible snapshots and system health KPIs (health score 0-100, P0-P4 findings, system fingerprint, temporal diff). Defensive security (hardening, records/forensics, vulns, scans, AppArmor) NOT this skill: handled by sister local-security skill. Use when asked: auditing a Linux system, health-check, OS health status, routine review, cleaning packages/caches/logs, orphan pacman/AUR, boot or resource optimization, or periodic maintenance of Arch/EndeavourOS/CachyOS/Debian/RHEL. Includes guided interaction to select objective, mode and depth according to context. Not for defensive security hardening or forensics (→ local-security).",
+      "domain": "local",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "local-maintenance"
+      ],
+      "triggers": [
+        "audit-full",
+        "auditar sistema",
+        "auditoría completa",
+        "cribar filesystem",
+        "fingerprint",
+        "health check sistema",
+        "health score",
+        "huérfanos",
+        "journal vacuum",
+        "limpia",
+        "limpiar",
+        "limpieza",
+        "mantenimiento",
+        "optimiza",
+        "paccache",
+        "salud del sistema",
+        "sistema arch"
+      ],
+      "entry": "skills/local-maintenance/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "local-proton",
+      "description": "Proton Mail (Proton Mail Bridge IMAP/SMTP local, MCP Mail) and Proton Pass secrets (pass-cli v2.3+ with JSON output, MCP Pass). Use when the operator requests reading, searching, sending or classifying Proton Mail, or obtaining tokens, passwords and API keys stored in Proton Pass. Do not use for other email providers or CI/GitHub secrets.",
+      "domain": "local",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "local-proton"
+      ],
+      "triggers": [
+        "bridge imap",
+        "pass-cli",
+        "proton mail",
+        "proton pass"
+      ],
+      "entry": "skills/local-proton/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
+      "name": "local-security",
+      "description": "Defensive Linux host security: posture, light forensic record management, CVEs, sysctl/SSH hardening, AppArmor/SELinux, auditd and fail2ban. Use when the operator requests system security audit, host hardening or auth log review. Not for application code vulnerabilities (→ web-owasp) nor disk cleanup (→ local-maintenance).",
+      "domain": "local",
+      "type": "atomic",
+      "language": "en",
+      "keywords": [
+        "local-security"
+      ],
+      "triggers": [
+        "apparmor",
+        "auditd",
+        "firewall",
+        "forense",
+        "hardening",
+        "seguridad host"
+      ],
+      "entry": "skills/local-security/SKILL.md",
+      "compatibility": "opencode, codex, cursor, copilot"
+    },
+    {
       "name": "plan-continue",
       "description": "Autoworkspace orchestrator: continue from roadmap or .autoworkspace status; when missing, audit the repo, scaffold project.yaml/status.yaml, and route DEFINE→SCHEMAS→IMPLEMENT→VALIDATE→INTEGRATE→STATUS. Use when asking where to start, plan mode, repo starting, or bringing a project up to date. Not for release close or version publication (→ project-publish).",
       "domain": "plan",
@@ -48,21 +117,29 @@
       "compatibility": "opencode, codex, cursor, copilot"
     },
     {
-      "name": "plan-validation",
-      "description": "Drive development with tests using the red-green-refactor loop. Use when implementing any logic, fixing any bug, or changing any behavior. Use when you need to prove that code works, when a bug report arrives, or when you're about to modify existing functionality. Not for pure configuration changes, documentation updates, or static content.",
+      "name": "plan-validators",
+      "description": "Drive implementation and QA with integrated tests: red-green-refactor, bug reproduction, test strategy, quality metrics and behavior coverage for routes, functions and jobs. Use when implementing or changing behavior, writing or reviewing tests, or planning coverage. Not for pure configuration, documentation or static content changes, nor production host debugging (→ local-maintenance).",
       "domain": "plan",
       "type": "atomic",
       "language": "en",
       "keywords": [
-        "plan-validation"
+        "plan-validators",
+        "tdd",
+        "test coverage",
+        "qa"
       ],
       "triggers": [
+        "cobertura de tests",
+        "estrategia de tests",
+        "qa",
         "reproduce el bug",
         "rojo verde",
         "tdd",
-        "test first"
+        "test coverage",
+        "test first",
+        "tests integrados"
       ],
-      "entry": "skills/plan-validation/SKILL.md",
+      "entry": "skills/plan-validators/SKILL.md",
       "compatibility": "opencode, codex, cursor, copilot"
     },
     {
@@ -82,24 +159,6 @@
         "revisa la arquitectura"
       ],
       "entry": "skills/project-architecture/SKILL.md",
-      "compatibility": "opencode, codex, cursor, copilot"
-    },
-    {
-      "name": "project-hooks",
-      "description": "Configure and run local git hooks (Husky, lint-staged, Prettier, typecheck, tests in pre-commit; e2e in pre-push if they exist). Use when the operator wants pre-commit hooks, husky, lint-staged or the local gate of a work close. Not for CI pipelines (→ project-publish) nor e2e test authorship.",
-      "domain": "project",
-      "type": "atomic",
-      "language": "en",
-      "keywords": [
-        "project-hooks"
-      ],
-      "triggers": [
-        "hooks locales",
-        "husky",
-        "lint-staged",
-        "pre-commit"
-      ],
-      "entry": "skills/project-hooks/SKILL.md",
       "compatibility": "opencode, codex, cursor, copilot"
     },
     {
@@ -123,16 +182,24 @@
     },
     {
       "name": "project-publish",
-      "description": "Closes a GitHub repository: version publication, CI/CD audit, or close of work at the end of a plan (repo ending, merge the plan, ship). Use when the topic is semantic versioning, Keep a Changelog, supply-chain of Actions, Husky+e2e+PR+merge-watch post-plan. Not for implementing product features or forges distinct from github.com.",
+      "description": "Close a GitHub repository or work increment with local quality gates, version publication, CI/CD audit, Husky, lint-staged, tests, e2e, PR and merge-watch. Use when configuring or running pre-commit/pre-push gates, publishing versions, or closing a plan. Not for implementing product features, test authorship (→ plan-validators), or forges distinct from github.com.",
       "domain": "project",
       "type": "atomic",
       "language": "en",
       "keywords": [
-        "project-publish"
+        "project-publish",
+        "husky",
+        "lint-staged",
+        "pre-commit",
+        "release"
       ],
       "triggers": [
         "changelog",
         "cierra repo",
+        "hooks locales",
+        "husky",
+        "lint-staged",
+        "pre-commit",
         "prepara release",
         "publica version",
         "semver"
@@ -141,21 +208,8 @@
       "compatibility": "opencode, codex, cursor, copilot"
     },
     {
-      "name": "project-testing",
-      "description": "Testing verification and quality assurance. Use when planning, implementing, or verifying test strategies, test quality metrics, and test coverage goals. Use when the operator requests test planning, test quality review, or test coverage analysis. Not for production debugging (→ system-health) nor single test-case authorship (→ plan-validation).\n",
-      "domain": "project",
-      "type": "atomic",
-      "language": "en",
-      "keywords": [
-        "project-testing"
-      ],
-      "triggers": [],
-      "entry": "skills/project-testing/SKILL.md",
-      "compatibility": "opencode, codex, cursor, copilot"
-    },
-    {
       "name": "role-back",
-      "description": "Specialist role for backend application work: data at rest and in motion, routes, deployments, robustness and application security. Includes general patterns for cache/KV, queues, rate limiting, object storage and search (Upstash and equivalents as providers). Use when implementing APIs, persistence, jobs or server-side integrations. Not for host hardening (→ system-security), OWASP code audit (→ web-owasp), or dependency SCA (→ project-libraries).",
+      "description": "Specialist role for backend application work: data at rest and in motion, routes, deployments, robustness and application security. Includes general patterns for cache/KV, queues, rate limiting, object storage and search (Upstash and equivalents as providers). Use when implementing APIs, persistence, jobs or server-side integrations. Not for host hardening (→ local-security), OWASP code audit (→ web-owasp), or dependency SCA (→ project-libraries).",
       "domain": "role",
       "type": "atomic",
       "language": "en",
@@ -163,20 +217,28 @@
         "role-back"
       ],
       "triggers": [
+        "backend",
+        "background job",
         "blob storage",
         "cola",
+        "cron",
+        "endpoint",
+        "implementa api",
+        "persistencia",
         "qstash",
         "ratelimit",
         "redis",
+        "ruta api",
         "upstash",
-        "vector"
+        "vector",
+        "worker"
       ],
       "entry": "skills/role-back/SKILL.md",
       "compatibility": "opencode, codex, cursor, copilot"
     },
     {
       "name": "role-clean-code",
-      "description": "Implements Clean Code principles to write expressive, maintainable software and refactor existing code safely in any language. Use when the operator asks for 'clean code', 'código limpio', refactoring, meaningful names, smaller functions, fewer code smells, or cleanup of duplicated logic. Not for architecture-only assessments (→ project-architecture), test-suite audits (→ project-testing), or security reviews (→ web-owasp).",
+      "description": "Implements Clean Code principles to write expressive, maintainable software and refactor existing code safely in any language. Use when the operator asks for 'clean code', 'código limpio', refactoring, meaningful names, smaller functions, fewer code smells, or cleanup of duplicated logic. Not for architecture-only assessments (→ project-architecture), test-suite audits (→ plan-validators), or security reviews (→ web-owasp).",
       "domain": "role",
       "type": "atomic",
       "language": "en",
@@ -240,102 +302,18 @@
         "role-front"
       ],
       "triggers": [
+        "componente",
         "contrato api cliente",
         "estado cliente",
+        "formulario",
         "frontend",
-        "routing ui"
+        "implementa ui",
+        "interfaz",
+        "navegación",
+        "routing ui",
+        "ruta cliente"
       ],
       "entry": "skills/role-front/SKILL.md",
-      "compatibility": "opencode, codex, cursor, copilot"
-    },
-    {
-      "name": "system-health",
-      "description": "Diagnosis and audit of Linux system health: health-check, quick/complete audit, system fingerprint, health scoring (0-100), P0-P4 findings, temporal diff. Use when the operator requests health-check, configuration/performance/hygiene audit, CIS/Lynis compliance or server onboarding. Not for execution cleanup (→ system-maintenance) nor hardening/forensics (→ system-security).",
-      "domain": "system",
-      "type": "atomic",
-      "language": "en",
-      "keywords": [
-        "system-health"
-      ],
-      "triggers": [
-        "audit-full",
-        "cribar filesystem",
-        "fingerprint",
-        "health check sistema",
-        "huérfanos",
-        "journal vacuum",
-        "limpia",
-        "limpiar",
-        "limpieza",
-        "mantenimiento",
-        "optimiza",
-        "paccache",
-        "salud del sistema",
-        "sistema arch"
-      ],
-      "entry": "skills/system-health/SKILL.md",
-      "compatibility": "opencode, codex, cursor, copilot"
-    },
-    {
-      "name": "system-maintenance",
-      "description": "Systematic Linux system maintenance by IA agent: hygiene, updates, ordering, optimization and suggestions. Graduated modes (quick/complete audit, routine, optimization, cleanup) with read-only execution by default, deterministic command validation by risk level, reversible snapshots and system health KPIs. Defensive security (hardening, records/forensics, vulns, scans, AppArmor) NOT this skill: handled by sister system-security skill. Use when asked: auditing a Linux system, routine review, cleaning packages/caches/logs, orphan pacman/AUR, boot or resource optimization, OS health-check, or periodic maintenance of Arch/EndeavourOS/ CachyOS/Debian/RHEL. Includes guided interaction to select objective, mode and depth according to context. Not for defensive security hardening or forensics (→ system-security).",
-      "domain": "system",
-      "type": "atomic",
-      "language": "en",
-      "keywords": [
-        "system-maintenance"
-      ],
-      "triggers": [
-        "cribar filesystem",
-        "huérfanos",
-        "journal vacuum",
-        "limpia",
-        "limpiar",
-        "limpieza",
-        "mantenimiento",
-        "optimiza",
-        "paccache",
-        "sistema arch"
-      ],
-      "entry": "skills/system-maintenance/SKILL.md",
-      "compatibility": "opencode, codex, cursor, copilot"
-    },
-    {
-      "name": "system-proton",
-      "description": "Proton Mail (Proton Mail Bridge IMAP/SMTP local, MCP Mail) and Proton Pass secrets (pass-cli v2.3+ with JSON output, MCP Pass). Use when the operator requests reading, searching, sending or classifying Proton Mail, or obtaining tokens, passwords and API keys stored in Proton Pass. Do not use for other email providers or CI/GitHub secrets.",
-      "domain": "system",
-      "type": "atomic",
-      "language": "en",
-      "keywords": [
-        "system-proton"
-      ],
-      "triggers": [
-        "bridge imap",
-        "pass-cli",
-        "proton mail",
-        "proton pass"
-      ],
-      "entry": "skills/system-proton/SKILL.md",
-      "compatibility": "opencode, codex, cursor, copilot"
-    },
-    {
-      "name": "system-security",
-      "description": "Defensive Linux host security: posture, light forensic record management, CVEs, sysctl/SSH hardening, AppArmor/SELinux, auditd and fail2ban. Use when the operator requests system security audit, host hardening or auth log review. Not for application code vulnerabilities (→ web-owasp) nor disk cleanup (→ system-maintenance).",
-      "domain": "system",
-      "type": "atomic",
-      "language": "en",
-      "keywords": [
-        "system-security"
-      ],
-      "triggers": [
-        "apparmor",
-        "auditd",
-        "firewall",
-        "forense",
-        "hardening",
-        "seguridad host"
-      ],
-      "entry": "skills/system-security/SKILL.md",
       "compatibility": "opencode, codex, cursor, copilot"
     },
     {

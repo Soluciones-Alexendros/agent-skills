@@ -4,7 +4,7 @@ description: "Write a structured specification before writing any code, then dec
 license: MIT
 metadata:
   author: addyosmani (adapted)
-  version: 4.0.0
+  version: 4.1.0
   domain: plan
   type: orchestrator
   language: en
@@ -73,9 +73,11 @@ list target: `tasks/todo.md`. Template: [spec-templates.md](references/spec-temp
 
 ### Phase 4: Implement
 
-Execute tasks one at a time following → plan-validation. Load only the spec
-sections and source files needed per step. Keep the spec alive when decisions
-change. Detail: [spec-quality.md](references/spec-quality.md).
+Execute tasks one at a time following → plan-validators. Before every task or
+independent implementation action, re-evaluate its scope and invoke every
+matching `role-*` skill, even when a different role handled the previous action.
+Load only the spec sections and source files needed per step. Keep the spec alive
+when decisions change. Detail: [spec-quality.md](references/spec-quality.md).
 
 ## Task Breakdown
 
@@ -87,19 +89,37 @@ focused session.
    Graph and sizing: [task-patterns.md](references/task-patterns.md).
 3. **Slice vertically** — one complete feature path at a time (schema + API + UI).
 4. **Write tasks** — one outcome, acceptance criteria, verification, dependencies,
-   likely files, size XS–M. Fields: [plan-templates.md](references/plan-templates.md).
+   implementation roles, test surfaces, likely files, size XS–M. Fields:
+   [plan-templates.md](references/plan-templates.md).
 5. **Order and checkpoint** — keep the system working after every task; put
    high-risk work early; checkpoint every 2–3 tasks. Same work → update in place;
    different work → stop and ask before touching `tasks/`.
 
 Anti-patterns: [anti-patterns.md](references/anti-patterns.md).
 
+## Recurrent Role Routing
+
+Every implementation task declares **Implementation roles** and **Test surfaces**.
+Select roles at plan start, then repeat the selection before each task or
+independent action; an earlier invocation never covers later work.
+
+| Current surface                              | Required role   |
+| -------------------------------------------- | --------------- |
+| Backend, API, persistence, jobs, queues      | role-back       |
+| Frontend, client routes, state, interactions | role-front      |
+| Visual direction, tokens, component styling  | role-design     |
+| Clean code, refactoring, duplication cleanup | role-clean-code |
+
+For mixed work, invoke all matching roles and define their contracts and handoffs.
+Re-evaluate whenever scope changes. Cover every declared route, function, job and
+end-to-end flow through → plan-validators and the project's standard test suite.
+
 ## Tools
 
 Use Read, Grep, and Glob to inspect before specifying; Write for specs, plans
 and task lists; Bash only for the project's own build/test/lint. Related:
-→ plan-validation (implementation loop), → plan-continue (roadmap / repo next steps),
-→ project-libraries (supply-chain before adding dependencies).
+→ plan-validators (implementation and integrated-test loop), → plan-continue
+(roadmap / repo next steps), → project-libraries (supply-chain before adding dependencies).
 
 ## References
 

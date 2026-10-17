@@ -1,10 +1,10 @@
 ---
 name: role-clean-code
-description: "Implements Clean Code principles to write expressive, maintainable software and refactor existing code safely in any language. Use when the operator asks for 'clean code', 'código limpio', refactoring, meaningful names, smaller functions, fewer code smells, or cleanup of duplicated logic. Not for architecture-only assessments (→ project-architecture), test-suite audits (→ project-testing), or security reviews (→ web-owasp)."
+description: "Implements Clean Code principles to write expressive, maintainable software and refactor existing code safely in any language. Use when the operator asks for 'clean code', 'código limpio', refactoring, meaningful names, smaller functions, fewer code smells, or cleanup of duplicated logic. Not for architecture-only assessments (→ project-architecture), test-suite audits (→ plan-validators), or security reviews (→ web-owasp)."
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: "1.0.0"
+  version: "1.1.0"
   domain: role
   type: atomic
   language: en
@@ -31,8 +31,8 @@ to redesign.
 - Applying a focused "boy scout rule" cleanup to code already in scope
 
 **When NOT to use:** architecture-only analysis (→ project-architecture);
-test strategy or suite assessment (→ project-testing); security review
-(→ web-owasp). For new behavior or bug fixes, lead with → plan-validation and
+test strategy or suite assessment (→ plan-validators); security review
+(→ web-owasp). For new behavior or bug fixes, lead with → plan-validators and
 separate the behavioral change from subsequent cleanup. Use → role-front or
 → role-back when framework-specific implementation is the primary task.
 
@@ -62,11 +62,11 @@ concurrency-sensitive paths. State the files in scope and the invariants to pres
 Run the relevant baseline before editing. For existing code, read
 [refactoring-protocol.md](references/refactoring-protocol.md) and choose the
 verification path. If coverage is inadequate for the intended transformation,
-characterize the current behavior through → plan-validation, narrow the change,
+characterize the current behavior through → plan-validators, narrow the change,
 or ask before accepting risk. Never claim behavior was preserved when the checks
 needed to support that claim were not run.
 
-For new behavior or bug fixes, use → plan-validation first: reproduce or specify
+For new behavior or bug fixes, use → plan-validators first: reproduce or specify
 the behavior with a failing test, implement the smallest change, then clean up
 with tests green.
 
@@ -137,8 +137,7 @@ Report concisely:
 
 ## Related
 
-- TDD and behavior changes → plan-validation
+- TDD, behavior changes and test-suite assessment → plan-validators
 - Architecture analysis → project-architecture
-- Test quality assessment → project-testing
 - Frontend/backend implementation → role-front / role-back
 - Security review → web-owasp

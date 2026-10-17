@@ -1,5 +1,5 @@
 #!/bin/bash
-# v3.0 Validation — OpenCode-first, multi-harness, legacy-vendor-free.
+# v5.0 Validation — OpenCode-first, multi-harness, legacy-vendor-free.
 #
 # Usage: bash run-validation.sh [--pytest-only] [--smoke-only]
 #   default: full gate. --pytest-only: only [6]. --smoke-only: only [5].
@@ -17,7 +17,7 @@ done
 FULL=1
 if [ "$ONLY_PYTEST" = 1 ] || [ "$ONLY_SMOKE" = 1 ]; then FULL=0; fi
 
-echo "=== v3.0 Validation — OpenCode-first, multi-harness ==="
+echo "=== v5.0 Validation — OpenCode-first, multi-harness ==="
 
 if [ "$FULL" = 1 ]; then
 echo "[0] Legacy-harness hygiene (scoped)"
@@ -106,7 +106,7 @@ python3 - <<'PY'
 import pathlib, re, sys
 # Domain-scoped: only <domain>-<slug> tokens count as skill refs.
 # Bare prose after an arrow (e.g. "-> test", "-> smoke") is not a skill ref.
-ARROW_RE = re.compile(r"→\s*`?((?:plan|system|project|web|role)-[a-z0-9-]+)`?")
+ARROW_RE = re.compile(r"→\s*`?((?:plan|local|project|web|role)-[a-z0-9-]+)`?")
 skills=set(p.name for p in pathlib.Path("skills").iterdir() if p.is_dir())
 ok=True
 for f in sorted(pathlib.Path("skills").glob("*/SKILL.md")):
@@ -119,16 +119,16 @@ print("Arrows OK" if ok else "Arrow checks FAILED")
 sys.exit(0 if ok else 1)
 PY
 
-echo "[4] skill-index.json parity (19 skills)"
+echo "[4] skill-index.json parity (16 skills)"
 python3 tools/skill-router/build_index.py
 python3 - <<'PY'
 import json, sys
 d = json.load(open("skill-index.json"))
 n = len(d.get("skills", []))
 print(f"Index holds {n} skills")
-sys.exit(0 if n == 19 else 1)
+sys.exit(0 if n == 16 else 1)
 PY
-echo "Index rebuilt (19 skills)"
+echo "Index rebuilt (16 skills)"
 fi
 
 if [ "$FULL" = 1 ] || [ "$ONLY_SMOKE" = 1 ]; then
