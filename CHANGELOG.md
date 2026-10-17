@@ -6,6 +6,23 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking:** taxonomía v5 — catálogo de **15 skills** en 5 dominios (`plan`, `local`, `project`, `web`, `role`), sin aliases ni carpetas vacías de compatibilidad. `system-maintenance`, `system-security` y `system-proton` pasan a `local-maintenance`, `local-security` y `local-proton` 5.0.0; `plan-validation` pasa a `plan-validators` 5.0.0.
+- `local-maintenance` absorbe la skill `system-health`: medir la salud del sistema es una subfase del mantenimiento (`probe_system` → `audit_quick`/`audit_full` → `report_render` → remediación).
+- Health Score con 5 categorías ponderadas: `security` 35, `updates` 25, `hygiene` 20, `resources` 10, `stability` 10 (nueva: LOG-06/LOG-08 salen de seguridad). Puntuación ponderada por severidad (`STATUS_VALUES` PASS 100 / WARN 40 / FAIL 0; `SEVERITY_WEIGHTS` P0 8 … P4 1); `SKIP`/`ERROR` ya no penalizan.
+- `check_pkg_06` en apt compara contra `apt-cache dumpavail` (antes `apt list --manual-installed`, falso positivo de ~335 paquetes): solo cuenta paquetes realmente fuera de repositorio.
+- `check_fs_11_inodes` emite PASS (P4) cuando los inodos están sanos.
+- `plan-validators` absorbe `project-testing`: inventario obligatorio de comportamiento y pruebas integradas para rutas HTTP/cliente, funciones, jobs/colas/cron y flujos E2E, con trazabilidad a la suite estándar.
+- `project-publish` 4.2.0 absorbe `project-hooks`: Husky, lint-staged, pre-commit, pre-push y gates locales forman parte del cierre de trabajo.
+- Invocación recurrente de roles: `plan-specification` 4.1.0 y `plan-continue` 4.2.0 exigen reevaluar e invocar `role-back` 1.1.0, `role-front` 1.1.0 y `role-design` 4.1.0 al iniciar un plan y antes de cada acción de implementación; el router y las plantillas recogen la misma regla.
+
+### Removed
+
+- Skill `system-health` (contenido integrado en `local-maintenance`).
+- Skill `project-testing` (contenido integrado en `plan-validators`).
+- Skill `project-hooks` (contenido integrado en `project-publish`).
+
 ## [4.0.0] - 2026-10-11
 
 ### Added

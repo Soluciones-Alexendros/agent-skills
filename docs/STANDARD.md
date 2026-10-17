@@ -13,7 +13,7 @@ license: MIT # repo-wide license
 metadata:
   author: Soluciones-Alexendros
   version: "0.1.0" # skill semver
-  domain: plan # one of docs/TAXONOMY.md: plan | system | project | web | role
+  domain: plan # one of docs/TAXONOMY.md: plan | local | project | web | role
   type: atomic # atomic | orchestrator | router | audit
   language: en
 ---

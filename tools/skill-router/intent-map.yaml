@@ -2,7 +2,7 @@
 # Used by route.py and .opencode/agents/skill-router.md
 intents:
   mantenimiento:
-    skills: [system-maintenance, system-health]
+    skills: [local-maintenance]
     patterns:
       [
         "mantenimiento",
@@ -17,11 +17,19 @@ intents:
         "cribar filesystem",
       ]
   salud_sistema:
-    skills: [system-health]
+    skills: [local-maintenance]
     patterns:
-      ["salud del sistema", "health check sistema", "fingerprint", "audit-full"]
+      [
+        "salud del sistema",
+        "health check sistema",
+        "fingerprint",
+        "audit-full",
+        "auditar sistema",
+        "health score",
+        "auditoría completa",
+      ]
   seguridad_host:
-    skills: [system-security]
+    skills: [local-security]
     patterns:
       [
         "hardening",
@@ -75,7 +83,7 @@ intents:
     skills: [web-owasp]
     patterns: ["owasp", "xss", "sqli", "inyección", "vulnerabilidad código"]
   hooks:
-    skills: [project-hooks]
+    skills: [project-publish]
     patterns: ["husky", "lint-staged", "pre-commit", "hooks locales"]
   backend_data:
     skills: [role-back]
@@ -88,11 +96,30 @@ intents:
         "ratelimit",
         "cola",
         "blob storage",
+        "backend",
+        "implementa api",
+        "endpoint",
+        "persistencia",
+        "background job",
+        "worker",
+        "cron",
+        "ruta api",
       ]
   frontend:
     skills: [role-front]
     patterns:
-      ["frontend", "estado cliente", "routing ui", "contrato api cliente"]
+      [
+        "frontend",
+        "estado cliente",
+        "routing ui",
+        "contrato api cliente",
+        "implementa ui",
+        "interfaz",
+        "componente",
+        "ruta cliente",
+        "formulario",
+        "navegación",
+      ]
   design:
     skills: [role-design]
     patterns:
@@ -101,10 +128,21 @@ intents:
     skills: [plan-specification]
     patterns: ["especificación", "spec", "desglosa tareas", "task breakdown"]
   validar_tdd:
-    skills: [plan-validation]
-    patterns: ["tdd", "test first", "rojo verde", "reproduce el bug"]
+    skills: [plan-validators]
+    patterns:
+      [
+        "tdd",
+        "test first",
+        "rojo verde",
+        "reproduce el bug",
+        "cobertura de tests",
+        "test coverage",
+        "estrategia de tests",
+        "tests integrados",
+        "qa",
+      ]
   proton:
-    skills: [system-proton]
+    skills: [local-proton]
     patterns: ["proton mail", "proton pass", "pass-cli", "bridge imap"]
   libraries:
     skills: [project-libraries]

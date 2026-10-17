@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # smoke_sh.sh — Smoke test de project-publish/scripts.
 # Verifica review-vs-plan.py: (a) bloquea diff vacio, (b) OK con cambios,
-# (c) bloquea posibles secretos en el diff.
+# (c) bloquea posibles secretos en el diff; finalmente ejecuta el smoke Husky.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -42,5 +42,7 @@ git add -A && git commit -qm "feat: secreto (test)"
 if python3 "$ROOT/scripts/review-vs-plan.py" .planning/active/task_plan.md feat/vacia main; then
   echo "FAIL: secreto no bloqueo" >&2; exit 1
 fi
+
+bash "$ROOT/scripts/tests/smoke_hooks.sh"
 
 echo "smoke project-publish: OK"

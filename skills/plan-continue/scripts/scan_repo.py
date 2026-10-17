@@ -151,6 +151,12 @@ SECRET_PATTERNS = {
         r"(?i)\b(?:mongodb(?:\+srv)?|postgres(?:ql)?|mysql|redis|amqp)://[^@\s]+@"),
 }
 
+# Falso positivo conocido: token de diseño CSS (`--…`) o handle opaco de fixture.
+# No relaja password, api_key, secret ni otros valores de token.
+DESIGN_TOKEN_ASSIGN_RE = re.compile(
+    r"""(?i)\btoken\b\s*[:=]\s*['"](?:--[A-Za-z0-9_-]+|opaque-handle\.json)['"]"""
+)
+
 MARKER_RE = re.compile(r"\b(TODO|FIXME|HACK|XXX|BUG)\b")
 
 # No escanear marcadores/secretos en docs o en el propio detector
@@ -434,6 +440,10 @@ def scan(root):
             for name, pat in SECRET_PATTERNS.items():
                 for m in pat.finditer(text):
                     # Solo metadatos: nunca m.group() / valor / snippet (CodeQL clear-text).
+                    if name == "Asignación de secreto" and DESIGN_TOKEN_ASSIGN_RE.fullmatch(
+                        text[m.start() : m.end()]
+                    ):
+                        continue
                     line_no = text.count("\n", 0, m.start()) + 1
                     report["secretos_potenciales"].append(
                         _secret_finding(name, r, line_no, confidence)

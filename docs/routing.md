@@ -22,6 +22,12 @@ User Prompt
   → agent follows SKILL.md
 ```
 
+En un plan de implementación, la cadena es planificación → `role-*` →
+`plan-validators` → `project-publish`. El router de fase solo ofrece un fallback:
+antes de cada tarea o acción independiente se vuelve a evaluar la superficie y se
+invocan todos los roles aplicables, aunque la acción anterior usara otro rol. El
+trabajo mixto backend/frontend/diseño requiere contratos y handoffs explícitos.
+
 ## Ejemplo
 
 Prompt: "audita y publica este repo"

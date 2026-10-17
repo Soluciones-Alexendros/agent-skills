@@ -24,6 +24,10 @@ or as an item in an external tracker:
 
 **Dependencies:** [Task numbers this depends on, or "None"]
 
+**Implementation roles:** [role-back / role-front / role-design — invoke all that apply]
+
+**Test surfaces:** [Routes, functions, jobs and end-to-end flows to integrate into the standard suite]
+
 **Files likely touched:**
 - `src/path/to/file.ts`
 - `tests/path/to/test.ts`

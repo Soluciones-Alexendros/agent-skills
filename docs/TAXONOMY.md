@@ -1,18 +1,18 @@
 # Skill taxonomy
 
-18 skills in 5 domains. The `metadata.domain` frontmatter field reflects this table, and the name prefix is the domain (normative, not advisory). The taxonomy is closed: every new skill must fit an existing domain or propose a new one in the PR (see CONTRIBUTING.md).
+15 skills in 5 domains. The `metadata.domain` frontmatter field reflects this table, and the name prefix is the domain (normative, not advisory). The taxonomy is closed: every new skill must fit an existing domain or propose a new one in the PR (see CONTRIBUTING.md).
 
-| Domain    | Scope                                                                                    | Skills                                                                                       |
-| --------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `plan`    | How work is decided: specification, continuation, validation                             | plan-specification · plan-continue · plan-validation                                         |
-| `system`  | Local OS and workstation tooling (not online DevOps)                                     | system-health · system-maintenance · system-security · system-proton                         |
-| `project` | Static repository concerns: docs, config, versioning, packaging, local quality           | project-architecture · project-hooks · project-libraries · project-publish · project-testing |
-| `web`     | Dynamic behavior of a deployed, internet-accessible project                              | web-compliance · web-owasp · web-performance                                                 |
-| `role`    | Specialist implementation agents with executable methods (replace vague persona prompts) | role-back · role-design · role-front                                                         |
+| Domain    | Scope                                                                                    | Skills                                                     |
+| --------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `plan`    | How work is decided and verified: specification, continuation, integrated validation     | plan-specification · plan-continue · plan-validators       |
+| `local`   | Local OS and workstation tooling, including health checks and audits (not online DevOps) | local-maintenance · local-security · local-proton          |
+| `project` | Static repository concerns: docs, config, versioning, packaging, local quality           | project-architecture · project-libraries · project-publish |
+| `web`     | Dynamic behavior of a deployed, internet-accessible project                              | web-compliance · web-owasp · web-performance               |
+| `role`    | Specialist implementation agents with executable methods (replace vague persona prompts) | role-back · role-design · role-front                       |
 
 ## Closed sets (normative)
 
-**Domain** (metadata.domain): `plan` | `system` | `project` | `web` | `role`
+**Domain** (metadata.domain): `plan` | `local` | `project` | `web` | `role`
 
 **Type** (metadata.type): `atomic` | `orchestrator` | `router` | `audit`
 

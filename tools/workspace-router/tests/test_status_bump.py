@@ -20,7 +20,7 @@ class TestStatusBump(unittest.TestCase):
             s1 = advance_status(root, phase="DEFINE", skill="plan-specification")
             self.assertEqual(s1["advance"], 1)
             self.assertEqual(s1["version"], "0.1.1")
-            s2 = advance_status(root, phase="INTEGRATE", skill="project-hooks")
+            s2 = advance_status(root, phase="INTEGRATE", skill="project-publish")
             self.assertEqual(s2["version"], "0.2.0")
             loaded = load_status(root)
             self.assertEqual(loaded["advance"], 2)

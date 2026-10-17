@@ -11,7 +11,7 @@ done
 
 CANON=$(find "$SRC" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort | tr '\n' ' ')
 
-echo "Installing autoworkspace (canon v4) to global harnesses..."
+echo "Installing autoworkspace (canon v5) to global harnesses..."
 
 install_to() {
   local dest="$1"
@@ -63,7 +63,7 @@ cp -f "$ROOT/AGENTS.md" "$HOME/.cursor/AGENTS.md"
 cp -f "$ROOT/docs/TAXONOMY.md" "$ROOT/docs/routing.md" "$HOME/.cursor/autoworkspace-docs/" 2>/dev/null || true
 cat > "$HOME/.grok/commands/skill-route.md" <<CMD
 ---
-description: Route a natural-language intent to the best autoworkspace skill (canon v4)
+description: Route a natural-language intent to the best autoworkspace skill (canon v5)
 ---
 
 Run the deterministic router and follow the top skill:

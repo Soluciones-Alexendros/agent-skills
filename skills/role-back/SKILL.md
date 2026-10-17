@@ -1,10 +1,10 @@
 ---
 name: role-back
-description: "Specialist role for backend application work: data at rest and in motion, routes, deployments, robustness and application security. Includes general patterns for cache/KV, queues, rate limiting, object storage and search (Upstash and equivalents as providers). Use when implementing APIs, persistence, jobs or server-side integrations. Not for host hardening (→ system-security), OWASP code audit (→ web-owasp), or dependency SCA (→ project-libraries)."
+description: "Specialist role for backend application work: data at rest and in motion, routes, deployments, robustness and application security. Includes general patterns for cache/KV, queues, rate limiting, object storage and search (Upstash and equivalents as providers). Use when implementing APIs, persistence, jobs or server-side integrations. Not for host hardening (→ local-security), OWASP code audit (→ web-owasp), or dependency SCA (→ project-libraries)."
 license: MIT
 metadata:
   author: Soluciones-Alexendros
-  version: 1.0.0
+  version: 1.1.0
   domain: role
   type: atomic
   language: en
@@ -30,7 +30,7 @@ provider among others.
 - Designing schemas, migrations, authn/authz at the application boundary
 - Wiring cache, queues, rate limits, object storage or search
 
-**When NOT to use:** Linux host hardening (→ system-security); OWASP audit of
+**When NOT to use:** Linux host hardening (→ local-security); OWASP audit of
 existing code (→ web-owasp); SCA/CVE of dependencies (→ project-libraries);
 frontend UI state (→ role-front).
 
@@ -81,17 +81,23 @@ Cloud, SQS, S3, Elasticsearch, etc.). Prefer official SDKs for the pinned versio
 When the repo already depends on Upstash packages, follow that project's
 patterns and the current Upstash docs — do not invent a parallel stack.
 
+## Re-entry
+
+- Re-invoke this role before every backend, API, persistence or job action, not only at plan start.
+- Re-evaluate the scope on every re-entry, including when another role handled the previous action.
+- Hand frontend, visual or other out-of-scope surfaces to their matching role with an explicit contract.
+
 ## Method
 
 1. Read existing server patterns, env contract and deploy target
-2. Implement with → plan-validation for behavior changes
+2. Implement with → plan-validators for behavior changes
 3. Verify with the project's API/integration tests and a real deploy preview when available
 4. Supply-chain changes → project-libraries first
 
 ## Related
 
 - Frontend contracts → role-front
-- Host security → system-security
+- Host security → local-security
 - Code security audit → web-owasp
 - Dependency audit → project-libraries
 - Publish / CI close → project-publish

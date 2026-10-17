@@ -30,9 +30,9 @@ Si falta health check y el repo es desconocido: derivar a `plan-continue` Fase 8
 
 Ejecutar en orden. Un paso en rojo detiene el siguiente hasta corregir.
 
-### 1. Gate Husky (`project-hooks`)
+### 1. Gate Husky integrado
 
-Cargar `project-hooks`. Si no hay `.husky/pre-commit`, configurarlo (modo instalar). Luego **modo gate**: correr el hook sobre el o los heads del plan, no solo dejarlo instalado.
+Usar `scripts/gate-husky.sh` de esta skill. Si no hay `.husky/pre-commit`, lo configura (modo instalar). Luego ejecuta el **modo gate** sobre el head del plan, no solo deja el hook instalado.
 
 Esperado: lint-staged, typecheck y tests unitarios en verde. Error: corregir en la rama del PR, repetir el gate. Recovery: si `package.json` no declara `typecheck` o `test`, omitir esa línea y anotarlo.
 
@@ -42,7 +42,7 @@ Si el repo tiene UI o scripts `e2e` / `test:e2e` / `playwright`: cargar `webapp-
 
 Precondition: servidor de desarrollo o preview del propio repo. Action: Chromium headless, aserciones del flujo, fallo con mensaje claro. Expected: 0 fallos. Error: última tanda de correcciones (paso 3) y repetir. Recovery: sin UI y sin script e2e → `N/A` y seguir.
 
-El e2e del cierre vive aquí. El pre-commit de Husky sigue siendo rápido (lint + tipos + unit). Si existe script e2e, `project-hooks` puede dejarlo en `pre-push`.
+El e2e del cierre vive aquí. El pre-commit de Husky sigue siendo rápido (lint + tipos + unit). Si existe script e2e, esta misma skill puede dejarlo en `pre-push`.
 
 ### 3. Revisión crítica contra el plan
 

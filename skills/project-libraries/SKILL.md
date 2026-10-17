@@ -4,7 +4,7 @@ description: "Dependency audit (SCA/CVE): multi-language pipeline (npm/pip/cargo
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 4.0.0
+  version: 4.0.1
   domain: project
   type: atomic
   language: en
@@ -32,8 +32,8 @@ performing dependency audit, SCA, CVE scanning, supply chain security or SBOM ge
 ## Not for:
 
 - Code OWASP review (→ web-owasp)
-- OS hardening (→ system-security)
-- Disk cleanup (→ system-maintenance)
+- OS hardening (→ local-security)
+- Disk cleanup (→ local-maintenance)
 
 ## Supported Pipeline
 

@@ -19,8 +19,7 @@ handoffs:
   implement_front: role-front
   implement_back: role-back
   implement_design: role-design
-  validate: plan-validation
-  integrate_hooks: project-hooks
+  validate: plan-validators
   integrate_publish: project-publish
   libraries: project-libraries
 phases:

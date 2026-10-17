@@ -16,6 +16,6 @@
     "prettier": "^3.3.3"
   },
   "lint-staged": {
-    "*.{md,json,yaml,yml,toml}": "prettier --write"
+    "*.{md,json,yaml,yml,toml}": "prettier --ignore-unknown --write"
   }
 }

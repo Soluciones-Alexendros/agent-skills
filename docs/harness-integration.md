@@ -19,7 +19,7 @@ bash scripts/install.sh
 bash scripts/install.sh --prune
 ```
 
-Enlaza las 18 skills canónicas a:
+Enlaza las 15 skills canónicas a:
 
 - `~/.cursor/skills/` y copia `~/.cursor/AGENTS.md` + docs de taxonomía/routing
 - `~/.grok/skills/`, `~/.grok/AGENTS.md` y comando `/skill-route`
@@ -28,12 +28,12 @@ Enlaza las 18 skills canónicas a:
 Grok ya puede apuntar al árbol con `[skills].paths` en `~/.grok/config.toml`. Verifica:
 
 ```bash
-grok inspect | grep -E 'plan-|system-|project-|web-|role-'
+grok inspect | grep -E 'plan-|local-|project-|web-|role-'
 python tools/skill-router/route.py "limpia mi sistema Arch" --top 3
 python tools/workspace-router/run.py --phase DEFINE --repo . --json
 ```
 
-En Grok CLI: `/skill-route limpia mi Arch` o invoca la skill por nombre (`/user:system-maintenance`).
+En Grok CLI: `/skill-route limpia mi Arch` o invoca la skill por nombre (`/user:local-maintenance`).
 
 Version-updates: Renovate (`.github/renovate.json`). No Dependabot version-updates.
 

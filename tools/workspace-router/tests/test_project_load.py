@@ -41,6 +41,20 @@ class TestProjectLoad(unittest.TestCase):
         p = {"handoffs": {"define": "plan-specification"}}
         self.assertEqual(handoff_for_phase(p, "DEFINE"), "plan-specification")
 
+    def test_default_handoffs(self):
+        self.assertEqual(handoff_for_phase({}, "VALIDATE"), "plan-validators")
+        self.assertEqual(handoff_for_phase({}, "INTEGRATE"), "project-publish")
+
+    def test_integrate_handoffs(self):
+        self.assertEqual(
+            handoff_for_phase({"handoffs": {"integrate_publish": "project-publish"}}, "INTEGRATE"),
+            "project-publish",
+        )
+        self.assertEqual(
+            handoff_for_phase({"handoffs": {"integrate_hooks": "project-publish"}}, "INTEGRATE"),
+            "project-publish",
+        )
+
     def test_load_from_disk(self):
         with tempfile.TemporaryDirectory() as tmp:
             aw = Path(tmp) / ".autoworkspace"
