@@ -108,15 +108,15 @@ El producto ya está en `ac85b9e`. Estas fichas no reabren esa implementación.
 
 **Acceptance criteria:**
 
-- [ ] El push incluye `ac85b9e` y el commit de la Task 3
-- [ ] `gh pr view 13` deja de informar `CONFLICTING`
-- [ ] No se mergea el PR en esta tarea
+- [x] El push incluye `ac85b9e` y el commit de la Task 3
+- [x] `gh pr view 13` deja de informar `CONFLICTING`
+- [x] No se mergea el PR en esta tarea
 
 **Verification:**
 
-- [ ] Tests pass: los del commit que se empuja, ya en verde en local
-- [ ] Build succeeds: sin build adicional
-- [ ] Manual check: `gh pr view 13 --json mergeable,mergeStateStatus,url`
+- [x] Tests pass: los del commit que se empuja, ya en verde en local
+- [x] Build succeeds: sin build adicional
+- [x] Manual check: `gh pr view 13` → `MERGEABLE` (2026-10-17)
 
 **Dependencies:** Task 3
 
@@ -132,7 +132,7 @@ El producto ya está en `ac85b9e`. Estas fichas no reabren esa implementación.
 
 ## Checkpoint: After Tasks 3-4
 
-- [ ] All tests pass en el commit de documentación
-- [ ] Application builds without errors
-- [ ] Core user flow works end-to-end: PR #13 mergeable, o el push sigue pendiente porque no se ha pedido
-- [ ] Review with human before INTEGRATE (`project-publish`)
+- [x] All tests pass en el commit de documentación
+- [x] Application builds without errors
+- [x] Core user flow works end-to-end: PR #13 mergeable
+- [x] Review with human before INTEGRATE (`project-publish`)

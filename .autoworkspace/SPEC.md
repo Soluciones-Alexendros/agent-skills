@@ -83,19 +83,19 @@ Retiradas, solo en el changelog: `system-health`, `system-maintenance`,
 2. `docs/TAXONOMY.md`, `README.md`, `AGENTS.md` y `docs/harness-integration.md` dicen 16 skills y dominio `local`, no `system`.
 3. Ningún fichero vivo enlaza a `project-testing`, `project-hooks`, `plan-validation` o `system-*` como skill actual. El changelog histórico puede nombrarlas. La ruta de estado de AppArmor en `local-security` no es un nombre de skill.
 4. `npm test` pasa en el commit de integración.
-5. El PR #13 deja de estar `CONFLICTING` solo después de un push aprobado.
+5. El PR #13 está en origin y `package.json` va por delante del tag `v4.1.0`.
 
 ## Open Questions
 
-1. ¿Publico `ac85b9e` en `origin/feat/local-taxonomy-validators` para que el PR #13 deje de estar en conflicto?
-2. ¿La brecha de estructura P1 (CONTRIBUTING.md en la raíz, `ci.yml`, ARCHITECTURE.md, Makefile, `.env.example`, `docs/{architecture,guides,runbooks,README.md}`, plantilla de PR y la meta-sección «Propósito de este documento») entra en este incremento o queda como deuda para un chore posterior?
+1. Resuelta: la rama está publicada. El PR #13 dejó de estar `CONFLICTING`.
+2. Resuelta en parte: el README lleva la meta-sección «Propósito de este documento» y la versión 5.0.0. El resto de la brecha P1 (CONTRIBUTING.md en la raíz, `ci.yml`, ARCHITECTURE.md, Makefile, `.env.example`, `docs/{architecture,guides,runbooks,README.md}` y la plantilla de PR) queda fuera.
 3. Resuelta el 2026-10-17: tras aprobar la spec, el siguiente paso es PLAN
    (`tasks/plan.md`). INTEGRATE espera a que el plan y las tareas se aprueben.
 
 ## Assumptions
 
 1. El incremento es una sola capacidad: cerrar el catálogo v5 con `role-clean-code`. No hay mapa de módulos aparte.
-2. `package.json` se queda en 4.1.0, la versión que ya publicó `main`. El breaking de taxonomía sigue en `[Unreleased]`.
+2. El check `cut_tag.py --check-repo` exige `package.json` por delante del tag porque `CHANGELOG.md` cambió. La versión del repo pasa a 5.0.0 y las notas salen de `[Unreleased]`.
 3. `role-clean-code` 1.1.0 es el ajuste de handoffs a `plan-validators`, no un cambio de método.
 4. Los hallazgos P2 de estructura del tablero de inicio son reales frente al canon P1 y no bloquean este merge.
-5. No se hace push ni se mergea el PR hasta que lo confirmes.
+5. El cierre autorizado es merge commit del PR #13 (`--auto --merge`), sin tag manual ni `gh release create`.

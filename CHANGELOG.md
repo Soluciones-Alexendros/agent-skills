@@ -6,6 +6,8 @@ La versión `2.1.0` de `package.json` no se publicó (no hubo tag ni sección de
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-10-17
+
 ### Changed
 
 - **Breaking:** taxonomía v5 — catálogo de **16 skills** en 5 dominios (`plan`, `local`, `project`, `web`, `role`), sin aliases ni carpetas vacías de compatibilidad. `system-maintenance`, `system-security` y `system-proton` pasan a `local-maintenance`, `local-security` y `local-proton` 5.0.0; `plan-validation` pasa a `plan-validators` 5.0.0.
@@ -166,7 +168,8 @@ Primera publicación pública del repo `Soluciones-Alexendros/autoworkspace` (21
 - Estructura `skills/<nombre>/` con frontmatter normalizado (`license: MIT`, `metadata` con autor, versión, dominio e idioma).
 - Validadores `tools/validate/` (spec + enlaces), CI en `.github/workflows/` y `run-validation.sh` agregado.
 
-[Unreleased]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v5.0.0...HEAD
+[5.0.0]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v4.1.0...v5.0.0
 [4.1.0]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v3.0.2...v4.0.0
 [3.0.2]: https://github.com/Soluciones-Alexendros/autoworkspace/compare/v3.0.1...v3.0.2

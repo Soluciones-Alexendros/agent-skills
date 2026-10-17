@@ -17,8 +17,8 @@ Se escribirá en `tasks/todo.md` solo después de aprobar este plan.
 - `main` ya contenía `role-clean-code` 1.0.0 sobre la taxonomía `system-*` de
   19 skills. La rama lo incorpora como 1.1.0 y reescribe los handoffs vivos a
   `plan-validators`. Las entradas históricas del changelog no se reescriben.
-- `package.json` permanece en 4.1.0. El breaking de taxonomía sigue en
-  `[Unreleased]` hasta un cierre con `project-publish`.
+- `package.json` pasa a 5.0.0. El circuito de release cambió (`CHANGELOG.md`)
+  y el tag publicado es `v4.1.0`; `check-bump` no acepta quedarse en 4.1.0.
 - La estructura P1 que falta (CONTRIBUTING en la raíz, `ci.yml`,
   ARCHITECTURE, Makefile, `.env.example`, `docs/{architecture,guides,runbooks}`,
   plantilla de PR y la meta-sección de propósito) no entra en este plan.
@@ -63,11 +63,11 @@ El desglose con criterios, roles, ficheros y verificación vive en
 ### Phase 2: Record and publish gate
 
 - [x] Task 3: Commit de `.autoworkspace/SPEC.md`, `tasks/plan.md` y `tasks/todo.md`
-- [ ] Task 4: Push a `origin/feat/local-taxonomy-validators` solo si se pide
+- [x] Task 4: Push a `origin/feat/local-taxonomy-validators` (PR #13 MERGEABLE)
 
 ### Checkpoint: Branch matches origin
 
-- [ ] PR #13 ya no está `CONFLICTING`, o el push sigue pendiente a propósito
+- [x] PR #13 ya no está `CONFLICTING`
 - [x] La deuda de estructura P1 sigue fuera de la rama
 
 ## Risks and Mitigations
