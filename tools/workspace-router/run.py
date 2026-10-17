@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Autoworkspace router: phase → skill handoff using project.yaml variables."""
+"""Autoworkspace router: phase → skill handoff using project.yaml variables.
+
+Query commands (route/list/status) are read-only: they do not create scaffold.
+Use --init explicitly to create .autoworkspace from templates.
+"""
 from __future__ import annotations
 
 import argparse
@@ -24,12 +28,17 @@ def load_catalog() -> list[str]:
     index = ROOT / "skill-index.json"
     if not index.is_file():
         skills_dir = ROOT / "skills"
-        return sorted(p.name for p in skills_dir.iterdir() if p.is_dir() and (p / "SKILL.md").is_file())
+        return sorted(
+            p.name
+            for p in skills_dir.iterdir()
+            if p.is_dir() and (p / "SKILL.md").is_file()
+        )
     data = json.loads(index.read_text(encoding="utf-8"))
     return [s["name"] for s in data.get("skills", [])]
 
 
 def ensure_scaffold(repo: Path) -> None:
+    """Explicit init only."""
     aw = repo / ".autoworkspace"
     aw.mkdir(parents=True, exist_ok=True)
     (aw / "schemas").mkdir(exist_ok=True)
@@ -40,21 +49,33 @@ def ensure_scaffold(repo: Path) -> None:
             dest.write_text((tmpl / name).read_text(encoding="utf-8"), encoding="utf-8")
 
 
-def route(repo: Path, phase: str, *, bump: bool, note: str) -> dict:
-    ensure_scaffold(repo)
+def route(repo: Path, phase: str, *, bump: bool, note: str, init: bool = False) -> dict:
+    if init:
+        ensure_scaffold(repo)
+    project_path = repo / ".autoworkspace" / "project.yaml"
+    if not project_path.is_file():
+        raise ProjectConfigError(
+            f"missing {project_path}; run with --init to create scaffold "
+            "(route/list/status do not write by default)"
+        )
     try:
         project = load_project(repo)
-    except ProjectConfigError as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
-        sys.exit(2)
+    except ProjectConfigError:
+        raise
     catalog = load_catalog()
-    allowed = filter_skills(catalog, project)
+    try:
+        allowed = filter_skills(catalog, project)
+    except ProjectConfigError:
+        raise
+    if not allowed:
+        raise ProjectConfigError("no skills allowed (enabled: [] or all disabled)")
     skill = handoff_for_phase(project, phase)
-    if skill and skill not in allowed and allowed:
-        # fall back to first allowed with same domain prefix if filtered out
-        prefix = skill.split("-", 1)[0]
-        alt = next((s for s in allowed if s.startswith(prefix + "-")), None)
-        skill = alt or skill
+    if skill is None or skill not in catalog:
+        raise ProjectConfigError(f"unknown handoff skill for phase {phase}: {skill!r}")
+    if skill not in allowed:
+        raise ProjectConfigError(
+            f"handoff skill {skill!r} not in allowlist; refusing silent fallback"
+        )
     result = {
         "repo": str(repo),
         "phase": phase,
@@ -62,36 +83,39 @@ def route(repo: Path, phase: str, *, bump: bool, note: str) -> dict:
         "allowed_skills": allowed,
         "profile": project.get("profile"),
         "handoffs": project.get("handoffs") or {},
+        "execution": "route_only",
+        "note": "Router selects; it does not execute the skill",
     }
     if bump:
-        status = advance_status(repo, phase=phase, skill=skill or "", note=note)
-        result["status"] = {
-            "version": status["version"],
-            "advance": status["advance"],
-            "phase": status["phase"],
-        }
-    else:
-        result["status"] = {
-            "version": load_status(repo).get("version"),
-            "advance": load_status(repo).get("advance"),
-            "phase": load_status(repo).get("phase"),
-        }
+        # Legacy --bump: reject arbitrary SemVer bookkeeping
+        raise ProjectConfigError(
+            "--bump is disabled for arbitrary advances; use verified complete "
+            "with evidence (T15) or an explicit migration path"
+        )
+    try:
+        status = load_status(repo)
+    except Exception:
+        status = {}
+    result["status"] = {
+        "version": status.get("version"),
+        "advance": status.get("advance"),
+        "phase": status.get("phase"),
+        "state_revision": status.get("state_revision"),
+    }
     return result
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Autoworkspace phase router")
     ap.add_argument("--repo", default=".", help="Target repository path")
-    ap.add_argument(
-        "--phase",
-        required=True,
-        choices=PHASES,
-        help="Pipeline phase",
-    )
+    ap.add_argument("--phase", choices=PHASES, help="Pipeline phase")
+    ap.add_argument("--init", action="store_true", help="Create .autoworkspace scaffold")
+    ap.add_argument("--list", action="store_true", help="List allowed skills (read-only)")
+    ap.add_argument("--status", action="store_true", help="Show status.yaml (read-only)")
     ap.add_argument(
         "--bump",
         action="store_true",
-        help="Advance status.yaml after routing",
+        help="(disabled) legacy status bump — rejected",
     )
     ap.add_argument("--note", default="", help="Optional status history note")
     ap.add_argument("--json", action="store_true", help="JSON output")
@@ -100,14 +124,49 @@ def main(argv: list[str] | None = None) -> int:
     if not repo.is_dir():
         print(f"ERROR: not a directory: {repo}", file=sys.stderr)
         return 2
-    out = route(repo, args.phase, bump=args.bump, note=args.note)
+
+    if args.init and not args.phase and not args.list and not args.status:
+        ensure_scaffold(repo)
+        print(json.dumps({"init": True, "repo": str(repo)}) if args.json else f"initialized {repo}/.autoworkspace")
+        return 0
+
+    if args.list:
+        try:
+            if args.init:
+                ensure_scaffold(repo)
+            project = load_project(repo)
+            allowed = filter_skills(load_catalog(), project)
+        except ProjectConfigError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
+        print(json.dumps({"allowed_skills": allowed}) if args.json else "\n".join(allowed))
+        return 0
+
+    if args.status:
+        try:
+            status = load_status(repo)
+        except Exception as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
+        print(json.dumps(status, ensure_ascii=False, indent=2) if args.json else status)
+        return 0
+
+    if not args.phase:
+        print("ERROR: --phase required unless --init/--list/--status", file=sys.stderr)
+        return 2
+
+    try:
+        out = route(repo, args.phase, bump=args.bump, note=args.note, init=args.init)
+    except ProjectConfigError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 2
     if args.json:
         print(json.dumps(out, ensure_ascii=False, indent=2))
     else:
         print(f"phase={out['phase']} skill={out['skill']} profile={out['profile']}")
         print(f"status version={out['status'].get('version')} advance={out['status'].get('advance')}")
         print(f"allowed={len(out['allowed_skills'])} skills")
-        print(f"→ invoke skill tool / read skills/{out['skill']}/SKILL.md")
+        print(f"→ invoke skill tool / read skills/{out['skill']}/SKILL.md (route ≠ execute)")
     return 0
 
 

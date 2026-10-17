@@ -63,35 +63,59 @@ def advance_status(
     checksum_spec: str = "",
     note: str = "",
     write: bool = True,
+    bump_product_version: bool = False,
+    evidence_ok: bool = False,
 ) -> dict[str, Any]:
+    """Advance bookkeeping. Product SemVer is unchanged unless bump_product_version.
+
+    Completing a real phase requires evidence_ok=True. Otherwise raises.
+    """
     if phase not in PHASES:
         raise ValueError(f"unknown phase {phase!r}")
+    if not evidence_ok:
+        raise ValueError(
+            "refusing status advance without evidence_ok=True "
+            "(simulated/awaiting_agent/blocked must not complete a phase)"
+        )
     root = Path(repo).resolve()
     data = load_status(root)
-    kind = bump_kind_for_phase(phase)
-    new_version = _bump_semver(str(data.get("version") or "0.1.0"), kind)
+    product_version = str(data.get("version") or "0.1.0")
+    if bump_product_version:
+        kind = bump_kind_for_phase(phase)
+        product_version = _bump_semver(product_version, kind)
+    state_revision = int(data.get("state_revision") or 0) + 1
     advance = int(data.get("advance") or 0) + 1
     now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     entry = {
         "advance": advance,
-        "version": new_version,
+        "version": product_version,
+        "state_revision": state_revision,
         "phase": phase,
         "skill": skill,
         "at": now,
         "note": note,
+        "evidence_ok": evidence_ok,
     }
     history = list(data.get("history") or [])
     history.append(entry)
+    # Summarized history may trim; evidence_log retains checksums without dropping the only proof.
+    evidence_log = list(data.get("evidence_log") or [])
+    if checksum_spec:
+        evidence_log.append(
+            {"state_revision": state_revision, "checksum_spec": checksum_spec, "at": now, "phase": phase}
+        )
     data.update(
         {
             "schema_version": 1,
-            "version": new_version,
+            "version": product_version,
+            "state_revision": state_revision,
             "phase": phase,
             "advance": advance,
             "last_skill": skill,
             "checksum_spec": checksum_spec or data.get("checksum_spec") or "",
             "updated_at": now,
-            "history": history[-50:],  # keep last 50
+            "history": history[-50:],
+            "evidence_log": evidence_log,
         }
     )
     if write:

@@ -134,13 +134,35 @@ class ProtonBridgeCli(unittest.TestCase):
         finally:
             proton_bridge.connect = old
 
+    def test_send_blocked_without_approval(self):
+        _with_creds(self)
+        rc = proton_bridge.main(["send", "--to", "a@b.com", "--subject", "s", "--body", "b"])
+        self.assertEqual(rc, 1)
+
     def test_send_ok_con_mock(self):
+        import hashlib
+
         _with_creds(self)
         old_c, old_s = proton_bridge.connect, proton_bridge.connect_smtp
         proton_bridge.connect = lambda *a, **k: FakeIMAP()
         proton_bridge.connect_smtp = lambda *a, **k: FakeSMTP()
+        digest = hashlib.sha256(b"a@b.com\ns\nb").hexdigest()
         try:
-            rc = proton_bridge.main(["send", "--to", "a@b.com", "--subject", "s", "--body", "b"])
+            rc = proton_bridge.main(
+                [
+                    "send",
+                    "--to",
+                    "a@b.com",
+                    "--subject",
+                    "s",
+                    "--body",
+                    "b",
+                    "--approve-send",
+                    "CONFIRM_SEND",
+                    "--approve-digest",
+                    digest,
+                ]
+            )
             self.assertEqual(rc, 0)
             self.assertIsNotNone(FakeSMTP.sent)
         finally:

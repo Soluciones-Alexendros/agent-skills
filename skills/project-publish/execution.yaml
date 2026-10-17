@@ -1,0 +1,30 @@
+schema_version: 1
+dialect: autoworkspace.execution
+skill: project-publish
+skill_version: 4.2.0
+execution_kind: script
+distribution: workspace-required
+shared_dependencies:
+  - tools/workspace-router
+system_requirements:
+  binaries: []
+  network: false
+operations:
+  - id: local_gates
+    effect: read
+    dry_run: "yes"
+    idempotency: "yes"
+    approval_required: false
+    recovery_required: false
+    description: project-publish:local_gates
+  - id: publish
+    effect: communicate-external
+    dry_run: "no"
+    idempotency: "no"
+    approval_required: true
+    recovery_required: false
+    description: project-publish:publish
+handoffs: []
+automation_limits:
+  Agent judgment remains for non-script operations; blocked mutators
+  stay blocked without approval.

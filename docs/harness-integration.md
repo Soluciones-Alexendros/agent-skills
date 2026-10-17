@@ -1,50 +1,21 @@
-# Harness Integration — OpenCode-first (multi-harness)
+# Harness integration status
 
-| Harness      | Skill Path                                                        | Auto-invoke                   | Instalación                        |
-| ------------ | ----------------------------------------------------------------- | ----------------------------- | ---------------------------------- |
-| **OpenCode** | `~/.config/opencode/skills/<name>/SKILL.md` + `.opencode/skills/` | Sí vía AGENTS.md + skill tool | `bash scripts/install-opencode.sh` |
-| **Cursor**   | `~/.cursor/skills/<name>/SKILL.md` + `~/.cursor/AGENTS.md`        | Sí                            | `bash scripts/install.sh`          |
-| **Grok CLI** | `~/.grok/skills/<name>/SKILL.md` + `~/.grok/AGENTS.md`            | Sí + `/skill-route`           | `bash scripts/install.sh`          |
-| Codex CLI    | `~/.codex/skills/<name>/SKILL.md`                                 | Sí                            | `bash scripts/install.sh`          |
-| Copilot      | `.github/skills/<name>/SKILL.md`                                  | Sí (preview)                  | copy                               |
-| Generic      | `./skills/<name>/SKILL.md`                                        | vía AGENTS.md                 | git clone                          |
+Classification of agent harnesses for autoworkspace skills.
 
-## Instalación global (Cursor + Grok + OpenCode + Codex)
+| Harness  | Status                                                                                                      | Evidence                                                |
+| -------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| OpenCode | documented-not-proven (level B) until a real binary of a declared version passes discovery/permission tests | `opencode.json`, `scripts/install-opencode.sh --target` |
+| Cursor   | documented-not-proven                                                                                       | project `skills/` + optional `.agents/skills` symlinks  |
+| Codex    | documented-not-proven                                                                                       | install target via `scripts/install.sh --target`        |
+| Copilot  | documented-not-proven                                                                                       | folder layout only                                      |
 
-Desde la raíz del repo:
+## OpenCode acceptance levels
 
-```bash
-bash scripts/install.sh
-# opcional: archivar skills obsoletas que no sean del catálogo canónico
-bash scripts/install.sh --prune
-```
+- **A (required for contracts):** configuration and adapter tests with doubles (`tools/execution`, `tools/contracts`).
+- **B (required to claim verified OpenCode support):** real binary of a declared version loads a skill by name and denies action permissions independently of load permissions. Auto-approval modes must not be used in those tests.
 
-Enlaza las 16 skills canónicas a:
+If the binary is unavailable, level B is `not_run` and support must not be advertised as verified.
 
-- `~/.cursor/skills/` y copia `~/.cursor/AGENTS.md` + docs de taxonomía/routing
-- `~/.grok/skills/`, `~/.grok/AGENTS.md` y comando `/skill-route`
-- `~/.agents/skills/`, `~/.codex/skills/`, `~/.config/opencode/skills/`
+## Permissions
 
-Grok ya puede apuntar al árbol con `[skills].paths` en `~/.grok/config.toml`. Verifica:
-
-```bash
-grok inspect | grep -E 'plan-|local-|project-|web-|role-'
-python tools/skill-router/route.py "limpia mi sistema Arch" --top 3
-python tools/workspace-router/run.py --phase DEFINE --repo . --json
-```
-
-En Grok CLI: `/skill-route limpia mi Arch` o invoca la skill por nombre (`/user:local-maintenance`).
-
-Version-updates: Renovate (`.github/renovate.json`). No Dependabot version-updates.
-
-## Instalación proyecto (OpenCode local)
-
-```bash
-bash scripts/install-opencode.sh
-```
-
-## OpenCode es el harness primario del repo
-
-- No depende de plugin system, solo de `AGENTS.md` + `opencode.json`
-- Descubrimiento: `skillDirectories` en opencode.json
-- Invocación: agente evalúa cada request, mapea a skill por description+keywords
+Loading a skill does not authorize Bash, network, secrets, or paths outside the project. Product restrictions remain even when the harness can load the skill file.

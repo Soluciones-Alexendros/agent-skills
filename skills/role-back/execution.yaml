@@ -1,0 +1,22 @@
+schema_version: 1
+dialect: autoworkspace.execution
+skill: role-back
+skill_version: 1.1.0
+execution_kind: agent
+distribution: standalone
+shared_dependencies: []
+system_requirements:
+  binaries: []
+  network: false
+operations:
+  - id: implement_api
+    effect: write-workspace
+    dry_run: "yes"
+    idempotency: "no"
+    approval_required: false
+    recovery_required: false
+    description: role-back:implement_api
+handoffs: []
+automation_limits:
+  Agent judgment remains for non-script operations; blocked mutators
+  stay blocked without approval.

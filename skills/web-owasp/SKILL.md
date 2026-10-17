@@ -4,7 +4,7 @@ description: "Code security review (OWASP): injection, XSS, authn/authz, cryptog
 license: MIT
 metadata:
   author: Soluciones-Alexendros (adapted)
-  version: 4.0.1
+  version: 4.1.0
   domain: web
   type: atomic
   language: en
@@ -33,34 +33,43 @@ in this code.
 - Release closure (→ project-publish)
 - Dependency audit/SCA (→ project-libraries)
 
-## OWASP Categories
+## Normative edition
 
-### A01: Injection
+Declare and verify against a single official edition before mapping findings.
+Default for this skill: **OWASP Top 10:2021** ([owasp.org/Top10](https://owasp.org/Top10/)).
+Identifiers below follow 2021 labels. Do not mix editions in one report.
+LLM/API Top 10 projects are separate; cite them only when that scope is explicit.
 
-- SQL, NoSQL, OS injection
-- Prevention: parametrized queries, input validation
+## OWASP Top 10:2021 categories (checklist, not certification)
 
-### A02: Broken Authentication
+### A01:2021 Broken Access Control
 
-- Session handling
-- Weak credentials
-- Prevention: multi-factor authentication
+### A02:2021 Cryptographic Failures
 
-### A03: Cross-Site Scripting (XSS)
+### A03:2021 Injection
 
-- Input sanitization
-- Output encoding
+- SQL, NoSQL, OS injection, XSS as injection class where applicable
+- Prevention: parametrized queries, input validation, output encoding
 
-### A05: Security Misconfiguration
+### A04:2021 Insecure Design
 
-- Default credentials
-- Informative error messages
-- Security patches
+### A05:2021 Security Misconfiguration
 
-### A09: Identification and Authentication Failures
+- Default credentials, verbose errors, missing patches
 
-- Password management
-- Account lockout
+### A06:2021 Vulnerable and Outdated Components
+
+- Cross-check with → project-libraries for dependency SCA
+
+### A07:2021 Identification and Authentication Failures
+
+- Session handling, weak credentials, MFA, account lockout
+
+### A08:2021 Software and Data Integrity Failures
+
+### A09:2021 Security Logging and Monitoring Failures
+
+### A10:2021 Server-Side Request Forgery (SSRF)
 
 ## Best Practices
 

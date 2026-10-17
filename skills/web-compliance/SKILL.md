@@ -31,7 +31,9 @@ auditing web compliance, dictating web compliance or remediation plan for SEO/ac
 ## Not for:
 
 - Core Web Vitals (→ web-performance)
-- Holistic audit without focus (→ web-compliance)
+- Application security review (→ web-owasp)
+- Dependency SCA (→ project-libraries)
+- Certifying full GDPR or accessibility compliance from an automated scan alone
 
 ## Main Checks
 

@@ -17,7 +17,9 @@ import shutil
 import socket
 import subprocess
 import sys
+from dataclasses import dataclass
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 logger = logging.getLogger("mantenimiento.common")
@@ -30,7 +32,37 @@ def _setup_logging(verbose: bool = False) -> None:
     else:
         logging.getLogger().setLevel(level)
 
-SKILL_VERSION = "2.0.0"
+COMPONENT_VERSION = "2.1.0"
+
+
+def skill_version_from_manifest() -> str:
+    """Read metadata.version from the skill SKILL.md (canonical skill version)."""
+    skill_md = Path(__file__).resolve().parents[1] / "SKILL.md"
+    try:
+        text = skill_md.read_text(encoding="utf-8")
+    except OSError:
+        return COMPONENT_VERSION
+    if not text.startswith("---"):
+        return COMPONENT_VERSION
+    end = text.find("\n---", 4)
+    if end == -1:
+        return COMPONENT_VERSION
+    try:
+        import yaml
+
+        fm = yaml.safe_load(text[4:end])
+    except Exception:
+        return COMPONENT_VERSION
+    if not isinstance(fm, dict):
+        return COMPONENT_VERSION
+    meta = fm.get("metadata") or {}
+    version = meta.get("version") if isinstance(meta, dict) else None
+    if isinstance(version, str) and version.strip():
+        return version.strip()
+    return COMPONENT_VERSION
+
+
+SKILL_VERSION = skill_version_from_manifest()  # skill manifest version; not component_version
 
 # --- Colores ANSI (desactivados si no hay TTY o está NO_COLOR) ---
 _USE_COLOR = sys.stdout.isatty() and not os.environ.get("NO_COLOR")
@@ -102,40 +134,108 @@ def which(cmd: str) -> str | None:
     return shutil.which(cmd)
 
 
+@dataclass
+class RunResult:
+    """Structured subprocess outcome. Empty stdout alone is not 'healthy'."""
+
+    returncode: int
+    stdout: str
+    stderr: str = ""
+    timed_out: bool = False
+    error: str = ""
+    argv: list[str] | None = None
+
+
+def run_result(
+    argv: list[str],
+    *,
+    timeout: int = 10,
+    cwd: str | None = None,
+    env: dict[str, str] | None = None,
+) -> RunResult:
+    """Typed argv runner (shell=False). Rejects shell-interpreter escapes."""
+    if not argv:
+        return RunResult(returncode=2, stdout="", error="empty argv")
+    binary = os.path.basename(argv[0])
+    if binary in {"bash", "sh", "dash", "zsh"} and len(argv) >= 2 and argv[1] in {"-c", "-lc"}:
+        return RunResult(returncode=2, stdout="", error="shell -c escape rejected", argv=list(argv))
+    try:
+        proc = subprocess.run(
+            argv,
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=timeout,
+            text=True,
+            check=False,
+            cwd=cwd,
+            env=env,
+        )
+        return RunResult(
+            returncode=proc.returncode,
+            stdout=proc.stdout or "",
+            stderr=proc.stderr or "",
+            argv=list(argv),
+        )
+    except subprocess.TimeoutExpired as exc:
+        return RunResult(
+            returncode=124,
+            stdout=(exc.stdout or "") if isinstance(exc.stdout, str) else "",
+            stderr=(exc.stderr or "") if isinstance(exc.stderr, str) else "",
+            timed_out=True,
+            error="timeout",
+            argv=list(argv),
+        )
+    except OSError as exc:
+        return RunResult(returncode=127, stdout="", error=str(exc), argv=list(argv))
+
+
 def run(cmd: str, timeout: int = 10) -> str:
-    """Ejecuta un comando shell y devuelve su stdout; '' ante fallo/timeout."""
+    """Legacy shell runner. Prefer run_result/run_capture for new code.
+
+    Returns stdout only. Callers must not treat '' as proof of health — use
+    run_capture or run_result to preserve return codes and timeouts.
+    """
     try:
         proc = subprocess.run(
             cmd,
             shell=True,
             executable="/bin/bash",
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
             timeout=timeout,
             text=True,
             check=False,
         )
-        return proc.stdout
-    except (subprocess.TimeoutExpired, OSError):
+        if proc.returncode != 0:
+            logger.debug("run rc=%s stderr=%s cmd=%r", proc.returncode, (proc.stderr or "")[:200], cmd)
+        return proc.stdout or ""
+    except subprocess.TimeoutExpired:
+        logger.warning("run timeout cmd=%r", cmd)
+        return ""
+    except OSError as exc:
+        logger.warning("run OSError %s cmd=%r", exc, cmd)
         return ""
 
 
 def run_capture(cmd: str, timeout: int = 10) -> tuple[int, str]:
-    """Ejecuta un comando shell y devuelve (returncode, stdout)."""
+    """Legacy shell runner returning (returncode, stdout). Prefer run_result."""
     try:
         proc = subprocess.run(
             cmd,
             shell=True,
             executable="/bin/bash",
             stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
             timeout=timeout,
             text=True,
             check=False,
         )
-        return proc.returncode, proc.stdout
-    except (subprocess.TimeoutExpired, OSError):
-        return 1, ""
+        return proc.returncode, proc.stdout or ""
+    except subprocess.TimeoutExpired:
+        return 124, ""
+    except OSError:
+        return 127, ""
 
 
 def count_nonempty(text: str) -> int:
@@ -322,11 +422,26 @@ class FindingCollector:
     def errors(self) -> int:
         return self._counters.get("ERROR", 0)
 
-    def _category_score(self, category: str) -> int:
-        """Media ponderada por severidad de los checks que puntúan (PASS/WARN/FAIL).
+    def category_coverage(self, category: str) -> dict[str, int]:
+        """How many findings exist and how many are scorable (PASS/WARN/FAIL)."""
+        total = 0
+        scorable = 0
+        unscored = 0
+        for finding in self.findings:
+            if finding["category"] != category:
+                continue
+            total += 1
+            if finding["status"] in STATUS_VALUES:
+                scorable += 1
+            else:
+                unscored += 1
+        return {"total": total, "scorable": scorable, "unscored": unscored}
 
-        SKIP/ERROR no puntúan ni ensucian el denominador: un control no aplicable
-        (p. ej. ARC-07 en Debian) ya no penaliza la categoría.
+    def _category_score(self, category: str) -> int | None:
+        """Weighted mean of PASS/WARN/FAIL. None when nothing was scorable.
+
+        SKIP/ERROR are not treated as perfect health. A category with only
+        SKIP/ERROR or with no findings returns None (not_checked), never 100.
         """
         weight = 0
         weighted = 0
@@ -340,21 +455,34 @@ class FindingCollector:
             weight += severity_weight
             weighted += severity_weight * value
         if weight == 0:
-            return 100
+            return None
         return weighted // weight
 
-    def health_score(self) -> dict[str, int]:
-        scores = {category: self._category_score(category) for category in CATEGORIES}
-        overall = sum(
-            scores[category] * CATEGORY_WEIGHTS[category] for category in CATEGORIES
-        ) // 100
-        return {"overall": overall, **scores}
+    def health_score(self) -> dict[str, Any]:
+        scores: dict[str, Any] = {}
+        covered_weight = 0
+        covered_sum = 0
+        for category in CATEGORIES:
+            score = self._category_score(category)
+            scores[category] = score
+            if score is not None:
+                w = CATEGORY_WEIGHTS[category]
+                covered_weight += w
+                covered_sum += score * w
+        overall = (covered_sum // covered_weight) if covered_weight else None
+        return {
+            "overall": overall,
+            "check_coverage": self.total,
+            "categories_scored": covered_weight,
+            **scores,
+        }
 
     def summary(self) -> dict[str, object]:
         by_severity = {
             sev: sum(1 for f in self.findings if f["severity"] == sev)
             for sev in SEVERITIES
         }
+        coverage = {cat: self.category_coverage(cat) for cat in CATEGORIES}
         return {
             "total_checks": self.total,
             "passed": self.passed,
@@ -362,6 +490,8 @@ class FindingCollector:
             "warned": self.warned,
             "skipped": self.skipped,
             "errors": self.errors,
+            "check_coverage": self.total,
+            "category_coverage": coverage,
             "by_severity": by_severity,
         }
 
